@@ -31,8 +31,8 @@ Our team uses Github to manage documentation. Look at [References](../Playbook_C
 
 ### GUI Procedure
 
-* [Create an Issue for Process Tracking](../Playbook_Creation_Process.md/#using-github-create-an-issue)
-* [Create a new source branch to work in](../Playbook_Creation_Process.md/#using-github-create-a-branch-to-work-in)
+* Create an Issue for Process Tracking
+* Create a new source branch to work in
 * Navigate to the root of your branch
 * Select the "Web IDE" button
 * To create an item, highlight the left-margin folder and select the dropdown arrow for options
@@ -57,7 +57,7 @@ Our team uses Github to manage documentation. Look at [References](../Playbook_C
 
 * Update and implement any recommendations or corrections to the document    
 
-* Once your document has been reviewed and all corrections made, submit your document for the [approval process](../Playbook_Creation_Process.md/#approval-process) to be finalized.  
+* Once your document has been reviewed and all corrections made, submit your document for the approval process to be finalized.  
 
 * Go into the issue and change the assignee to an approver
     * Go into the issue
@@ -67,7 +67,7 @@ Our team uses Github to manage documentation. Look at [References](../Playbook_C
     * Send a note to `approver` letting him know the document is ready for final review
     * Following approval, add a link to the document/playbook into the Readme
         * Example: `[Playbook Creation Process](./docs/Playbook_Creation_Process.md)`
-    * Submit a [Merge Request](../Playbook_Creation_Process.md/#using-github-create-a-merge-request)
+    * Submit a Merge Request
 
 * Note: Remember that all steps prior to the merge request MUST be completed within your working branch
 
@@ -82,16 +82,15 @@ TBD
 
 ### Procedure
 
-* [Create an Issue for Process Tracking](../Playbook_Creation_Process.md/#using-github-create-an-issue)
-* [Create a new source branch to work in](../Playbook_Creation_Process.md/#using-github-create-a-branch-to-work-in)
+* Create an Issue for Process Tracking
+* Create a new source branch to work in
 * Navigate to the root of your branch
 * Select the "Web IDE" button
 * Open a new issue to track progress on your changes
     * Remove all existing labels
     * Add the label DRAFT
 * Create a link to the associated issue 
-    * `Associate Issue: (./issues/1)`
-    * You can append your issue to the list
+    * You can append your issues to the list
         * Example: (issue1) , (issue1) , (issue3)
 
 * Once you've completed your document: 
@@ -103,7 +102,7 @@ TBD
 
 * Update and implement any recommendations or corrections to the document    
 
-* Once your document has been reviewed and all corrections made, submit your document for the [approval process](../Playbook_Creation_Process.md/#approval-process) to be finalized.  
+* Once your document has been reviewed and all corrections made, submit your document for the approval process to be finalized.  
 
 * Go into the issue and change the assignee to an approver
     * Go into the issue
@@ -113,7 +112,7 @@ TBD
     * Send a note in Chime to `approver` letting them know the document is ready for final review
     * Following approval, add a link to the document/playbook into the Readme
         * Example: `[Playbook Creation Process](./docs/Playbook_Creation_Process.md)`
-    * Submit a [Merge Request](../Playbook_Creation_Process.md/#using-github-create-a-merge-request)
+    * Submit a Merge Request
 
 * Note: Remember that all steps prior to the merge request MUST be completed within your working branch
 
@@ -156,7 +155,7 @@ Team Owners
 We use issues to track ongoing and completed work. Additionally, this assists the team with transitioning through our review and approval process. This also permits comments from reviewers to address anything withing repository objects as part of our documentation bar raiser process. 
 
 * Graphical User Interface: the GUI allows you to interact with GitHub from a web browser to interact with this repository
-    1. Navigate to the [Playbook Repository](customer Git repository link here) using your favored web browser
+    1. Navigate to your GitHub repository using your favored web browser
     1. Open an issue by selecting Issues from the top menu
         1. Select "New Issue"
         1. Add a title and description of what you are working on
