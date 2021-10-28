@@ -5,12 +5,10 @@ This document is provided for informational purposes only. It represents the cur
 
 This AWS Content is provided subject to the terms of the AWS Customer Agreement available at http://aws.amazon.com/agreement or other written agreement between the Customer and either Amazon Web Services, Inc. or Amazon Web Services EMEA SARL or both.
 
-[[_TOC_]]
-
 ## Points of Contact
 
-Author: `Author Name` \ 
-Approver: `Approver Name` \
+Author: `Author Name`   
+Approver: `Approver Name`  
 Last Date Approved:   
 
 ### Objectives
@@ -33,7 +31,7 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 * **Responsive**
 * **Preventative**
 
-![Image](images/aws_caf.png)
+![Image](/images/aws_caf.png)
 * * *
 
 ### Response Steps
@@ -42,9 +40,9 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 3. [**DETECTION AND ANALYSIS**] Perform detection and analyze CloudTrail for unrecognized API 
 4. [**RECOVERY**] Execute recovery procedures as appropriate
 
-***The response steps follow the Incident Response Life Cycle from NIST Special Publication 800-61r2
-[NIST Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
-![Image](images/nist_life_cycle.png)***
+***The response steps follow the Incident Response Life Cycle from [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)  
+
+![Image](/images/nist_life_cycle.png)***
 
 ### Incident Classification & Handling
 * **Tactics, techniques, and procedures**: Ransom & Data Destruction
@@ -143,7 +141,7 @@ For additional information, please review the [AWS Security Incident Response Gu
     * DeleteBucketTagging
     * DeleteBucketPublicAccessBlock
 * If S3 Server Access Logs are enabled, then look for high, sequential `REST.COPY.OBJECT_GET` from the same remote IP and requester.
-*  Check your CloudTrail log to review your AWS account for any unauthorized AWS usage, such as unauthorized EC2 instances, Lambda functions, or EC2 Spot bids. You can also check usage by logging into your AWS Management Console and reviewing each service page. The "Bills" page in the Billing console can also be checked for unexpected usage 
+* Check your CloudTrail log to review your AWS account for any unauthorized AWS usage, such as unauthorized EC2 instances, Lambda functions, or EC2 Spot bids. You can also check usage by logging into your AWS Management Console and reviewing each service page. The "Bills" page in the Billing console can also be checked for unexpected usage 
     *  Please keep in mind that unauthorized usage can occur in any region and that your console may show you only one region at a time. To switch between regions, you can use the dropdown in the top-right corner of the console screen
 
 ## Recovery
