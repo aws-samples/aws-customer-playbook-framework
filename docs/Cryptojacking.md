@@ -6,4 +6,4 @@ This document is provided for informational purposes only. It represents the cur
 This AWS Content is provided subject to the terms of the AWS Customer Agreement available at http://aws.amazon.com/agreement or other written agreement between the Customer and either Amazon Web Services, Inc. or Amazon Web Services EMEA SARL or both.
 
 ## Playbook Workshop
-The workshop and associated playbook for Bitcoin Mining can be downloaded from the [AWS Incident Response Playbooks Workshop](https://gitlab.aws.dev/fredski/aws-incident-response-playbooks-workshop/-/blob/main/playbooks/crypto_mining/EC2_crypto_mining.md)
+The workshop and associated playbook for Bitcoin Mining can be downloaded from the [AWS Incident Response Playbooks Workshop](https://github.com/aws-samples/aws-incident-response-playbooks-workshop/blob/main/playbooks/crypto_mining/EC2_crypto_mining.md)
