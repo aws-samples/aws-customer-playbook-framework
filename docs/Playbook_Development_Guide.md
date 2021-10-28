@@ -30,7 +30,7 @@ This AWS Content is provided subject to the terms of the AWS Customer Agreement 
     6. **Eradication & Recovery**: Resources provisioned by the adversary are disabled or completely removed, and the vulnerabilities and configuration issues of all affected resources are identified. After workload owner approval, all resources are properly reconfigured and security updates are applied to reduce likelihood of success from the same or similar exploits. Reassessment of the security posture of the workload is completed. After configuration changes and security updates are applied, if the security posture of the workload still poses unacceptable level of risk for the business, recommendations for medium and long term architectural changes should be drafted and submitted for evaluation by the responsible and accountable teams.
     7. **Post-incident activity**: After all previous phases are completed, an in-depth analysis of the incident is performed in the form of “lessons learned” sessions. The incident response timeline is published and discussed focusing on the changes that need to be made to enhance preparedness for the next security incident. During this phase, the incident response team focus is to enhance directive, preventative, detection and response controls (Refer to figure B) not only for the workload affected, but for all workloads owned by the enterprise.
 
-![Image](/images/image-nist.png)
+![Image](/images/nist_life_cycle.png)
 
 **Figure A - Incident Response Life Cycle**
 
