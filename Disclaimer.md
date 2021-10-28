@@ -4,13 +4,13 @@ This document is provided for informational purposes only. It represents the cur
 
 This AWS Content is provided subject to the terms of the AWS Customer Agreement available at http://aws.amazon.com/agreement or other written agreement between the Customer and either Amazon Web Services, Inc. or Amazon Web Services EMEA SARL or both.
 
-This comprehensive framework and the included documents are provided as templates using non-prescriptive guidance to demonstrate how people (the informed customer) , processes (this playbook framework) , and technology (using open source GitLab) may be aligned to establish an Incident Response Playbook library.
+This comprehensive framework and the included documents are provided as templates using non-prescriptive guidance to demonstrate how people (the informed customer) , processes (this playbook framework) , and technology (using open source GitHub) may be aligned to establish an Incident Response Playbook library.
 
 This resource is intentionally incomplete. This allows the customer to adopt a framework while providing enough ambiguity and flexibility to think strategically as they navigate their incident response documentation essentials, wants, and needs. There is no one absolute answer; it is essential to integrate this process with your operational demands, objectives, and outcomes.
 
 The included Bitcoin Template is an example of a playbook for a specific situation. You should make certain the template, and all other materials in this archive, are customized for your environment(s) and resources and test it before implementing for purposes in production. Forking or mirroring this archive is NOT sufficient for a practical execution of an incident response playbook library.
 
-Customers should also use a [private GitLab repository](https://gitlab.aws.dev/help/public_access/public_access) in combination with best practices and scanning tools to mitigate and prevent sensitive data exposure. Some examples of resources that could be used include: 
+Customers should also use a [private GitHub repository](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility) in combination with best practices and scanning tools to mitigate and prevent sensitive data exposure. Some examples of resources that could be used include: 
 
 - [Ten GitHub Security Best Practices](https://snyk.io/blog/ten-git-hub-security-best-practices/)
 - [Scan for Sensitive Information Using Git-Secrets](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/scan-git-repositories-for-sensitive-information-and-security-issues-by-using-git-secrets.html)
