@@ -5,14 +5,6 @@ The contents of this library are provided for informational purposes only. It re
 
 This AWS Content is provided subject to the terms of the AWS Customer Agreement available at http://aws.amazon.com/agreement or other written agreement between the Customer and either Amazon Web Services, Inc. or Amazon Web Services EMEA SARL or both.
 
-[[_TOC_]]
-
-## On Boarding to the Incident Response Team
-
-`What are the onboarding procedures to join the incident response / security team?` \
-`Is there cloud training, security training requirements?` \
-`Is there an introduction, inventory of AWS technologies used?`
-
 ## Contributing to the Incident Response Playbooks
 
 ### Impostor Syndrome Disclaimer
