@@ -95,8 +95,8 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 23. [**PREPARATION**] Avoid using the root user for day-to-day operations
 24. [**PREPARATION**] Evaluate your Overall Security Posture
 
-***The response steps follow the Incident Response Life Cycle from NIST Special Publication 800-61r2
-[NIST Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
+***The response steps follow the Incident Response Life Cycle from [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)  
+
 ![Image](/images/nist_life_cycle.png)***
 
 ### Incident Classification & Handling
