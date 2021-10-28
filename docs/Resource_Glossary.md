@@ -5,8 +5,6 @@ This document is provided for informational purposes only. It represents the cur
 
 This AWS Content is provided subject to the terms of the AWS Customer Agreement available at http://aws.amazon.com/agreement or other written agreement between the Customer and either Amazon Web Services, Inc. or Amazon Web Services EMEA SARL or both.
 
-[[_TOC_]]
-
 ## Overall References
 ### [AWS Cloud Adoption Framework](https://aws.amazon.com/professional-services/CAF/)
 AWS Professional Services created the AWS Cloud Adoption Framework (AWS CAF) to help organizations develop and execute efficient and effective plans for their cloud adoption journey. The guidance and best practices provided by the framework help you build a comprehensive approach to cloud computing across your organization, and throughout your IT lifecycle. Using the AWS CAF helps you realize measurable business benefits from cloud adoption faster and with less risk.
@@ -14,7 +12,9 @@ AWS Professional Services created the AWS Cloud Adoption Framework (AWS CAF) to 
 - [AWS Security Incident Response Guide Downloadable](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/aws-security-incident-response-guide.pdf)
 This guide presents an overview of the fundamentals of responding to security incidents within a customer’s AWS Cloud environment. It focuses on an overview of cloud security and incident response concepts, and identifies cloud capabilities, services, and mechanisms that are available to customers who are responding to security issues.
 
-This paper is intended for those in technical roles and assumes that you are familiar with the general principles of information security, have a basic understanding of incident response in your current on-premises environments, and have some familiarity with cloud services. 
+This paper is intended for those in technical roles and assumes that you are familiar with the general principles of information security, have a basic understanding of incident response in your current on-premises environments, and have some familiarity with cloud services.
+### [AWS Security Reference Architecture (AWS SRA)](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/welcome.html)
+The Amazon Web Services (AWS) Security Reference Architecture (AWS SRA) is a holistic set of guidelines for deploying the full complement of AWS security services in a multi-account environment. It can be used to help design, implement, and manage AWS security services so that they align with AWS best practices. The recommendations are built around a single-page architecture that includes AWS security services—how they help achieve security objectives, where they can be best deployed and managed in your AWS accounts, and how they interact with other security services. This overall architectural guidance complements detailed, service-specific recommendations such as those found on the [AWS security website](https://docs.aws.amazon.com/security/). 
 
 ## Amazon Dashboards
 ### [Amazon Billing Dashboard](https://console.aws.amazon.com/billing/home#)
