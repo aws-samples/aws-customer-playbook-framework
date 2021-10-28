@@ -9,8 +9,8 @@ This AWS Content is provided subject to the terms of the AWS Customer Agreement 
 
 ## Points of Contact
 
-Author: `Author Name` \ 
-Approver: `Approver Name` \
+Author: `Author Name`  
+Approver: `Approver Name`  
 Last Date Approved:   
 
 ## Executive Summary
@@ -40,7 +40,7 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 * **Responsive**
 * **Preventative**
 
-![Image](images/aws_caf.png)
+![Image](/images/aws_caf.png)
 * * *
 
 ### Response Steps
@@ -63,9 +63,9 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 17. [**CONTAINMENT**] Isolate Affected Resources Immediately
 18. [**RECOVERY**] Perform recovery processes as appropriate
 
-***The response steps follow the Incident Response Life Cycle from NIST Special Publication 800-61r2
-[NIST Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
-![Image](images/nist_life_cycle.png)***
+***The response steps follow the Incident Response Life Cycle from [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)  
+
+![Image](/images/nist_life_cycle.png)***
 
 ### Incident Classification & Handling
 * **Tactics, techniques, and procedures**: Tools: Forensics
