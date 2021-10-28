@@ -5,6 +5,9 @@ The contents of this library are provided for informational purposes only. It re
 
 This AWS Content is provided subject to the terms of the AWS Customer Agreement available at http://aws.amazon.com/agreement or other written agreement between the Customer and either Amazon Web Services, Inc. or Amazon Web Services EMEA SARL or both.
 
+## What this Repository Is
+This collections of files is provided as an example framework for customers to create, develop, and integrate security playbooks in preparation for potential attack scenarios when using AWS services. 
+
 ## Contributing to the Incident Response Playbooks
 
 ### Impostor Syndrome Disclaimer
