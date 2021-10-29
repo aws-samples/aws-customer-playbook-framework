@@ -54,9 +54,10 @@ And you don't just have to write code. You can help out by writing documentation
 
 ## References
 * [AWS Cloud Adoption Framework](https://aws.amazon.com/professional-services/CAF/)
+* [AWS Incident Response Blogs](https://aws.amazon.com/blogs/security/tag/incident-response/)
 * [AWS Security Incident Response Guide Wiki](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/welcome.html)
 * [AWS Security Incident Response Guide Downloadable](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/aws-security-incident-response-guide.pdf)
-* [AWS Incident Response Blogs](https://aws.amazon.com/blogs/security/tag/incident-response/)
+* [AWS Security Reference Architecture (AWS SRA)](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/welcome.html)
 * [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/)
 * [AWS Well Architected Resources](https://aws.amazon.com/architecture/well-architected/)
 
