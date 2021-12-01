@@ -57,7 +57,7 @@ And you don't just have to write code. You can help out by writing documentation
 
 #### 300-400 Level Scenarios
 * [Bitcoin and Cryptojacking](./docs/Cryptojacking.md)
-* Responding to Ransom in AWS
+* [Responding to Ransom in AWS](./docs/Responding_to_Ransom_in_AWS.md)
     * [Amazon Elastic Computing (EC2) Linux/Unix](./docs/Ransom_Response_EC2_Linux.md)
     * [Amazon Elastic Computing (EC2) Microsoft Windows](./docs/Ransom_Response_EC2_Windows.md)
     * [Amazon Relational Database Service (RDS)](./docs/Ransom_Response_RDS.md)
