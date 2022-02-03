@@ -2,8 +2,8 @@
 
 ## Points of Contact
 
-Author:  `Author's Name` 
-Approver: `Approver Name`  
+Author:  `Author's Name`  
+Approver: `Approver Name`   
 Last Date Approved:   
 
 ### Objectives
@@ -26,6 +26,9 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 * **Responsive**
 * **Preventative**
 
+![Image](/images/aws_caf.png)
+* * *
+
 ### Response Steps
 1. [**PREPARATION**] Use AWS GuardDuty detections for IAM
 2. [**PREPARATION**] Identify, document, and test escalation Procedures
@@ -33,16 +36,16 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 4. [**DETECTION AND ANALYSIS**] Perform detection and analyze CloudWatch for unrecognized events
 3. [**CONTAINMENT & ERADICATION**] Delete or rotate IAM User Keys
 4. [**CONTAINMENT & ERADICATION**] Delete or rotate unrecognized resources
-5. [**RECOVERY**] Execute recovery procedures as appropriate
+5. [**CONTAINMENT & ERADICATION**] Rotate SMTP Credentials
+6. [**RECOVERY**] Execute recovery procedures as appropriate
 
 ***The response steps follow the Incident Response Life Cycle from [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)  
-
 ### Incident Classification & Handling
-* **Tactics, techniques, and procedures**:
-* **Category**:
+* **Tactics, techniques, and procedures**: Tool: AWS Management Console
+* **Category**: Log Analysis
 * **Resource**: SES
-* **Indicators**:
-* **Log Sources**:
+* **Indicators**: Cyber Threat Intelligence, Third Party Notice
+* **Log Sources**: CloudTrail
 * **Teams**: Security Operations Center (SOC), Forensic Investigators, Cloud Engineering
 
 ## Incident Handling Process
@@ -72,7 +75,7 @@ For additional information, please review the [AWS Security Incident Response Gu
 ## Preparation - SES Specific
 * Use Sending Authorization Policies to control who can send email and from where
     * https://docs.aws.amazon.com/ses/latest/dg/sending-authorization.html
-* Use configuration sets to control IP addresses and identities permitted to send messages
+* Use configuration sets to create didicated IP address pools permitted to send various types of messages
     * https://docs.aws.amazon.com/ses/latest/dg/using-configuration-sets.html
 * Consider using Dedicated IP addresses for Amazon SES
     * https://docs.aws.amazon.com/ses/latest/dg/dedicated-ip.html
@@ -115,7 +118,7 @@ The following findings are specific to IAM entities and access keys and always h
 * UnauthorizedAccess:IAMUser/TorIPCaller
 
 ## Escalation Procedures
-- `I need a business decision on when EC2 forensics should be conducted`
+- `I need a business decision on when forensics should be conducted`
 - `Who is monitoring the logs/alerts, receiving them and acting upon each?`
 - `Who gets notified when an alert is discovered?`
 - `When do public relations and legal get involved in the process?`
@@ -159,6 +162,7 @@ Following are specific CloudTrail `eventName` events to look for changes in your
 * [Delete unauthorized roles](https://console.aws.amazon.com/iam/home#/roles)
 * [Revoke temporary credentials](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_disable-perms.html#denying-access-to-credentials-by-issue-time). Temporary credentials can also be revoked by deleting the IAM User.
     * NOTE: Deleting IAM Users may impact production workloads and should be done with care
+* [Rotate SMTP Credentials](https://aws.amazon.com/premiumsupport/knowledge-center/ses-create-smtp-credentials/)
 
 ## Recovery
 * Create new IAM users with least-privilege access policies
