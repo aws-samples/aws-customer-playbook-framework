@@ -66,6 +66,8 @@ And you don't just have to write code. You can help out by writing documentation
 
 ### AWS Analysis Tools
 * [Analyzing VPC Flow Logs with AWS Athena](./docs/Analyzing_VPC_Flow_Logs.md)
+* [Assisted Log Enabler for AWS](https://github.com/awslabs/assisted-log-enabler-for-aws): Assisted Log Enabler for AWS is for customers who do not have logging turned on for various services, and lack knowledge of best practices and/or how to turn them on.
+* [AWS Security Analytics Bootstrap](https://github.com/awslabs/aws-security-analytics-bootstrap): AWS Security Analytics Bootstrap enables customers to perform security investigations on AWS service logs by providing an Amazon Athena analysis environment that's quick to deploy, ready to use, and easy to maintain.
 * [EC2 Forensics](./docs/EC2_Forensics.md)
 
 ## References
