@@ -9,7 +9,7 @@ This AWS Content is provided subject to the terms of the AWS Customer Agreement 
 This collections of files is provided as an example framework for customers to create, develop, and integrate security playbooks in preparation for potential attack scenarios when using AWS services. 
 
 ## Was ist dieses Repository
-Diese Dateisammlung wird als Beispiel für Kunden bereitgestellt, um Sicherheits-Playbooks zu erstellen, zu entwickeln und zu integrieren, um sich auf mögliche Angriffsszenarien bei der Nutzung von AWS-Services vorzubereiten. [Spielbücher auf Deutsch befinden sich hier](./docs/de)
+Diese Dateisammlung wird als Beispiel für Kunden bereitgestellt, um Sicherheits-Playbooks zu erstellen, zu entwickeln und zu integrieren, um sich auf mögliche Angriffsszenarien bei der Nutzung von AWS-Services vorzubereiten. [Spielbücher auf Deutsch befinden Sie hier](./docs/de)
 
 ## Qué es este repositorio
 Esta colección de archivos se proporciona como un marco de ejemplo para que los clientes creen, desarrollen e integren guías de seguridad a fin de prepararse para posibles situaciones de ataque al utilizar los servicios de AWS. [Los libros de jugadas en español se encuentran aquí](./docs/es)
