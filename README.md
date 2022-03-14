@@ -9,19 +9,19 @@ This AWS Content is provided subject to the terms of the AWS Customer Agreement 
 This collections of files is provided as an example framework for customers to create, develop, and integrate security playbooks in preparation for potential attack scenarios when using AWS services. 
 
 ## Was ist dieses Repository
-Diese Dateisammlung wird als Beispiel für Kunden bereitgestellt, um Sicherheits-Playbooks zu erstellen, zu entwickeln und zu integrieren, um sich auf mögliche Angriffsszenarien bei der Nutzung von AWS-Services vorzubereiten. [Spielbücher in spanischer Sprache befinden sich hier](./docs/de)
+Diese Dateisammlung wird als Beispiel für Kunden bereitgestellt, um Sicherheits-Playbooks zu erstellen, zu entwickeln und zu integrieren, um sich auf mögliche Angriffsszenarien bei der Nutzung von AWS-Services vorzubereiten. [Spielbücher auf Deutsch befinden sich hier](./docs/de)
 
 ## Qué es este repositorio
 Esta colección de archivos se proporciona como un marco de ejemplo para que los clientes creen, desarrollen e integren guías de seguridad a fin de prepararse para posibles situaciones de ataque al utilizar los servicios de AWS. [Los libros de jugadas en español se encuentran aquí](./docs/es)
 
 ## Qu'est-ce que ce dépôt
-Ces collections de fichiers sont fournies à titre d'exemple de cadre permettant aux clients de créer, de développer et d'intégrer des playbooks de sécurité en vue de scénarios d'attaque potentiels lors de l'utilisation des services AWS. [Les playbooks en espagnol se trouvent ici](./docs/fr)
+Ces collections de fichiers sont fournies à titre d'exemple de cadre permettant aux clients de créer, de développer et d'intégrer des playbooks de sécurité en vue de scénarios d'attaque potentiels lors de l'utilisation des services AWS. [Les playbooks en français se trouvent ici](./docs/fr)
 
 ## このリポジトリとは何か
-このファイルのコレクションは、AWS のサービスを使用する際の潜在的な攻撃シナリオに備えて、セキュリティプレイブックを作成、開発、統合するためのフレームワークの例として提供されています。[スペイン語のプレイブックはこちら](./docs/ja)
+このファイルのコレクションは、AWS のサービスを使用する際の潜在的な攻撃シナリオに備えて、セキュリティプレイブックを作成、開発、統合するためのフレームワークの例として提供されています。[日本のプレイブックはこちら](./docs/ja)
 
 ## 这个仓库是什么
-这些文件集是作为示例框架提供的，供客户创建、开发和集成安全行动手册，为使用 AWS 服务时的潜在攻击场景做好准备。[西班牙语剧本位于此处](./docs/zh)
+这些文件集是作为示例框架提供的，供客户创建、开发和集成安全行动手册，为使用 AWS 服务时的潜在攻击场景做好准备。[中文剧本位于此处](./docs/zh)
 
 ## Contributing to the Incident Response Playbooks
 
