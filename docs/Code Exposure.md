@@ -14,7 +14,7 @@ Last Date Approved:
 This playbook outlines the process to identify owners of code resources, determine how they were exposed, who may have accessed the exposed code, determine impact of exposure, required remediation actions, and determine root cause of code exposure.
 
 ## Potential Indicators of Compromise
-- DLP Alerts
+- Data Loss Prevention (DLP) Alerts
 - Known code publication or exposure
 - Suspicious CloudTrail logs
 
@@ -59,7 +59,7 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 * **Directive**
 * **Detective**
 * **Responsive**
-* **Preventative**
+* **Preventive**
 
 ![Image](/images/aws_caf.png)
 * * *
@@ -145,6 +145,10 @@ Teams \
 Other? 
 >>>
 
+### DLP Implementation
+
+Implementing a Data Loss Prevention (DLP) solution may provide additional detection capabilities and alerts.  A DLP solution may provide greatest value in EC2 environments or evaluating network traffic. DLP solutions can be found in the [AWS Marketplace](https://aws.amazon.com/marketplace/search/results?searchTerms=dlp).
+
 ## Detection
 
 ### Logging and S3 Bucket Checks
@@ -155,6 +159,14 @@ Other?
 - Identify the resources in your organization and accounts; such as Amazon S3 buckets or IAM roles; that are shared with an external entity: `./prowler -c extra769`
 - Find resources exposed to the internet: `./prowler -g group17`
 
+### Logging and CodeCommit Events
+- [Monitor AWS CodeCommit events in EventBridge](https://docs.aws.amazon.com/codecommit/latest/userguide/monitoring-events.html), which delivers a stream of real-time data. These events are the same as those that appear in Amazon CloudWatch Events, which delivers a near real-time stream of system events that describe changes in AWS resources.
+- [Create a CloudTrail trail to enable continuous delivery of CodeCommit events to an S3 bucket](https://docs.aws.amazon.com/codecommit/latest/userguide/integ-cloudtrail.html). CloudTrail captures all API calls for CodeCommit as events.
+
+### DLP Alerts
+
+Implementing a DLP solution may provide additional detection capabilities and alerts.  Details are available from the DLP solution provider.
+
 ## Escalation Procedures
 - `Who is monitoring the logs/alerts, receiving them and acting upon each?`
 - `Who gets notified when an alert is discovered?`
@@ -164,8 +176,11 @@ Other?
 ## Analysis
 It is highly recommended to export logs to a security incident event management (SIEM) solution (such as Splunk, ELK stack, etc.) to aid in viewing and analyzing a variety of logs for a more complete attack timeline analysis.
 
+### CloudTrail
+CloudTrail provides up to 90 days of event logs for all AWS API calls.  This information can be used to identify and track malicious or anomalous actions.  More information is available in the [CloudTrail Log Event Reference](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html).
+
 ### CloudTrail: Public S3 Bucket
-By default, CloudTrail logs API calls that were made in the last 90 days, but not log requests made to objects. You can see bucket-level events on the CloudTrail console. However, you can't view data events (Amazon S3 object-level calls) there—you must parse or query CloudTrail logs for them. 
+By default, CloudTrail logs API calls that were made in the last 90 days, but not log requests made to objects. You can see bucket-level events on the CloudTrail console. However, you can't view data events (Amazon S3 object-level calls) by default--you must enable object level logging before those events appear in CloudTrail. 
 
 1. Navigate to your [CloudTrail Dashboard](https://console.aws.amazon.com/cloudtrail)
 1. In the left-hand margin select `Event History`
@@ -173,7 +188,7 @@ By default, CloudTrail logs API calls that were made in the last 90 days, but no
 1. Review CloudTrail logs for the eventnames `GetPublicAccessBlock` and `DeletePublicAccessBlock`
 
 ### CloudTrail: Public S3 Object
-You can also get CloudTrail logs for object-level Amazon S3 actions. To do this, enable data events for your S3 bucket or all buckets in your account. When an object-level action occurs in your account, CloudTrail evaluates your trail settings. If the event matches the object that you specified in a trail, the event is logged. 
+You can also get CloudTrail logs for object-level Amazon S3 actions. To do this, [enable data events for your S3 bucket](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html) or all buckets in your account. When an object-level action occurs in your account, CloudTrail evaluates your trail settings. If the event matches the object that you specified in a trail, the event is logged. 
 
 1. Navigate to your [CloudTrail Dashboard](https://console.aws.amazon.com/cloudtrail)
 1. In the left-hand margin select `Event History`
@@ -185,6 +200,12 @@ VPC Flow Logs is a feature that enables you to capture information about the IP 
 
 For further information and steps, including querying with Athena, please refer to the [AWS Documentation for VPC Flow Logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-athena.html). It is recommended that Athena analysis be included in a separate playbook and linked to other relevant items. 
 
+### DNS Logs
+DNS Logs is a feature that enables you to capture information about the DNS traffic going to and from network interfaces in your VPC. This can be useful in identifying anomalies or high-risk domains.
+
+### CloudWatch
+Data from EC2 instances and other sources may be [ingested into CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html).  This data may be used to trigger alarms or perform analysis.  CloudWatch also provides for [anomaly detection](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html) where enabled.
+
 ### Endpoint / Host Based
 1. Navigate to your [CloudTrail Dashboard](https://console.aws.amazon.com/cloudtrail)
 1. In the left-hand margin select `Event History`
@@ -193,7 +214,11 @@ For further information and steps, including querying with Athena, please refer 
 
 - Review EC2 operating system and application logs for inappropriate logins, installation of unknown software, or the presence of unrecognized files. 
 
-- It is highly recommended to have a third-party host-based intrusion detection system (HIDS) solution (such as OSSEC, Tripwire, Wazuh, [Amazon Inspector](https://aws.amazon.com/inspector/), other) 
+- It is highly recommended to have a third-party host-based intrusion detection system (HIDS) solution (such as OSSEC, Tripwire, Wazuh, [Amazon Inspector](https://aws.amazon.com/inspector/), other)
+
+### DLP
+
+DLP solutions may detect and alert as configured.  DLP solutions are available at the [AWS Marketplace](https://aws.amazon.com/marketplace/search/results?searchTerms=dlp).
 
 ## Containment
 
@@ -201,6 +226,12 @@ For further information and steps, including querying with Athena, please refer 
 aws s3api put-public-access-block --bucket bucket-name-here --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
 
 You can also review [Blocking public access to your Amazon S3 storage](https://aws.amazon.com/s3/features/block-public-access/) for additional details on blocking public S3 access across your account.
+
+### CodeCommit
+
+Audit access control for all users with the [AWS Identity and Access Management (IAM) service in conjuction with CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control.html).
+
+Permissions may also be changed or restricted with the [CodeCommit permissions reference](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-permissions-reference.html).
 
 ## Eradication
 
@@ -213,10 +244,21 @@ Remove any unrecognized objects from buckets
 1. To delete the current version of the object, choose Latest version, and choose the trash can icon.
 1. To delete a previous version of the object, choose Latest version, and choose the trash can icon beside the version that you want to delete.
 
+### AWS CodeCommit
+
+[Audit identities and access to code commit.](https://docs.aws.amazon.com/codecommit/latest/userguide/security-iam.html)
+
+### Amazon EC2
+
+Where possible:
+
+1. [Launch a replacement EC2 instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-launch-snapshot.html) using [EBS Snapshots](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html) or [Amazon Machine Image (AMI) backups](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html) created from the source
+1. [Attach an EBS volume](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html) from the terminated instance to the new EC2 instance.
+
 ## Recovery
 Same procedures as those listed for Eradication
 
-## Preventative Actions
+## Preventive Actions
 
 ### Authentication Prowler Checks
 - Ensure multi-factor authentication (MFA)  is enabled:
@@ -238,14 +280,42 @@ Regularly review bucket access and policies on a monthly basis and utilize [Clou
 
 [Managing access with ACLs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/acls.html) to limit unauthorized access to resources on a bucket and object level
 
+### Amazon EC2
+
+[Use multi-factor authentication (MFA) with each account.](https://aws.amazon.com/iam/features/mfa/)
+
+Use TLS to communicate with AWS resources. We recommend TLS 1.2 or later. Some services have this enabled by default, others will need to be implemented (for example in the [Javascript SDK](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/enforcing-tls.html)).
+
+[Set up API and user activity logging with AWS CloudTrail.](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-with-cloudtrail.html)
+
+[Use AWS encryption solutions such as KMS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html), along with all default security controls within AWS services.
+
+[Enable EBS snapshots](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html)
+
+### AWS CodeCommit
+
+[Use multi-factor authentication (MFA) with each account.](https://aws.amazon.com/iam/features/mfa/)
+
+Use TLS to communicate with AWS resources. We recommend TLS 1.2 or later. Some services have this enabled by default, others will need to be implemented (for example in the [Javascript SDK](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/enforcing-tls.html)).
+
+[Set up API and user activity logging with AWS CloudTrail.](https://docs.aws.amazon.com/codecommit/latest/userguide/integ-cloudtrail.html)
+
+[Use AWS encryption solutions such as KMS](https://docs.aws.amazon.com/codecommit/latest/userguide/encryption.html), along with all default security controls within AWS services.
+
+[Use advanced managed security services such as Amazon Macie](https://aws.amazon.com/blogs/compute/discovering-sensitive-data-in-aws-codecommit-with-aws-lambda-2/), which assists in discovering and securing personal data that is stored in Amazon S3.
+
 ### Amazon Macie
-[Amazon Macie](https://aws.amazon.com/macie/) can detect stored credentials, private keys, and other access data by [using managed data identifiers](https://docs.aws.amazon.com/macie/latest/user/managed-data-identifiers.html) 
+[Amazon Macie](https://aws.amazon.com/macie/) can detect stored credentials, private keys, and other access data by [using managed data identifiers](https://docs.aws.amazon.com/macie/latest/user/managed-data-identifiers.html).
 
 ### AWS Config
 [AWS Config](https://docs.aws.amazon.com/config/latest/developerguide/managed-rules-by-aws-config.html) has multiple automated rules to manage code exposure including [codebuild-project-envvar-awscred-check](https://docs.aws.amazon.com/config/latest/developerguide/codebuild-project-envvar-awscred-check.html) to check if credentials are stored in code.
 
 ### Overall Security Posture
 Execute a [Self-Service Security Assessment](https://aws.amazon.com/blogs/publicsector/assess-your-security-posture-identify-remediate-security-gaps-ransomware/) against the environment to further identify other risks and potentially other public exposure not identified throughout this playbook.
+
+### DLP Implementation
+
+Implementing a Data Loss Prevention (DLP) solution may provide additional detection capabilities and alerts.  DLP solutions can be found in the [AWS Marketplace](https://aws.amazon.com/marketplace/search/results?searchTerms=dlp) and should be configured as prescribed.
 
 ## Lessons Learned
 `This is a place to add items specific to your company that do not need "fixing," but are important to know when executing this playbook in tandem with operational and business requirements.`
