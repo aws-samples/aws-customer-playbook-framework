@@ -120,7 +120,7 @@ Identify all existing resources and have an updated asset inventory list coupled
 - Application and instance logs stored in S3 can also be queried using Athena.
 
 ### Training
-- `What training is in place for analysts within the company to become familiar with AWS API (command-line environment), Code Commit, S3, RDS, and other AWS services?`
+- `What training is in place for analysts within the company to become familiar with AWS API (command-line environment), CodeCommit, S3, RDS, and other AWS services?`
 >>>
 Opportunities here for Threat Detection and incident response include: \
 [AWS RE:INFORCE](https://reinforce.awsevents.com/faq/) \
@@ -246,7 +246,7 @@ Remove any unrecognized objects from buckets
 
 ### AWS CodeCommit
 
-[Audit identities and access to code commit.](https://docs.aws.amazon.com/codecommit/latest/userguide/security-iam.html)
+[Audit identities and access to CodeCommit.](https://docs.aws.amazon.com/codecommit/latest/userguide/security-iam.html)
 
 ### Amazon EC2
 
