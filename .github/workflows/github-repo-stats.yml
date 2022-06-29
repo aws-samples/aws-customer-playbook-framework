@@ -14,6 +14,6 @@ jobs:
     steps:
       - name: run-ghrs
         # Use latest release.
-        uses: github-repo-stats@RELEASE
+        uses: kihakuni/github-repo-stats@RELEASE
         with:
           ghtoken: ${{ secrets.ghrs_github_api_token }}
