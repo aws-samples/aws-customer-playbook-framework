@@ -41,7 +41,7 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 * **Code copies, transfers, and publication**
 * **Credential exposure**
 * **Vulnerabilities exposed**
-* **Enviormental intelligence exposed**
+* **Environmental intelligence exposed**
 	* **Tools used**
 	* **Configuration information**
 * **Actor's intent**
@@ -72,12 +72,12 @@ Throughout the execution of the playbook, focus on the _***desired outcomes***_,
 5. [**PREPARATION**] Identify, document, and test escalation procedures
 6. [**PREPARATION**] Implement training to address exfiltration attacks
 7. [**DETECTION AND ANALYSIS**] Perform exfiltration and DLP checks
-8. [**DETECTION AND ANALYSIS**] Review respository (CodeCommit) read and write actions
+8. [**DETECTION AND ANALYSIS**] Review repository (CodeCommit) read and write actions
 9. [**DETECTION AND ANALYSIS**] Review DNS logs
 10. [**DETECTION AND ANALYSIS**] Review VPC flow logs
-11. [**DETECTION AND ANALYSIS**] Review endpoint / host based logs
+11. [**DETECTION AND ANALYSIS**] Review endpoint / host-based logs
 12. [**CONTAINMENT**] Block access for affected accounts
-13. [**ERADICATION**] Remove unrecognized and unauthorized objects in respositories
+13. [**ERADICATION**] Remove unrecognized and unauthorized objects in repositories
 14. [**RECOVERY**] Perform recovery procedures as appropriate
 
 ***The response steps follow the Incident Response Life Cycle from [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)  
@@ -229,7 +229,7 @@ You can also review [Blocking public access to your Amazon S3 storage](https://a
 
 ### CodeCommit
 
-Audit access control for all users with the [AWS Identity and Access Management (IAM) service in conjuction with CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control.html).
+Audit access control for all users with the [AWS Identity and Access Management (IAM) service in conjunction with CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control.html).
 
 Permissions may also be changed or restricted with the [CodeCommit permissions reference](https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-permissions-reference.html).
 
@@ -276,7 +276,7 @@ Same procedures as those listed for Eradication
 
 Regularly review bucket access and policies on a monthly basis and utilize [CloudWatch Events](https://docs.aws.amazon.com/codepipeline/latest/userguide/create-cloudtrail-S3-source-console.html) or Security Hub for automated detections
 
-[Using versioning in S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html) to mitigate accidental or intentional deletion of top level objects
+[Using versioning in S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html) to mitigate accidental or intentional deletion of top-level objects
 
 [Managing access with ACLs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/acls.html) to limit unauthorized access to resources on a bucket and object level
 
@@ -284,7 +284,7 @@ Regularly review bucket access and policies on a monthly basis and utilize [Clou
 
 [Use multi-factor authentication (MFA) with each account.](https://aws.amazon.com/iam/features/mfa/)
 
-Use TLS to communicate with AWS resources. We recommend TLS 1.2 or later. Some services have this enabled by default, others will need to be implemented (for example in the [Javascript SDK](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/enforcing-tls.html)).
+Use TLS to communicate with AWS resources. We recommend TLS 1.2 or later. Some services have this enabled by default, others will need to be implemented (for example in the [JavaScript SDK](https://docs.aws.amazon.com/sdk-for-script/v2/developer-guide/enforcing-tls.html)).
 
 [Set up API and user activity logging with AWS CloudTrail.](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-with-cloudtrail.html)
 
@@ -296,7 +296,7 @@ Use TLS to communicate with AWS resources. We recommend TLS 1.2 or later. Some s
 
 [Use multi-factor authentication (MFA) with each account.](https://aws.amazon.com/iam/features/mfa/)
 
-Use TLS to communicate with AWS resources. We recommend TLS 1.2 or later. Some services have this enabled by default, others will need to be implemented (for example in the [Javascript SDK](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/enforcing-tls.html)).
+Use TLS to communicate with AWS resources. We recommend TLS 1.2 or later. Some services have this enabled by default, others will need to be implemented (for example in the [JavaScript SDK](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/enforcing-tls.html)).
 
 [Set up API and user activity logging with AWS CloudTrail.](https://docs.aws.amazon.com/codecommit/latest/userguide/integ-cloudtrail.html)
 
