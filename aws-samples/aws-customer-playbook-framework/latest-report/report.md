@@ -1,5 +1,5 @@
 % Statistics for aws-samples/aws-customer-playbook-framework
-% Generated for [aws-samples/aws-customer-playbook-framework](https://github.com/aws-samples/aws-customer-playbook-framework) with [jgehrcke/github-repo-stats](https://github.com/jgehrcke/github-repo-stats) at 2022-06-29 15:17 UTC.
+% Generated for [aws-samples/aws-customer-playbook-framework](https://github.com/aws-samples/aws-customer-playbook-framework) with [jgehrcke/github-repo-stats](https://github.com/jgehrcke/github-repo-stats) at 2022-06-29 15:23 UTC.
 
 
 ## Views
@@ -90,7 +90,7 @@ Top 15 referrers: 01: `Google`, 02: `maturitymodel.security.aws.dev`, 03: `githu
 
 <div id="chart_paths_top_n_alltime" class="full-width-chart"></div>
 
-Top 15 paths: 01: `/`, 02: `/blob/main/docs/Compromised_IAM_Credentials.md`, 03: `/tree/main/docs`, 04: `/blob/main/docs/S3_Public_Access.md`, 05: `/blob/main/docs/Denial_of_Service.md`, 06: `/tree/main/docs/es`, 07: `/blob/main/docs/Ransom_Response_EC2_Windows.md`, 08: `/blob/main/docs/Analyzing_VPC_Flow_Logs.md`, 09: `/blob/main/docs/Ransom_Response_EC2_Linux.md`, 10: `/blob/main/docs/Ransom_Response_S3.md`
+Top 15 paths: 01: `/`, 02: `/blob/main/docs/Compromised_IAM_Credentials.md`, 03: `/tree/main/docs`, 04: `/blob/main/docs/S3_Public_Access.md`, 05: `/blob/main/docs/Denial_of_Service.md`, 06: `/tree/main/docs/es`, 07: `/blob/main/docs/Ransom_Response_EC2_Windows.md`, 08: `/blob/main/docs/Ransom_Response_EC2_Linux.md`, 09: `/blob/main/docs/Analyzing_VPC_Flow_Logs.md`, 10: `/blob/main/docs/Ransom_Response_S3.md`
 
 
 <script type="text/javascript">
