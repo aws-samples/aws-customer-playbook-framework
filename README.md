@@ -55,6 +55,7 @@ And you don't just have to write code. You can help out by writing documentation
 * [Inappropriate Public Resources: RDS)](./docs/RDS_Public_Access.md)
 * [Unauthorized Network Changes](./docs/Unauthorized_Network_Changes.md)
 * [Simple Email Service Compromise](./docs/Responding_to_SES_Events.md)
+* [Identifying Exposure of CodeCommit](./docs/Code_Exposure.md)
 
 #### 300-400 Level Scenarios
 * [Bitcoin and Cryptojacking](./docs/Cryptojacking.md)
