@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/aws-samples/aws-customer-playbook-framework,246,135
+/aws-samples/aws-customer-playbook-framework/tree/main/docs,117,42
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md,71,51
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Denial_of_Service.md,34,10
+/aws-samples/aws-customer-playbook-framework/tree/main/docs/es,18,12
+/aws-samples/aws-customer-playbook-framework/tree/github-repo-stats,18,4
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Analyzing_VPC_Flow_Logs.md,17,16
+/aws-samples/aws-customer-playbook-framework/compare/main...github-repo-stats,16,3
+/aws-samples/aws-customer-playbook-framework/actions/workflows/github-repo-stats.yml,16,2
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Playbook_Creation_Process.md,15,9
