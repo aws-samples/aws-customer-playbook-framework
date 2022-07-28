@@ -12,7 +12,7 @@ This collections of files is provided as an example framework for customers to c
 Diese Dateisammlung wird als Beispiel für Kunden bereitgestellt, um Sicherheits-Playbooks zu erstellen, zu entwickeln und zu integrieren, um sich auf mögliche Angriffsszenarien bei der Nutzung von AWS-Services vorzubereiten. [Spielbücher auf Deutsch befinden Sie hier](./docs/de)
 
 ## Qué es este repositorio
-Esta colección de archivos se proporciona como un marco de ejemplo para que los clientes creen, desarrollen e integren guías de seguridad a fin de prepararse para posibles situaciones de ataque al utilizar los servicios de AWS. [Los libros de jugadas en español se encuentran aquí](./docs/es)
+Esta colección de archivos se proporciona como un marco de ejemplo para que los clientes creen, desarrollen e integren guías de seguridad a fin de prepararse para posibles situaciones de ataque al utilizar los servicios de AWS. [El plan de respuesta en español se encuentran aquí](./docs/es)
 
 ## Qu'est-ce que ce dépôt
 Ces collections de fichiers sont fournies à titre d'exemple de cadre permettant aux clients de créer, de développer et d'intégrer des playbooks de sécurité en vue de scénarios d'attaque potentiels lors de l'utilisation des services AWS. [Les playbooks en français se trouvent ici](./docs/fr)
