@@ -220,7 +220,7 @@ Look for unusual login activity
 1. In the left-hand margin select `Event History`
 1. In the drop-down change from `Read-Only` to `Event Name`
 1. In the search field enter `ConsoleLogin` or `AssumeRole` or `GetFederationToken` or `GetCredentialReport` or `GenerateCredentialReport` and review the available events for any suspicious activity
-    * **NOTE** userIdentify  will show up as `"type": "Root"` for root or `"type": "IAMUser"` for users 
+    * **NOTE** userIdentity  will show up as `"type": "Root"` for root or `"type": "IAMUser"` for users 
 
 Locate the IAM access key ID and user name used to launch a suspicious EC2 instance
 1. Open the CloudTrail console, and then choose Event history.
