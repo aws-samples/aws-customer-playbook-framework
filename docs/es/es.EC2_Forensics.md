@@ -1,19 +1,6 @@
 **Manual de estrategias de respuesta a incidentes: EC2 Forensics**
 
-Este documento se proporciona únicamente con fines informativos.
-Representa las ofertas y prácticas actuales de productos de Amazon Web
-Services (AWS) a la fecha de publicación de este documento, que están
-sujetas a cambios sin previo aviso. Los clientes son responsables de
-realizar su propia evaluación de forma independiente sobre la
-información presentada en este documento y de cualquier uso de los
-productos o servicios de AWS, cada uno de los cuales se proporciona «as
-is» sin garantía de ningún tipo, ya sea expresa o implícita. Este
-documento no crea ninguna garantía, representación, compromiso
-contractual, condición o garantía de parte de AWS, sus filiales,
-proveedores o licenciantes. Las responsabilidades y las obligaciones de
-AWS con sus clientes están controladas por los acuerdos de AWS, y este
-documento no forma parte ni modifica ningún acuerdo entre AWS y sus
-clientes.
+Este documento se proporciona únicamente con fines informativos. Representa las ofertas y prácticas actuales de productos de Amazon Web Services (AWS) a la fecha de publicación de este documento, que están sujetas a cambios sin previo aviso. Los clientes son responsables de realizar su propia evaluación de forma independiente sobre la información presentada en este documento y de cualquier uso de los productos o servicios de AWS, cada uno de los cuales se proporciona «as is» sin garantía de ningún tipo, ya sea expresa o implícita. Este documento no crea ninguna garantía, representación, compromiso contractual, condición o garantía de parte de AWS, sus filiales, proveedores o licenciantes. Las responsabilidades y las obligaciones de AWS con sus clientes están controladas por los acuerdos de AWS, y este documento no forma parte ni modifica ningún acuerdo entre AWS y sus clientes.
 
 © 2021 Amazon Web Services, Inc. o sus filiales. Todos los derechos
 reservados. Este trabajo está licenciado bajo una licencia internacional
@@ -22,7 +9,7 @@ Creative Commons Attribution 4.0.
 Este contenido de AWS se proporciona sujeto a los términos del Acuerdo
 de cliente de AWS disponible en <http://aws.amazon.com/agreement> u otro
 acuerdo por escrito entre el cliente y Amazon Web Services, Inc. o
-Amazon Web Services EMEA SARL o ambos. \[\[*TOC*\]\]
+Amazon Web Services EMEA SARL o ambos. 
 
 **Puntos de contacto**
 
@@ -47,7 +34,7 @@ Si necesita mover datos entre regiones de AWS, tenga en cuenta las
 implicaciones legales de mover datos entre jurisdicciones.
 
 Para obtener más información, consulte la Guía de respuesta a incidentes
-de seguridad de [AWS Security Incident Response
+de seguridad de AWS [AWS Security Incident Response
 Guide](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/welcome.html)
 
 **Objetivos**
@@ -105,39 +92,37 @@ seguridad](https://d1.awsstatic.com/whitepapers/es_ES/aws-cloud-adoption-framewo
 7.  \[**\[PREPARACIÓN\]** Identificar, documentar y probar los
     procedimientos de escalamiento
 
-8.  \[**DETECCIÓN AND ANÁLISIS**\] Crear una Amazon EBS Snapshot
+8.  \[**DETECCIÓN Y ANÁLISIS**\] Crear una Amazon EBS Snapshot
 
-9.  \[**DETECCIÓN AND ANÁLISIS**\] Compartir una Amazon EBS Snapshot
+9.  \[**DETECCIÓN Y ANÁLISIS**\] Compartir una Amazon EBS Snapshot
 
-10. \[**DETECCIÓN AND ANÁLISIS**\] Compartir una snapshot sin cifrar
+10. \[**DETECCIÓN Y ANÁLISIS**\] Compartir una snapshot sin cifrar
     utilizando la consola
 
-11. \[**DETECCIÓN AND ANÁLISIS**\] Usar una snapshot sin cifrar que se
+11. \[**DETECCIÓN Y ANÁLISIS**\] Usar una snapshot sin cifrar que se
     haya compartido con usted de forma privada
 
-12. \[**DETECCIÓN AND ANÁLISIS**\] Compartir una instantánea sin cifrar
+12. \[**DETECCIÓN Y ANÁLISIS**\] Compartir una instantánea sin cifrar
     mediante la consola
 
-13. \[**DETECCIÓN AND ANÁLISIS**\] Usar una snapshot sin cifrar que se
+13. \[**DETECCIÓN Y ANÁLISIS**\] Usar una snapshot sin cifrar que se
     haya compartido con usted
 
-14. \[**DETECCIÓN AND ANÁLISIS**\] Crear un EC2 forense a partir de
+14. \[**DETECCIÓN Y ANÁLISIS**\] Crear un EC2 forense a partir de
     Forensics Golden AMI
 
-15. \[**DETECCIÓN AND ANÁLISIS**\] Montar el volumen de EBS sospechoso
-    en Forensics EC2
+15. \[**DETECCIÓN Y ANÁLISIS**\] Montar el volumen de EBS sospechoso en
+    Forensics EC2
 
-16. \[**DETECCIÓN AND ANÁLISIS**\] Ejecutar los procesos forenses
+16. \[**DETECCIÓN Y ANÁLISIS**\] Ejecutar los procesos forenses
 
 17. \[**CONTENCIÓN**\] Aislar los recursos afectados inmediatamente
 
 18. \[**RECUPERACIÓN**\] Realizar los procesos de recuperación según
     corresponda
 
-> Los pasos de respuesta siguen el ciclo de vida de respuesta ante
-> incidentes de la publicación especial del [NIST Special Publication
-> 800-61r2 Computer Security Incident Handling
-> Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
+> *\*Los pasos de respuesta siguen el ciclo de vida de respuesta ante
+> incidentes de la publicación especial del* [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
 
 **Clasificación y manejo de incidents**
 
@@ -172,8 +157,7 @@ etapas:**
 
 **\[PREPARACIÓN\]**
 
-[**Mejores
-Practicas**](https://d1.awsstatic.com/Marketplace/scenarios/security/SEC_11_TSB_Final.pdf)
+[**Mejores Practicas**](https://d1.awsstatic.com/Marketplace/scenarios/security/SEC_11_TSB_Final.pdf)
 
 -   Active AWS CloudTrail en todas las regions. No limite el registro de
     CloudTrail a las regiones de AWS que utilice activamente. Activar
@@ -403,44 +387,27 @@ de las instancias que contiene:
     -   Instalación SANS SIFT Toolkit
 
         -   sudo su - ubuntu
-
         -   sudo curl -Lo /usr/local/bin/sift
             [https://github.com/teamdfir/sift-cli/releases/download/v1.10.0-rc5/sift-cli-linux](https://github.com/teamdfir/sift-cli/releases/download/v1.10.0-rc5/sift-cli-linux)
-
         -   sudo chmod +x /usr/local/bin/sift
-
-        -   sudo /usr/local/bin/sift install \--mode=server
-            \--user=ubuntu
-
+        -   sudo /usr/local/bin/sift install \--mode=server \--user=ubuntu
         -   sudo /usr/local/bin/sift upgrade
-
     -   Instalación Google Rapid Response
-
         -   sudo apt install mysql-server
-
         -   sudo mysql_secure_installation
-
         -   create database grr; grant all privileges on grr.\* to
             grr@localhost identified by \'password\'; flush privileges;
-
-        -   wget
-            [https://storage.googleapis.com/releases.grr-response.com/grr-server_3.2.4-6_amd64.deb](https://storage.googleapis.com/releases.grr-response.com/grr-server_3.2.4-6_amd64.deb)
-
+        -   wget [https://storage.googleapis.com/releases.grr-response.com/grr-server_3.2.4-6_amd64.deb](https://storage.googleapis.com/releases.grr-response.com/grr-server_3.2.4-6_amd64.deb)
         -   sudo apt install ./grr-server_3.2.4-6_amd64.deb
-
         -   sudo systemctl restart grr-server
-
         -   sudo systemctl status grr-server
-
-            1.  Para mas información referirse a [how to Install and
-                Setup GRR clients on Ubuntu
+            1.  Para mas información referirse a [how to Install and Setup GRR clients on Ubuntu
                 18.04](https://kifarunix.com/how-to-install-and-setup-grr-clients-on-ubuntu-18-04-debian-9/)
 
 ```{=html}
 <!-- -->
 ```
-1.  Abra la [consola VPC de
-    Amazon](https://console.aws.amazon.com/vpc/).
+1.  Abra la [consola VPC de Amazon](https://console.aws.amazon.com/vpc/).
 
 2.  Vaya a Instancias
 
@@ -579,11 +546,9 @@ Es esencial capturar la memoria ANTES DEL aislamiento o apagado del
 sistema para capturar todos los datos volátiles (y valiosos)
 disponibles.
 
-[**Crear una instantánea de Amazon
-EBS**](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html)
+[**Crear una instantánea de Amazon EBS**](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html)
 
-1.  Abra la [consola EC2 de
-    Amazon.](https://console.aws.amazon.com/ec2/)
+1.  Abra la [consola EC2 de Amazon.](https://console.aws.amazon.com/ec2/)
 
 2.  Elija Instantáneas en Elastic Block Store en el panel de navegación.
 
@@ -600,27 +565,21 @@ EBS**](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapsho
 
 8.  Elija crear Snapshot.
 
-[**Compartir un Snapshot de Amazon
-EBS**](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html)
+[**Compartir un Snapshot de Amazon EBS**](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html)
 
 **Comparte un snapshot sin cifrado utilizando la consola**
 
-1.  Abra la [consola EC2 de
-    Amazon.](https://console.aws.amazon.com/ec2/)
+1.  Abra la [consola EC2 de Amazon.](https://console.aws.amazon.com/ec2/)
 
 2.  Elija Snapshots en el panel de navegación.
 
-3.  Seleccione la snapshot y, a continuación, elija Acciones, Modificar
-    permisos.
+3.  Seleccione la snapshot y, a continuación, elija Acciones, Modificar permisos.
 
-4.  Haga que la snapshot sea pública o compártala con cuentas de AWS
-    específicas de la siguiente manera:
+4.  Haga que la snapshot sea pública o compártala con cuentas de AWS específicas de la siguiente manera:
 
     -   Para hacer pública la snapshot, elija Público.
-
     -   Esta opción no es válida para snapshots cifradas o snapshots con
         un código de producto de AWS Marketplace.
-
     -   Para compartir la snapshot con una o más cuentas de AWS, elija
         Privado, introduzca el ID de la cuenta de AWS (sin guiones) en
         Número de cuenta de AWS y elija Agregar permiso. Repita el
@@ -628,11 +587,9 @@ EBS**](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/ebs-modifying-s
 
 5.  Selecciona Guardar.
 
-> **Para usar una snapshot sin cifrar que se haya compartido con usted
-> de forma privada**
+> **Para usar una snapshot sin cifrar que se haya compartido con usted de forma privada**
 
-1.  Abra la [consola EC2 de
-    Amazon.](https://console.aws.amazon.com/ec2/)
+1.  Abra la [consola EC2 de Amazon.](https://console.aws.amazon.com/ec2/)
 
 2.  Elija Snapshots en el panel de navegación.
 
@@ -714,7 +671,6 @@ EBS**](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/ebs-modifying-s
       "Condition": {"Bool": {"kms:GrantIsForAWSResource": true}}
     }    
 ```
-
 6.  Abra la [consola EC2 de
     Amazon.](https://console.aws.amazon.com/ec2/)
 
@@ -803,9 +759,7 @@ anteriormente creada.
 -   ¿Hay algún requisito de retención para los registros, los datos o
     las pruebas? Potencialmente, buscar en Glacier Vaults
 
--   Un ejemplo de [Digital Forensic Analysis of Amazon Linux EC2
-    Instances](https://www.sans.org/reading-room/whitepapers/cloud/digital-forensic-analysis-amazon-linux-ec2-instances-38235)
-    está disponible en SANS institute.
+-   Un ejemplo de [Digital Forensic Analysis of Amazon Linux EC2 Instances](https://www.sans.org/reading-room/whitepapers/cloud/digital-forensic-analysis-amazon-linux-ec2-instances-38235) está disponible en SANS institute.
 
 **Contención**
 
@@ -820,23 +774,17 @@ aislamiento a las operaciones actuales y a los flujos de ingresos.
 
 Habilitar las protecciones de terminación
 
--   [Terminar una
-    instancia.](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/terminating-instances.html)
+-   [Terminar una instancia.](https://docs.aws.amazon.com/es_es/AWSEC2/latest/UserGuide/terminating-instances.html)
 
-    1.  Establecer el comportamiento de cierre de la instancia en
-        Detener (vs. terminar)
+    1.  Establecer el comportamiento de cierre de la instancia en Detener (vs. terminar)
 
-    2.  Deshabilitar «DeleteOnTermination» para todos los volúmenes de
-        instancias
+    2.  Deshabilitar «DeleteOnTermination» para todos los volúmenes de instancias
 
--   [Desconexión de instancias EC2 del grupo de Auto
-    Scaling.](https://docs.aws.amazon.com/es_es/autoscaling/ec2/userguide/detach-instance-asg.html)
+-   [Desconexión de instancias EC2 del grupo de Auto Scaling.](https://docs.aws.amazon.com/es_es/autoscaling/ec2/userguide/detach-instance-asg.html)
 
-    1.  Abra la [consola de Amazon EC2 Auto
-        Scaling](https://console.aws.amazon.com/ec2autoscaling/).
+    1.  Abra la [consola de Amazon EC2 Auto Scaling](https://console.aws.amazon.com/ec2autoscaling/).
 
-    2.  Selecciona la casilla de verificación junto a tu grupo de Auto
-        Scaling.
+    2.  Selecciona la casilla de verificación junto a tu grupo de Auto Scaling.
 
     3.  Se abre un panel dividido en la parte inferior de la página de
         grupos de Auto Scaling, en el que se muestra información sobre
@@ -850,14 +798,11 @@ Habilitar las protecciones de terminación
         marcar para reducir la capacidad deseada. elija Separar (detach)
         instancia.
 
--   [Desuscribir de Load
-    Balancer(s)](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html)
+-   [Desuscribir de Load Balancer(s)](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html)
 
-    1.  Abra la [consola de Amazon
-        EC2](https://console.aws.amazon.com/ec2/).
+    1.  Abra la [consola de Amazon EC2](https://console.aws.amazon.com/ec2/).
 
-    2.  En el panel de navegación, en LOAD BALANCING, seleccione Load
-        Balancers.
+    2.  En el panel de navegación, en LOAD BALANCING, seleccione Load Balancers.
 
     3.  Selecciona tu balanceador de cargas.
 
@@ -901,14 +846,19 @@ y comerciales.
 
 -   Como Respondedor de Incidentes, necesito un runbook para realizar el
     análisis forense de **EC2.**
+
 -   Como Respondedor a Incidentes, necesito una decisión empresarial
     sobre cuándo se deben realizar los análisis forenses de EC2.
+
 -   Como Respondedor a Incidentes, necesito tener el registro habilitado
     en todas las regiones que estén habilitadas, independientemente de
     la intención de uso.
+
 -   Como Respondedor a Incidentes, debo asegurarme de que solo se usen
     las AMI aprobadas.
+
 -   Como Respondedor a Incidentes, necesito poder detectar crypto mining
     en mis instancias EC2 existentes
+
 -   Como Respondedor a Incidentes, necesito un método preparado para
     eliminar números masivos de instancias.
