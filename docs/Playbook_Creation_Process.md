@@ -18,7 +18,7 @@ Preparation
 ## Executive Summary
 This playbook outlines the process to create a new playbook/runbook, transition the document from DRAFT to APPROVED, and re-validation requirements using GitLab.  
 
-For more advanced playbook creation, please reference the [AWS Incident Response Playbooks Workshop](https://gitlab.aws.dev/fredski/aws-incident-response-playbooks-workshop/-/blob/main/playbooks/crypto_mining/EC2_crypto_mining.md)
+For more advanced playbook creation, please reference the [AWS Incident Response Playbooks Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/43742d64-6a5e-45ea-9339-cbb3fb26944e/en-US)
 
 ## Guidance
 
