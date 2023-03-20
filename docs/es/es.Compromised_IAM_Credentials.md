@@ -1,4 +1,4 @@
-#Guía de respuesta de Incidentes: Credenciales de IAM comprometidas  
+# Guía de respuesta de Incidentes: Credenciales de IAM comprometidas  
 Este documento se proporciona únicamente con fines informativos. Representa las ofertas de productos y prácticas actuales de Amazon Web Services (AWS) en la fecha de publicación de este documento, que están sujetas a cambios sin previo aviso. Los clientes son responsables de realizar su propia evaluación independiente de la información de este documento y de cualquier uso de los productos o servicios de AWS, cada uno de los cuales se proporciona «tal cual» sin garantía de ningún tipo, ya sea expresa o implícita. Este documento no crea ninguna garantía, declaración, compromiso contractual, condición o garantía por parte de AWS, sus filiales o proveedores. Las responsabilidades y obligaciones de AWS con sus clientes están reguladas por los acuerdos de AWS, y este documento no forma parte de ningún acuerdo entre AWS y sus clientes ni lo modifica.
 © 2021 Amazon Web Services, Inc. o sus filiales. Todos los derechos reservados. Esta obra está licenciada bajo una licencia internacional Creative Commons Attribution 4.0.
 
