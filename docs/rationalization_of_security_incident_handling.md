@@ -47,15 +47,15 @@ Alerts are determined by the threat modeling of a workload during the developmen
 
 ### Workload relevance: 
 
-**High**: major monetary loss and image perception damage, long term business impact, low recovery success
-**Medium**: sustainable monetary loss and image perception damage, short term business impact, high recovery success
-**Low**: no measurable monetary loss and image perception damage, no business impact, recovery is not applicable
+**High**: major monetary loss and image perception damage, long term business impact, low recovery success  
+**Medium**: sustainable monetary loss and image perception damage, short term business impact, high recovery success  
+**Low**: no measurable monetary loss and image perception damage, no business impact, recovery is not applicable  
 
 ### Data classification:
 
-**Secret**: major monetary loss and image perception damage, long term business impact, low recovery success
-**Confidential**: sustainable monetary loss and image perception damage, short term business impact, high recovery success
-**Unclassified**: no measurable monetary loss and image perception damage, no business impact, recovery is not applicable
+**Secret**: major monetary loss and image perception damage, long term business impact, low recovery success  
+**Confidential**: sustainable monetary loss and image perception damage, short term business impact, high recovery success  
+**Unclassified**: no measurable monetary loss and image perception damage, no business impact, recovery is not applicable  
 
 
 ## The goal of alert prioritization is to send them to the appropriate queue:
