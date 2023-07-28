@@ -161,10 +161,10 @@ Understand, document, and socialize services such as the following that your use
 Best practices recommend removing all access keys associated with the root account: `./prowler -c check_112`
 
 ### New or unrecognized IAM users
-Review the IAM credential report from your [Asset Inventory](./Compromised_IAM_Credentials.md/#asset-inventory)
-Check if IAM users have two active access keys: `./prowler -c check_extra712`
-Ensure IAM policies that allow full \"*:*\" administrative privileges are not created: `./prowler -c check_122`
-Check if IAM Access Analyzer is enabled and its findings: `./prowler -c check_extra769`
+Review the IAM credential report from your [Asset Inventory](./Compromised_IAM_Credentials.md/#asset-inventory)  
+Check if IAM users have two active access keys: `./prowler -c check_extra712`  
+Ensure IAM policies that allow full \"*:*\" administrative privileges are not created: `./prowler -c check_122`  
+Check if IAM Access Analyzer is enabled and its findings: `./prowler -c check_extra769`  
 
 ### Unrecognized or unauthorized resources (e.g., EC2, Lambda)
 ```bash
@@ -173,10 +173,10 @@ aws lambda list-functions
 ```
 
 ### Looking for Secrets
-Potential secret found in EC2 instance User Data: `./prowler -c check_extra741`
-Potential secret found in Lambda function variables: `./prowler -c check_extra759`
-Potential secret found in ECS task definition variables: `./prowler -c check_extra768`
-Potential secret found in Autoscaling Configuration: `./prowler -c check_extra775`
+Potential secret found in EC2 instance User Data: `./prowler -c check_extra741`  
+Potential secret found in Lambda function variables: `./prowler -c check_extra759`  
+Potential secret found in ECS task definition variables: `./prowler -c check_extra768`  
+Potential secret found in Autoscaling Configuration: `./prowler -c check_extra775`  
 
 ### Unusual billing increases
 To view your AWS bill, open the [Bills](https://console.aws.amazon.com/billing/home#) pane of the Billing and Cost Management console, and then choose the month you want to view from the dropdown menu.
