@@ -266,7 +266,7 @@ For further information and steps, including querying with Athena, please refer 
 
 ## Eradication
 ### Review the findings from [Review CloudTrail event history for activity by the compromised access key](./#cloudtrail)
-Remove any resources created by the compromised key(s). Check all AWS regions, even regions where you never launched AWS resources.
+Remove any resources created by the compromised key(s). Check all AWS regions, even regions where you never launched AWS resources.  
     * **Important**: If you need to keep any resources for investigation, consider backing them up. For example, if you have a regulatory, compliance, or legal need to retain an EC2 instance, take an EBS snapshot before terminating the instance.
 
 ### Review the [Avoiding unexpected charges](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/checklistforunwantedcharges.html)
