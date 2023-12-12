@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/aws-samples/aws-customer-playbook-framework,491,298
+/aws-samples/aws-customer-playbook-framework/tree/main/docs,460,135
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md,359,123
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Analyzing_VPC_Flow_Logs.md,162,63
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Ransom_Response_S3.md,149,56
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Ransom_Response_EC2_Linux.md,138,53
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Responding_to_Ransom_in_AWS.md,117,45
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Playbook_Creation_Process.md,113,45
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/S3_Public_Access.md,113,41
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/EC2_Forensics.md,98,34
