@@ -1,329 +1,1129 @@
-# Playbook de réponse aux incidents : informations d'identification IAM compromises
-Ce document est fourni à titre informatif uniquement. Il représente les offres de produits et les pratiques actuelles d'Amazon Web Services (AWS) à la date d'émission de ce document, qui peuvent être modifiées sans préavis. Les clients sont responsables de faire leur propre évaluation indépendante des informations contenues dans ce document et de toute utilisation des produits ou services AWS, chacun étant fourni « en l'état » sans garantie d'aucune sorte, expresse ou implicite. Ce document ne crée aucune garantie, représentation, engagement contractuel, condition ou assurance de la part d'AWS, de ses sociétés affiliées, de ses fournisseurs ou de ses concédants de licence. Les responsabilités et responsabilités d'AWS envers ses clients sont contrôlées par des accords AWS, et ce document ne fait pas partie ni ne modifie un accord entre AWS et ses clients.
+# Manuel de sécurité en cas de compromission des informations d'identification d'un compte AWS
 
-© 2021 Amazon Web Services, Inc. ou ses sociétés affiliées. Tous droits réservés. Cette œuvre est sous licence Creative Commons Attribution 4.0 International License.
+## Présentation
 
-Ce contenu AWS est fourni sous réserve des termes de l'accord client AWS disponible à l'adresse http://aws.amazon.com/agreement ou d'un autre accord écrit entre le client et Amazon Web Services, Inc. ou Amazon Web Services EMEA SARL ou les deux.
+Dans le cadre de notre engagement continu envers nos clients, AWS fournit ce
+manuel de réponse aux incidents de sécurité qui décrit les étapes nécessaires pour
+détecter et traiter les informations d'identification compromises au sein de votre AWS
+compte (s). Le but de ce document est de fournir des informations prescriptives
+des conseils sur les mesures à prendre une fois que vous pensez qu'un événement de sécurité est
+a eu lieu.
 
-# Points de contact
+![Image](/images/nist_life_cycle.png)
 
-Auteur : `Nom de l'auteur \
-Approbateur : `Nom de l'approbateur` \
-Dernière date d'approbation :
-
-## Résumé exécutif
-Ce playbook décrit le processus de réponse lorsque vous constatez une activité non autorisée au sein de votre compte AWS ou que vous pensez qu'une partie non autorisée a accédé à votre compte.
-
-## Indicateurs potentiels de compromis
-- Utilisateurs IAM nouveaux ou non reconnus
-- Ressources non reconnues ou non autorisées (par exemple EC2, Lambda)
-- Augmentations inhabituelles de la facturation
-- Notification du chercheur en sécurité
-- Notification indiquant que mes ressources ou mon compte AWS peuvent être compromis
-
-## Constatations potentielles d'AWS GuardDuty
-- CredentialAccess:IAMUser/AnomalousBehavior
-- DefenseEvasion:IAMUser/AnomalousBehavior
-- Discovery:IAMUser/AnomalousBehavior
-- Exfiltration:IAMUser/AnomalousBehavior
-- Impact:IAMUser/AnomalousBehavior
-- InitialAccess:IAMUser/AnomalousBehavior
-- PenTest:IAMUser/KaliLinux
-- PenTest:IAMUser/ParrotLinux
-- PenTest:IAMUser/PentooLinux
-- Persistence:IAMUser/AnomalousBehavior
-- Policy:IAMUser/RootCredentialUsage
-- PrivilegeEscalation:IAMUser/AnomalousBehavior
-- Recon:IAMUser/MaliciousIPCaller
-- Recon:IAMUser/MaliciousIPCaller.Custom
-- Recon:IAMUser/TorIPCaller
-- Stealth:IAMUser/CloudTrailLoggingDisabled
-- Stealth:IAMUser/PasswordPolicyChange
-- UnauthorizedAccess:IAMUser/ConsoleLoginSuccess.B
-- UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration
-- UnauthorizedAccess:IAMUser/MaliciousIPCaller
-- UnauthorizedAccess:IAMUser/MaliciousIPCaller.Custom
-- UnauthorizedAccess:IAMUser/TorIPCaller
-
-### Objectifs
-Tout au long de l'exécution du playbook, concentrez-vous sur les résultats recherchés***_, en prenant des notes pour améliorer les capacités de réponse aux incidents.
-
-#### Déterminer :
-* **Vulnérabilités exploitées**
-* **Exploits et outils observés**
-* **Intention de l'acteur**
-* **Attribution de l'acteur**
-* **Dommages infligés à l'environnement et à l'entreprise**
-
-#### Récupérer :
-
-* **Retour à la configuration d'origine et durcie**
-
-#### Améliorer les composants Perspectives de sécurité des FAC :
-[Perspective de sécurité AWS Cloud Adoption Framework] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
-* **Directive**
-* **Détective**
-* **Responsible**
-* **Préventif**
-
-! [Image] (/images/aws_caf.png)
-* * *
-
-### Étapes de réponse
-1. [**PREPARATION**] Effectuer un inventaire des actifs
-2. [**PREPARATION**] Mettre en œuvre un plan de formation pour identifier et répondre aux informations d'identification IAM exposées
-3. [**PREPARATION**] Mettre en œuvre une stratégie de communication pour la réponse aux incidents
-4. [**DETECTION**] Identifier l'accès au compte Root (autorisé et non)
-5. [**DETECTION**] Identifier les nouveaux utilisateurs IAM ou non reconnus
-6. [**DETECTION**] Identifier les ressources non reconnues ou non autorisées (par exemple EC2, Lambda)
-7. [**DÉTECTION**] Identifier et trouver les secrets exposés
-8. [**DETECTION**] Identifier les augmentations de facturation inhabituelles
-9. [**DETECTION**] Répondre à une notification d'AWS ou d'un tiers indiquant que mes ressources ou mon compte AWS pourraient être compromis
-10. [**DÉTECTION**] Identifier les informations d'identification d'utilisateur IAM potentiellement non autorisées
-11. [**PREPARATION**] Identifier les procédures d'escalade
-12. [**DÉTECTION ET ANALYSIS**] Consulter les journaux CloudTrail
-13. [**DÉTECTION ET ANALYSIS**] Consulter les VPC Flow Logs
-14. [**DÉTECTION ET ANALYSIS**] Consulter les journaux basés sur les terminaux/hôtes
-15. [**CONFINEMENT**] Effectuer les actions de confinement appropriées
-16. [**ERADICATION**] Passez en revue les résultats de la revue de l'historique des événements CloudTrail pour l'activité par la clé d'accès compromise
-17. [**ÉRADICATION**] Passez en revue le document Éviter les frais inattendus
-18. [**RECOVERY**] Effectuer les actions de récupération appropriées
-19. [**PREPARATION**] Effectuer un scan IAM Prowler
-20. [**PREPARATION**] Activer MFA
-21. [**PREPARATION**] Vérifiez les informations de votre compte
-22. [**PREPARATION**] Utilisez les projets AWS Git pour rechercher des preuves d'utilisation non autorisée
-23. [**PREPARATION**] Évitez d'utiliser l'utilisateur racine pour les opérations quotidiennes
-24. [**PREPARATION**] Évaluez votre posture générale de sécurité
-
-***Les étapes de réponse suivent le cycle de vie de réponse aux incidents du [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide] (https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
-
-! [Image] (/images/nist_life_cycle.png) ***
-
-### Classification et manipulation des incidents
-* **Tactiques, techniques et procédures** : Exposition des informations d'identification
-* **Catégorie** : exposition aux informations d'identification IAM
-* **Ressource** : IAM
-* **Indicateurs** : Cyber Threat Intelligence, avis de tiers
-* **Sources de journaux : AWS CloudTrail, AWS Config, VPC Flow Logs, Amazon GuardDuty
-* **Équipes** : Centre des opérations de sécurité (SOC), enquêteurs judiciaires, ingénierie du cloud
-
-## Processus de gestion des incidents
-### Le processus de réponse aux incidents comporte les étapes suivantes :
-* Préparation
-* Détection et analyse
-* Confinement et éradication
-* Récupération
-* Activité post-incident
+*Aspects de la réponse aux incidents AWS*
 
 ## Préparation
-Ce playbook fait référence et s'intègre, dans la mesure du possible, à [Prowler] (https://github.com/toniblyx/prowler) qui est un outil de ligne de commande qui vous aide dans l'évaluation de la sécurité AWS, l'audit, le renforcement et la réponse aux incidents.
 
-Il suit les directives de la norme CIS Amazon Web Services Foundations Benchmark (49 contrôles) et comporte plus de 100 contrôles supplémentaires, notamment liés au RGPR, HIPAA, PCI-DSS, ISO-27001, FFIEC, SOC2 et autres.
+Afin de répondre rapidement et efficacement aux incidents
+activités, il est crucial de préparer les personnes, les processus, et
+technologie au sein de votre organisation. Passez en revue le [*Incident de sécurité AWS]
+Réponse
+Guide*] (https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/preparation.html),
+et mettre en œuvre les mesures nécessaires pour garantir la préparation de tous
+trois domaines.
 
-Cet outil fournit un instantané rapide de l'état actuel de la sécurité dans un environnement client. À titre de solution de rechange, [AWS Security Hub] (https://aws.amazon.com/security-hub/?aws-security-hub-blogs.sort-by=item.additionalFields.createdDate&aws-security-hub-blogs.sort-order=desc) permet une analyse automatisée de la conformité et peut [s'intégrer à Prowler] ( https://github.com/toniblyx/prowler/blob/b0fd6ce60f815d99bb8461bb67c6d91b6607ae63/README.md#security-hub-integration)
+## Comment faire appel à AWS Support pour obtenir de l'aide
 
-### Inventaire des actifs
-Identifiez tous les utilisateurs existants et disposez d'une liste actualisée des objectifs pour chaque compte
+Il est important que vous informiez AWS dès que vous suspectez une compromission
+informations d'identification associées à votre compte AWS ou à votre organisation. Voici les
+étapes pour faire appel à AWS Support :
 
-1. Accédez à [AWS Console] (https://console.aws.amazon.com/)
-1. Accédez à « Services » et sélectionnez « IAM »
-1. Dans le menu de gauche, sélectionnez « Rapport d'identification »
-1. Sélectionnez « Télécharger le rapport »
-1. Portez une attention particulière à la date à laquelle les comptes ont été créés, le mot de passe utilisé pour la dernière fois et les colonnes du mot de passe
-* **NOTE** Si un utilisateur possède plusieurs clés d'accès, validez l'objectif de chaque
+### Ouvrez un dossier d'assistance AWS
 
-### Formation
-- `Quelle est la formation mise en place pour que les analystes de l'entreprise se familiarisent avec l'AWS API (environnement de ligne de commande), S3, RDS et d'autres services AWS ? `
->>>
-Voici les possibilités de détection des menaces et de réponse aux incidents : \
-[AWS RE:INFORCE] (https://reinforce.awsevents.com/faq/) \
-[Self-Service Security Assessment] (https://aws.amazon.com/blogs/publicsector/assess-your-security-posture-identify-remediate-security-gaps-ransomware/)
->>>
+- Connectez-vous à votre compte AWS :
 
-- `Quels rôles peuvent apporter des modifications aux services de votre compte ? `
-- `Quels utilisateurs ces rôles leur sont attribués ? Le moindre privilège est-il respecté ou existe-t-il des utilisateurs de super administrateurs ? `
-- `Une évaluation de sécurité a-t-elle été effectuée sur votre environnement, avez-vous une base de référence connue pour détecter des choses « nouvelles » ou « suspectes » ? `
+- C'est le premier compte AWS concerné par la sécurité
+événement, pour valider la propriété du compte AWS.
 
-### Technologie de communication
-- `Quelle technologie est utilisée au sein de l'équipe/de l'entreprise pour communiquer les problèmes ? Y a-t-il quelque chose d'automatisé ? `
->>>
-Téléphone \
-E-mail \
-AWS SES \
-AWS SNS \
-Slack \
-Carillon \
-Autre ?
->>>
+- Remarque : Si vous ne parvenez pas à accéder au compte, utilisez [ceci
+formulaire] (https://support.aws.amazon.com/#/contacts/aws-account-support/)
+pour soumettre une demande d'assistance.
+
+- Sélectionnez « *Services* », « *Centre d'assistance* », « *Créer un dossier* ».
+
+- Sélectionnez le type de problème « *Compte et facturation » *.
+
+- Sélectionnez le service et la catégorie concernés :
+
+- Exemple :
+
+- Service : Compte
+
+- Catégorie : Sécurité
+
+- Choisissez un degré de gravité :
+
+- Support aux entreprises ou clients sur le marché : *Risque commercial critique
+Question*.
+
+- Clients du service d'assistance aux entreprises : *Question urgente sur les risques commerciaux*.
+
+- Décrivez votre question ou votre problème :
+
+- Fournissez une description détaillée du problème de sécurité que vous rencontrez
+l'expérience, les ressources touchées et l'impact commercial.
+
+- Heure à laquelle l'événement de sécurité a été reconnu pour la première fois.
+
+- Résumé de la chronologie de l'événement jusqu'à présent.
+
+- Artefacts que vous avez collectés (captures d'écran, fichiers journaux).
+
+- L'ARN des utilisateurs ou des rôles IAM que vous pensez être compromis.
+
+- Description des ressources concernées et de l'impact commercial.
+
+- Niveau d'engagement au sein de votre organisation (par exemple : « Cette sécurité
+l'événement bénéficie de la visibilité du PDG et du conseil d'administration de
+Réalisateurs »).
+
+- Facultatif : ajoutez des contacts de dossier supplémentaires.
+
+- Sélectionnez « *Contactez-nous* ».
+
+- Langue de contact préférée (peut être soumise à la disponibilité)
+
+- Mode de contact préféré : Internet, téléphone ou chat (recommandé)
+
+- Facultatif : contacts supplémentaires
+
+<!-- -->
+
+- *Cliquez sur « Soumettre » *
+
+- **Escalations** : veuillez en informer l'équipe chargée de votre compte AWS dès que
+possible, afin qu'ils puissent engager les ressources nécessaires et augmenter au fur et à mesure
+nécessaire.
+
+**Remarque :** Il est très important de vérifier votre « sécurité alternative »
+Le « contact » est défini pour chaque compte AWS. Pour plus de détails, veuillez vous référer
+à [ceci
+article] (https://aws.amazon.com/blogs/security/update-the-alternate-security-contact-across-your-aws-accounts-for-timely-security-notifications/).
 
 ## Détection
 
-### Accès au compte Root
-Il est recommandé de supprimer toutes les clés d'accès associées au compte racine : `. /prowler -c check_112`
+Il existe plusieurs méthodes pour détecter les informations d'identification compromises dans votre
+Environnement AWS. Voici quelques moyens de détecter les indicateurs potentiels de
+Compromis (iOC). Pour une liste détaillée des IoC, veuillez vous référer à [annexe]
+A.] (#appendix -a-reviewing-logs) **Remarque** : Documentez les détails de chaque
+J'ai soupçonné l'IoC d'effectuer une analyse plus approfondie.
 
-### Utilisateurs IAM nouveaux ou non reconnus
-Consultez le rapport d'informations d'identification IAM à partir de votre [inventaire des actifs] (. /compromised_IAM_Credentials.md/ #asset -inventaire)
-Vérifiez si les utilisateurs IAM disposent de deux clés d'accès actives : `. /prowler -c check_extra712`
-Assurez-vous que les stratégies IAM qui autorisent les privilèges administratifs complets \ "* : * \ » ne sont pas créées : `. /prowler -c check_122`
-Vérifiez si IAM Access Analyzer est activé et ses résultats sont les suivants : `. /prowler -c check_extra769`
+1. Donnez votre avis sur Amazon [GuardDuty]
+résultats] (https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings.html).
+Les résultats ci-dessous sont liés à une activité suspecte ou anormale
+par des entités IAM. Passez en revue le [résultat]
+détails] (https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-iam.html),
+et si l'activité est inattendue, cela peut indiquer une compromission
+titre de compétence.
 
-### Ressources non reconnues ou non autorisées (par exemple EC2, Lambda)
-aws ec2 describe-instances
-aws lambda list-functions
+1. CredentialAccess:IAMUser/AnomalousBehavior
 
-### À la recherche de secrets
-Secret potentiel trouvé dans les données utilisateur de l'instance EC2 : `. /prowler -c check_extra741`
-Secret potentiel trouvé dans les variables de fonction Lambda : `. /prowler -c check_extra759`
-Secret potentiel trouvé dans les variables de définition de tâches ECS : `. /prowler -c check_extra768`
-Secret potentiel trouvé dans la configuration Autoscaling : `. /prowler -c check_extra775`
+2. DefenseEvasion:IAMUser/AnomalousBehavior
 
-### Augmentations inhabituelles de la facturation
-Pour afficher votre facture AWS, ouvrez le volet [Bills] (https://console.aws.amazon.com/billing/home #) de la console Billing and Cost Management, puis choisissez le mois que vous souhaitez afficher dans le menu déroulant.
+3. Discovery:IAMUser/AnomalousBehavior
 
-Vous pouvez afficher l'historique de vos paiements AWS dans le volet [Commandes et factures] (https://console.aws.amazon.com/billing/home?/paymenthistory) de la console Billing and Cost Management.
+4. Exfiltration:IAMUser/AnomalousBehavior
 
-Vous pouvez également utiliser [AWS Cost Anomaly Detection] (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-ad.html) pour la surveillance dynamique et les alertes.
+5. Impact:IAMUser/AnomalousBehavior
 
-Vérifiez votre facture pour connaître les éléments suivants :
-* Services AWS que vous n'utilisez normalement pas
-* Ressources dans les régions AWS que vous n'utilisez normalement pas
-* Un changement significatif dans la taille de votre facture
+6. InitialAccess:IAMUser/AnomalousBehavior
 
-Vous pouvez utiliser ces informations pour vous aider à supprimer ou à mettre fin aux ressources que vous ne souhaitez pas conserver.
+7. PenTest:IAMUser/KaliLinux
 
-### Notification indiquant que mes ressources ou mon compte AWS peuvent être compromis
-Si vous avez reçu une notification d'AWS concernant votre compte, connectez-vous à AWS Support Center, puis répondez à la notification.
+8. PenTest:IAMUser/ParrotLinux
 
-Si vous ne pouvez pas vous connecter à votre compte, utilisez le formulaire Contactez-nous pour demander de l'aide à AWS Support.
+9. PenTest:IAMUser/PentooLinux
 
-Si vous avez des questions ou des préoccupations, créez un nouveau dossier AWS Support dans AWS Support Center.
-* **NOTE** : N'incluez pas d'informations sensibles dans votre correspondance, telles que les clés d'accès AWS, les mots de passe ou les informations de carte de crédit.
-Utiliser les projets AWS Git pour rechercher des preuves d'utilisation non autorisée
+10. Persistence:IAMUser/AnomalousBehavior
 
-### Identifier les informations d'identification d'utilisateur IAM potentiellement non autorisées
-1. Ouvrez la console IAM.
-1. Choisissez Utilisateurs dans le volet de navigation.
-1. Choisissez chaque utilisateur IAM dans la liste, puis cochez sous Stratégies d'autorisations pour une stratégie nommée AWSExposedCredentialPolicy_DO_NOT_REMOVE. 1. Si l'utilisateur possède cette stratégie attachée, vous devez faire pivoter les clés d'accès de l'utilisateur.
+11. Policy:IAMUser/RootCredentialUsage
 
-## Procédures d'escalade
-- `Qui surveille les logs/alertes, les reçoit et agit sur chacun ? `
-- `Qui est averti lorsqu'une alerte est découverte ? `
-- `Quand les relations publiques et les services juridiques s'impliquent-ils dans le processus ? `
-- `Quand souhaitez-vous contacter AWS Support pour obtenir de l'aide ? `
+12. PrivilegeEscalation:IAMUser/AnomalousBehavior
+
+13. Recon:IAMUser/MaliciousIPCaller
+
+14. Recon:IAMUser/MaliciousIPCaller.Custom
+
+15. Recon:IAMUser/TorIPCaller
+
+16. Stealth:IAMUser/CloudTrailLoggingDisabled
+
+17. Stealth:IAMUser/PasswordPolicyChange
+
+18. UnauthorizedAccess:IAMUser/ConsoleLoginSuccess.B
+
+19. UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration
+
+20. UnauthorizedAccess:IAMUser/MaliciousIPCaller
+
+21. UnauthorizedAccess:IAMUser/MaliciousIPCaller.Custom
+
+22. UnauthorizedAccess:IAMUser/TorIPCaller
+
+2. Consultez AWS Billing pour détecter des pics inhabituels qui peuvent être le signe d'un compte
+et compromission des informations d'identification en suivant ces étapes :
+
+1. Connectez-vous à la console de gestion AWS et ouvrez le [Facturation]
+console] (https://console.aws.amazon.com/billing/).
+
+2. Choisissez « *Factures » * pour voir le détail de vos frais actuels.
+
+3. Choisissez « *Paiements » * pour consulter l'historique de vos transactions de paiement.
+
+4. Choisissez « *Rapports sur les coûts et l'utilisation d'AWS » * pour voir les rapports défectueux
+réduisez vos dépenses.
+
+3. Téléchargez le rapport sur les informations d'identification IAM en accédant à la console IAM et
+choisissez le « *Rapport d'identification » * sur la gauche sous « *Accès »
+rapports » * puis passez en revue les points suivants :
+
+1. Identifiez la création inhabituelle d'un utilisateur IAM en consultant la date de création
+et les dernières colonnes du mot de passe utilisées/modifiées.
+
+2. Vérifiez si des utilisateurs de l'IAM possèdent deux clés d'accès ou plus.
+
+3. Vérifiez si des utilisateurs d'IAM ont
+*AWS ExposedCredentialPolicy \ _DO \ _NOT \ _REMOVE* ci-joint. Si c'est le cas,
+faites pivoter ses clés d'accès.
+
+4. Passez en revue les rôles IAM sur le compte AWS, afin d'identifier ceux qui ne vous sont pas familiers
+rôles qui ont été créés ou auxquels on a accédé
+
+1. Dans la console AWS, sélectionnez « *Service*s », « *IAM* », et
+« *Rôles* »
+
+2. Passez en revue tous les « *noms de rôle* » inconnus.
+
+3. Cliquez sur le nom du rôle et passez en revue les informations répertoriées :
+
+1. Date de création du rôle
+
+2. ARN
+
+3. Dernière activité
+
+4. Cliquez sur « *Autorisations* » pour consulter les politiques IAM ci-jointes
+au rôle.
+
+5. Cliquez sur « *Relations de confiance* » pour voir les entités qui peuvent assumer
+le rôle.
+
+6. Cliquez sur « *Access Advisor* » pour voir quels services ont été
+accessible par le rôle et par la « *Date du dernier accès* ».
+
+5. Détectez toutes les ressources non reconnues ou non autorisées au sein de votre AWS
+un compte tel que :
+
+1. instances EC2 en exécutant la commande suivante dans l'AWS CLI
+terminal « *aws ec2 describe-instances* » et validez le
+résultats. Recherchez l'heure de création de chaque instance à l'aide du
+*—query 'Reservations \ [\] .Instances \ [\]. {ip : adresse IP publique,
+tm : LaunchTime} '--filters 'name=tag:name, Values=
+MyInstanceName' | jq 'sort \ _by (.tm) | reverse |. \ [0 \] '* filtre.
+
+2. Lambda fonctionne en exécutant la commande suivante dans l'AWS CLI
+terminal « *aws lambda list-functions* » et validez le dernier
+a modifié l'heure en utilisant le filtre « | *grep « LastModified* » ».
+
+6. Consultez toutes les notifications de sécurité d'AWS concernant votre compte en
+se connecter à [AWS Support]
+Center] (https://support.console.aws.amazon.com/support/home#/) puis
+lire et répondre au (x) message (s).
+
+7. Passez en revue les résultats en suivant ces étapes :
+
+1. Ouvrez la [console IAM] (https://console.aws.amazon.com/iam/).
+
+2. Choisissez « *Analyseur d'accès » * dans la colonne de gauche sous Access
+rapports.
+
+3. Sous « *Résultats actifs » * passez en revue les résultats pour identifier les ressources
+dans votre organisation, comme les compartiments S3, les rôles IAM ou Lambda
+fonctions partagées avec des entités externes.
 
 ## Analyse
-Il est fortement recommandé d'exporter les journaux vers une solution de gestion des événements d'incidents de sécurité (SIEM) (telle que Splunk, ELK stack, etc.) pour faciliter l'affichage et l'analyse de divers journaux pour une analyse plus complète de la chronologie des attaques.
 
-### CloudTrail
-Recherchez une activité de connexion inhabituelle
-1. Accédez à votre [tableau de bord CloudTrail] (https://console.aws.amazon.com/cloudtrail)
-1. Dans la marge de gauche, sélectionnez « Historique des événements »
-1. Dans la liste déroulante, passez de « Lecture seule » à `Nom de l'événement`
-1. Dans le champ de recherche, saisissez `ConsoleLogin` ou `AssumeRole` ou `GetFederationToken` ou `GetCredentialReport` ou `GenerateCredentialReport` et examinez les événements disponibles pour toute activité suspecte.
-* **NOTE** userIdentity apparaîtra sous la forme « type » : « Root"` pour Root ou `"type » : « Iamuser"` pour les utilisateurs
+Une fois que vous aurez identifié des ressources ou des activités suspectes susceptibles
+indiquer un compromis, effectuer une analyse plus approfondie dans votre SIEM ou enregistrer
+outils d'analyse. AWS dispose de différents outils de services de sécurité pour vous aider à
+analyse des événements liés à la sécurité. Certains de ces outils incluent :
 
-Localisez l'ID de clé d'accès IAM et le nom d'utilisateur utilisés pour lancer une instance EC2 suspecte
-1. Ouvrez la console CloudTrail, puis choisissez Historique des événements.
-1. Sélectionnez le menu déroulant Filtre, puis choisissez Nom de la ressource.
-1. Dans le champ Entrer le nom de la ressource, collez l'ID d'instance EC2, puis choisissez Entrée sur votre appareil.
-1. Développez le nom de l'événement pour RunInstances.
-1. Copiez la clé d'accès AWS et notez le nom d'utilisateur.
+1. **Amazon Guardduty** - Amazon GuardDuty est un outil de détection des menaces
+un service qui surveille en permanence les activités malveillantes et
+comportement non autorisé visant à protéger vos comptes AWS, Amazon Elastic
+Charges de travail Compute Cloud (EC2), applications de conteneurs, Amazon Aurora
+bases de données et données stockées dans Amazon Simple Storage Service (S3).
 
-Consultez l'historique des événements CloudTrail pour connaître l'activité à l'aide de la clé d'accès compromise
-1. Ouvrez la console CloudTrail, puis choisissez Historique des événements dans le volet de navigation.
-1. Sélectionnez le menu déroulant Filtre, puis choisissez le filtre de clé d'accès AWS.
-1. Dans le champ Enter AWS Access Key, entrez l'ID de clé d'accès IAM compromis.
-1. Développez le nom de l'événement pour l'appel d'API RunInstances.
-* **NOTE** : Vous ne pouvez afficher l'historique des événements des 90 derniers jours que si vous n'avez déjà configuré une piste qui est enregistrée dans un compartiment S3
+2. **AWS Security Hub** - Le hub de sécurité AWS est une solution de sécurité dans le cloud
+service de gestion (CSPM) qui effectue des opérations automatisées et continues
+les meilleures pratiques de sécurité comparées à vos ressources AWS pour vous aider
+identifier les erreurs de configuration et agréger vos alertes de sécurité
+(c'est-à-dire les résultats) dans un format standardisé afin que vous puissiez
+les enrichir, les étudier et les corriger.
 
-### VPC Flow Logs
-Les VPC Flow Logs sont une fonctionnalité qui vous permet de capturer des informations sur le trafic IP vers et depuis les interfaces réseau de votre VPC. Cela peut être utile pour les adresses IP découvertes dans CloudTrail afin de déterminer les types de connexions externes à toutes les ressources publiques.
+3. **Amazon Detective** - Amazon Detective facilite les analyses,
+enquêter et identifier rapidement la cause première du potentiel
+des problèmes de sécurité ou des activités suspectes.
 
-Pour plus d'informations et des étapes, y compris les requêtes avec Athena, reportez-vous à la [Documentation AWS pour les VPC Flow Logs] (https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-athena.html). Il est recommandé que l'analyse d'Athena soit incluse dans un livre de jeu distinct et liée à d'autres éléments relatifs.
+Vous pouvez également effectuer une recherche dans l'historique de vos événements AWS CloudTrail, en suivant
+ces étapes pour analyser et recueillir des preuves :
 
-### Endpoint /basé sur l'hôte
-* **Identifiez la dernière heure de création pour un nom d'instance donné** : `aws ec2 describe-instances —query 'Reservations [] .Instances []. {ip : PublicAddress, tm : LaunchTime} '—filters 'Name=Tag:Name, Valeurs= MyInstanceName' | jq 'sort_by (.tm) | inverse |. [0] '`
+1. Analysez les journaux AWS CloudTrail pour détecter les éléments suivants :
 
-* **Identifier l'heure de dernière modification pour les fonctions lambda** : `aws lambda list-functions | grep « LastModified"`
+1. Toute activité inhabituelle associée aux connexions :
+
+1. Accédez au [Sentier dans le cloud]
+Tableau de bord] (https://console.aws.amazon.com/cloudtrail).
+
+2. Sur le côté gauche, sélectionnez Historique des événements.
+
+3. Dans le menu déroulant, remplacez « En lecture seule » par « Nom de l'événement ».
+
+4. Passez en revue les événements disponibles pour détecter toute activité suspecte en
+en recherchant les termes suivants via le champ de recherche :
+« *ConsoleLogin* », « *AssumeRole* », « *GetFederationToken* »,
+« *GetCredentialReport* », « *GenerateCredentialReport* ». Également
+il est important de noter que « *UserIdentity* » doit apparaître
+sous la forme « *type* » : « *Root* » pour l'utilisateur root ou « *type* » :
+« *IAMuser* » pour tous les utilisateurs IAM locaux du compte.
+
+<!-- -->
+
+1. Localisez l'identifiant de clé d'accès et le nom d'utilisateur IAM utilisés pour lancer un
+instance Amazon EC2 suspecte :
+
+1. Ouvrez la console AWS CloudTrail et choisissez « *Event
+historique » * depuis le volet de navigation.
+
+2. Sélectionnez le menu déroulant « *Attributs de recherche » *, puis
+choisissez « *Nom de la ressource » *.
+
+3. Dans le champ Entrez le nom de la ressource, collez l'ID de l'instance EC2,
+puis appuyez sur Entrée sur votre appareil.
+
+4. Développez le nom de l'événement pour *RunInstances*.
+
+5. Copiez la clé d'accès AWS et notez le nom d'utilisateur.
+
+2. Consultez l'historique des événements AWS CloudTrail pour connaître l'activité du
+clé d'accès compromise :
+
+1. Ouvrez la console CloudTrail et choisissez « *Événement »
+> historique » * depuis le volet de navigation.
+
+2. Sélectionnez le menu déroulant « *Attributs de recherche » *, puis
+> choisissez « *Clé d'accès AWS » *.
+
+3. Dans le champ « *Entrez une clé d'accès AWS » *, entrez
+> ID de clé d'accès IAM compromis.
+
+4. Développez le nom de l'événement pour l'appel d'API *RunInstances*.
+
+3. Si vous accédez à AWS via un fournisseur d'identité tiers, soyez
+assurez-vous de vérifier les journaux d'accès et de suivre les conseils du fournisseur
+sur la réponse à un événement et la sécurisation de votre environnement.
+
+<!-- -->
+
+1. Analysez les informations d'identification compromises par IAM Access Advisor pour la dernière fois
+des informations pour savoir quel est le dernier service auquel elle a accédé en suivant
+ces étapes :
+
+1. Accédez à la [console IAM] (https://console.aws.amazon.com/iam).
+
+2. Accédez aux utilisateurs ou aux rôles, cliquez sur le nom du compromis
+principal, choisissez l'onglet « *conseiller d'accès » * et regardez lequel
+ressources auxquelles il a accédé pour la dernière fois.
 
 ## Confinement
-1. Désactivez l'utilisateur IAM, créez une clé d'accès IAM de sauvegarde, puis désactivez la clé d'accès compromise
-1. Ouvrez la [console IAM] (https://console.aws.amazon.com/iam/), puis collez l'ID de clé d'accès IAM dans la barre de recherche IAM.
-1. Choisissez le nom d'utilisateur, puis cliquez sur l'onglet Informations d'identification de sécurité.
-1. Dans Mot de passe de console, choisissez Gérer.
-* **REMARQUE** : Si le mot de passe AWS Management Console est défini sur Désactivé, vous pouvez ignorer cette étape.
-1. Dans Accès à la console, choisissez Désactiver, puis Appliquer.
-1. Important : Les utilisateurs dont les comptes sont désactivés ne peuvent pas accéder à AWS Management Console. Toutefois, si l'utilisateur dispose de clés d'accès actives, il peut toujours accéder aux services AWS à l'aide d'appels d'API.
-1. Pour la clé d'accès IAM compromise, choisissez Rendre inactif.
-1. Désactivez la clé IAM de l'application, créez une clé d'accès IAM de sauvegarde, puis désactivez la clé d'accès compromise
-1. Commencez par créer une deuxième clé. Ensuite, modifiez votre application pour utiliser la nouvelle clé.
-1. Désactivez (mais ne supprimez pas) la première clé.
-1. En cas de problème avec votre application, réactivez temporairement la clé. Lorsque votre application est entièrement fonctionnelle et que la première clé est désactivée, supprimez la première clé.
-1. Faire pivoter et supprimer toutes les clés d'accès AWS inactives/compromises
-* ** ! ! Assurez-vous de conserver un enregistrement de toutes les clés d'accès supprimées afin de pouvoir continuer à les rechercher dans CloudTrail ! ! **
+
+Après avoir analysé et recueilli plus d'informations sur le compromis
+informations d'identification et toutes les autres ressources concernées, il est temps de contrôler et
+supprimer l'événement de sécurité.
+
+1. Désactivez le ou les utilisateurs IAM, créez une clé d'accès IAM de sauvegarde, puis
+désactivez la clé d'accès compromise en suivant ces étapes :
+
+1. Ouvrez la [console IAM] (https://console.aws.amazon.com/iam/) et
+collez l'identifiant de la clé d'accès IAM dans la barre de recherche IAM.
+
+2. Choisissez le nom d'utilisateur, puis choisissez « *Sécurité »
+onglet « accréditations* ».
+
+3. Dans le champ du mot de passe de la console, choisissez « *Gérer* ».
+
+4. Dans Accès à la console, choisissez « *Désactiver* », puis sélectionnez Appliquer.
+
+5. Pour la clé d'accès IAM compromise, choisissez « *Rendre inactive* ».
+
+2. Faites pivoter les clés d'accès en suivant ces étapes :
+
+1. Tout d'abord, créez une deuxième clé en accédant au [IAM
+console] (https://console.aws.amazon.com/iam/).
+
+2. Dans le volet de navigation, choisissez « *Utilisateurs » *.
+
+3. Choisissez le nom de l'utilisateur prévu, puis choisissez
+l'onglet « *Informations de sécurité » *.
+
+4. Dans la section « *Clés d'accès » *, choisissez « *Créer une clé d'accès » *. Sur
+la page « *Accédez aux meilleures pratiques* *et aux alternatives » *,
+choisissez « *Autre » *, puis choisissez « *Suivant » . *
+
+5. Modifiez ensuite votre application pour utiliser la nouvelle clé.
+
+6. Désactivez (mais ne supprimez pas) la première touche.
+
+7. En cas de problème avec votre candidature, réactivez le
+clé temporairement. Lorsque votre application sera pleinement fonctionnelle, et
+la première touche est désactivée. Ce n'est qu'alors que vous pouvez supprimer le
+première clé. Assurez-vous de conserver une trace de tous les accès supprimés
+des clés pour continuer à les rechercher dans les journaux d'AWS CloudTrail.
+
+3. Révoquez les sessions actives du ou des rôles IAM en suivant ces étapes :
+
+1. Ouvrez la [console IAM] (https://console.aws.amazon.com/iam/) et
+accédez au rôle et cliquez sur le rôle IAM que vous souhaitez activer
+sessions pour.
+
+2. Cliquez sur le nom du rôle IAM et accédez à l'onglet « *révoquer les sessions » *.
+
+3. Cliquez sur le bouton « *révoquer les sessions actives* » et confirmez l'étape.
+
+4. Isolez les ressources concernées en suivant ces étapes :
+
+1. Pour les instances Amazon EC2, accédez à la console des instances EC2, vérifiez
+dans la case à côté de l'instance EC2 que vous souhaitez isoler, cliquez sur
+*actions*, cliquez sur *sécurité*, puis sur *modifier la sécurité
+groupes*. Détachez tous les groupes de sécurité actuels et associez un
+groupe de sécurité isolé qui bloque les entrées et les sorties
+communication avec l'EC2.
+
+2. Pour les compartiments Amazon S3, utilisez [bucket
+politiques] (https://docs.aws.amazon.com/AmazonS3/latest/userguide/add-bucket-policy.html)
+pour empêcher toute adresse IP suspecte d'accéder au S3
+des seaux.
+
+5. Révoquer les sessions de l'Identity Center :
+
+Avec Identity Center, il y a deux sessions qui peuvent être préoccupantes
+qui sont la session sur le portail d'accès et les sessions de rôle/de candidature :
+
+1. Séance sur le portail d'accès :
+
+1. Désactiver l'utilisateur dans Identity Center :
+
+1. Accédez à la console Identity Center et sélectionnez « Utilisateurs »
+
+2. Choisissez le nom d'utilisateur de l'utilisateur à désactiver
+
+3. Dans la zone Informations générales de l'utilisateur, cliquez sur « Désactiver »
+> accès utilisateur »
+
+2. Révoquer toutes les sessions actives :
+
+1. Sur la page de l'utilisateur dans Identity Center, sélectionnez « Actif »
+> onglet des sessions
+
+2. Sélectionnez toutes les sessions répertoriées, puis cliquez sur « Supprimer la session »
+
+2. Révoquer les sessions de rôle :
+
+1. Identifiez le ou les ensembles d'autorisations utilisés par l'utilisateur.
+
+1. Depuis la console Identity Center, cliquez sur Ensembles d'autorisations
+
+2. Sélectionnez le nom de l'ensemble d'autorisations.
+
+3. Faites défiler la page jusqu'à « Politique en ligne » et cliquez sur le bouton Modifier
+
+4. Ajoutez la politique suivante :
+
+{
+
+« Version » : « 17/10/2012 »,
+
+« Déclaration » : \ [
+
+{
+
+« Effet » : « Refuser »,
+
+« Action » : « \ * »,
+
+« Ressource » : « \ * »,
+
+« État » : {
+
+« StringEquals » : {
+
+« IdentityStore:UserId » : « exemple »
+
+},
+
+« DateLessThan » : {
+
+« AWS : Heure d'émission du jeton » : « 26/09/2023 15:00:00.000 Z »
+
+}
+
+}
+
+}
+
+\]
+
+}
+
+Pour cette politique, remplacez « exemple » par le nom d'utilisateur Identity Center de l'utilisateur.
+Le nom d'utilisateur se trouve dans le champ « Informations générales » du
+Page utilisateur. La valeur de AWS:TokenIssueTime doit être égale au temps en
+à laquelle vous appliquez cette politique.
+
+1. Sessions de candidature
+
+Les sessions d'application sont créées lorsqu'un utilisateur accède à un tiers
+application ou service AWS directement depuis le portail d'accès.
+
+Pour révoquer les sessions de candidature, consultez la documentation du
+application à laquelle vous avez accédé.
+
+1. Centre d'identité compromis
+
+Si votre fournisseur d'identité est compromis, vous devez bloquer l'accès à
+Identity Center provenant d'un fournisseur d'identité compromis (c'est-à-dire externe)
+Fournisseur d'identité basé sur SAML (ou Active Directory) en modifiant le
+source d'identité vers le « répertoire des sources d'identité ».
+
+Pour changer votre source d'identité :
+
+6.1 Accédez à la console Identity Center
+
+6.2 Sélectionnez « Paramètres »
+
+6.3 Sur la page des paramètres, cliquez sur l'onglet « Source d'identité »
+
+6.4 Cliquez sur le bouton « Actions » puis sur « Changer d'identité »
+source'
+
+6.5 Sélectionnez « Répertoire du centre d'identité » dans « Choisir une source d'identité »
+page
+
+6.6 Cliquez sur le bouton « Suivant »
+
+6.7 Lisez les informations contenues dans le champ « Vérifier et confirmer »,
+
+6.8 Tapez « ACCEPTER » dans le champ approprié, puis cliquez sur « Modifier »
+bouton « source d'identité »
+
+Remarque : si vous accédez à AWS via un fournisseur d'identité tiers,
+assurez-vous de vérifier les journaux d'accès et de suivre les directives du fournisseur sur
+répondre à un événement et sécuriser votre environnement.
+
+De plus, si vous passez d'Active Directory à Identity Center
+annuaire, tous les utilisateurs et groupes seront supprimés. Les ensembles d'autorisations seront
+ne pas être supprimée, mais les attributions d'ensembles d'autorisations seront supprimées. Si vous
+passent d'un fournisseur d'identité externe basé sur SAML, tous les utilisateurs
+et les groupes resteront renseignés dans Identity Center, tout comme le
+assignations d'ensembles d'autorisations
 
 ## Éradication
-### Examinez les résultats de [Examiner l'historique des événements CloudTrail pour connaître l'activité par la clé d'accès compromise] (. /#cloudtrail)
-Supprimez toutes les ressources créées par la ou les clés compromises. Assurez-vous de vérifier toutes les régions AWS, même les régions où vous n'avez jamais lancé de ressources AWS.
-* **Important** : Si vous devez conserver des ressources pour l'enquête, envisagez de les sauvegarder. Par exemple, si vous avez un besoin réglementaire, de conformité ou juridique de conserver une instance EC2, prenez un instantané EBS avant de mettre fin à l'instance.
 
-### Consultez le [Éviter les charges imprévues] (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/checklistforunwantedcharges.html)
-Vérifiez et supprimez tous les services reconnus dans votre compte. Portez une attention particulière aux ressources suivantes :
-* Instances EC2 et AMI, y compris les instances à l'état arrêté
-* Volumes et instantanés EBS
-* Fonctions et couches AWS Lambda
+Une fois que vous aurez fini de contenir l'événement de sécurité, il sera temps de travailler
+sur la suppression et le nettoyage de la cause de l'événement de sécurité.
 
-Pour supprimer des fonctions et des couches Lambda, procédez comme suit :
-1. Ouvrez la console Lambda.
-1. Dans le volet de navigation, choisissez Fonctions.
-1. Sélectionnez les fonctions que vous souhaitez supprimer.
-1. Pour Actions, choisissez Supprimer.
-1. Dans le volet de navigation, choisissez Calques.
-1. Sélectionnez la couche que vous souhaitez supprimer.
-1. Choisissez Supprimer.
+1. Supprimez toutes les ressources créées par les clés compromises qui étaient
+détectée lors de la « phase d'analyse, étape 1 ». Vérifiez même toutes les régions AWS
+régions dans lesquelles vous ne lancez pas de ressources AWS. Si vous en avez besoin
+conservez une ressource pour les enquêtes, pensez à la sauvegarder.
 
-Supprimez tous les utilisateurs IAM que vous n'avez pas créés
-1. Connectez-vous à AWS Management Console et ouvrez la [console IAM] (https://console.aws.amazon.com/iam/)
-1. Dans le volet de navigation, choisissez Utilisateurs, puis cochez la case en regard du nom d'utilisateur que vous souhaitez supprimer, et non du nom ou de la ligne elle-même.
-1. En haut de la page, choisissez Supprimer l'utilisateur.
-1. Dans la boîte de dialogue de confirmation, attendez le chargement des dernières informations consultées avant de consulter les données. La boîte de dialogue indique quand chacun des utilisateurs sélectionnés a accédé à un service AWS pour la dernière fois. Si vous tentez de supprimer un utilisateur actif au cours des 30 derniers jours, vous devez cocher une case supplémentaire pour confirmer que vous souhaitez supprimer l'utilisateur actif. Si vous souhaitez continuer, choisissez Oui, Supprimer.
+2. Vérifiez et
+[supprimer] (https://repost.aws/knowledge-center/terminate-resources-account-closure)
+tous les services non reconnus utilisés sur votre compte. Rémunération
+attention particulière aux ressources suivantes :
 
-Vous trouverez de la documentation sur la suppression d'autres services sur la page [mettre fin à toutes mes ressources] (https://aws.amazon.com/premiumsupport/knowledge-center/terminate-resources-account-closure/).
+1. Instances EC2 et AMI, y compris les instances situées dans le
+État.
+
+2. Volumes et instantanés EBS.
+
+3. Fonctions et couches AWS Lambda.
+
+3. Supprimez les autorisations inutiles lors de la journalisation des buckets ou du journal S3
+ressources d'agrégation identifiées à l'étape 6 de la « phase de détection » qui
+pourrait être utilisé pour éviter d'être repérée. Cela vous permet d'identifier ce qui n'est pas intentionnel
+accès à vos ressources et à vos données.
+
+4. Supprimez toutes les données exposées qui ne sont pas nécessaires aux opérations.
+
+5. Effectuez des analyses des failles de sécurité sur les sites destinés au public
+ressources. Vous pouvez utiliser des outils tels que [Amazon
+Inspecteur] (https://docs.aws.amazon.com/inspector/latest/user/scanning-resources.html)
+pour scanner le système d'exploitation et une application logicielle <sup>tierce</sup> pour
+vulnérabilités.
 
 ## Récupération
-AWS dispose d'un guide publié pour [Que dois-je faire si je constate une activité non autorisée dans mon compte AWS ?] (https://aws.amazon.com/premiumsupport/knowledge-center/potential-account-compromise/)
 
-## Actions préventives
-### Prowler IAM Scan
-`. /prowler -g contrôle 122, contrôle 111, contrôle 110, contrôle 19, contrôle 18, contrôle 17, contrôle 16, contrôle 15, contrôle 11, contrôle 116, contrôle 12, contrôle 114, contrôle 115, contrôle 14, contrôle 13, contrôle 112, contrôle 119, extra71, extra7100, extra7125, extra7125, extra769, extra769, extra774`
+Une fois que vous aurez terminé d'éliminer les causes des événements de sécurité. C'est l'heure
+pour remettre les ressources concernées dans un état connu.
 
-### Activer MFA
-Pour une sécurité accrue, il est recommandé de configurer MFA afin de protéger vos ressources AWS. Vous pouvez activer [MFA pour les utilisateurs IAM] (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html) ou [utilisateur racine du compte AWS] (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html). L'activation de MFA pour l'utilisateur racine affecte uniquement les informations d'identification de l'utilisateur racine. Les utilisateurs IAM du compte sont des identités distinctes avec leurs propres informations d'identification, et chaque identité possède sa propre configuration MFA.
+1. Restaurez les données nécessaires à partir de sauvegardes propres connues antérieures au
+événement :
 
-### Vérifiez les informations de votre compte
-AWS a besoin d'informations de compte précises pour vous contacter et aider à résoudre tout problème de compte. Vérifiez que les informations de votre compte sont correctes.
-* Le nom du compte et l'adresse e-mail.
-* Vos coordonnées, en particulier votre numéro de téléphone.
-* Les autres contacts de votre compte.
+1. [Restauration à partir d'un instantané Amazon EBS ou d'un
+AMI] (https://docs.aws.amazon.com/prescriptive-guidance/latest/backup-recovery/restore.html).
 
-### Utiliser les projets AWS Git pour rechercher des preuves d'utilisation non autorisée
-AWS propose des projets Git que vous pouvez installer pour vous aider à protéger votre compte :
-* [Git Secrets] (https://github.com/awslabs/git-secrets) peut analyser les fusions, les validations et les messages de validation à la recherche d'informations secrètes (c'est-à-dire des clés d'accès). Si Git Secrets détecte des expressions régulières interdites, il peut refuser la publication de ces commits dans des référentiels publics.
-* Utilisez [AWS Step Functions et AWS Lambda pour générer Amazon CloudWatch Events] (https://aws.amazon.com/step-functions) à partir d'AWS Health ou d'AWS Trusted Advisor. S'il existe des preuves que vos clés d'accès sont exposées, les projets peuvent vous aider à détecter, enregistrer et atténuer automatiquement l'événement.
+2. [Restauration depuis une base de données
+instantané] (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RestoreFromSnapshot.html) Amazon
+RDS.
 
-### Évitez d'utiliser l'utilisateur racine pour les opérations quotidiennes
-La clé d'accès de l'utilisateur racine de votre compte AWS donne un accès complet à toutes vos ressources AWS, y compris vos informations de facturation. Vous ne pouvez pas réduire les autorisations associées à la clé d'accès utilisateur racine de votre compte AWS. Il est recommandé de ne pas utiliser l'accès utilisateur racine, sauf si cela est absolument nécessaire.
+3. [Restaurer le précédent
+versions] (https://docs.aws.amazon.com/AmazonS3/latest/userguide/RestoringPreviousVersions.html) Amazon
+Versions des objets S3.
 
-Si vous ne disposez pas déjà d'une clé d'accès pour l'utilisateur racine de votre compte AWS, n'en créez pas, sauf si cela est absolument nécessaire. Au lieu de cela, créez un utilisateur IAM pour vous-même avec des autorisations administratives. Vous pouvez vous connecter à AWS Management Console avec l'adresse e-mail et le mot de passe de votre compte AWS pour créer un utilisateur IAM.
+2. Si nécessaire, reconstruisez les systèmes à partir de zéro, y compris en les redéployant
+auprès d'une source fiable grâce à l'automatisation, parfois sur un nouveau compte AWS.
 
-### Posture générale de sécurité
-Exécutez un [Self-Service Security Assessment] (https://aws.amazon.com/blogs/publicsector/assess-your-security-posture-identify-remediate-security-gaps-ransomware/) contre l'environnement afin d'identifier davantage d'autres risques et éventuellement d'autres risques publics non identifiés dans ce playbook.
+3. Si l'accès à l'authentification multifactorielle « MFA » est perdu et que vous ne le faites pas
+vous avez un autre appareil MFA enregistré sur votre compte root, s'il vous plaît
+suivez ces étapes :
 
-## Leçons apprises
-`Il s'agit d'un endroit où ajouter des éléments spécifiques à votre entreprise qui n'ont pas nécessairement besoin de « réparation », mais qui sont importants à savoir lors de l'exécution de ce livre de jeu en tandem avec les exigences opérationnelles et commerciales. `
+1. Connectez-vous à [AWS Management]
+Console] (https://console.aws.amazon.com/) en tant que propriétaire du compte
+en choisissant Utilisateur Racine et en saisissant l'adresse e-mail de votre compte AWS
+adresse. Sur la page suivante, entrez votre mot de passe.
 
-# Nombre d'articles de carnet de commandes réglés
-- En tant que répondeur aux incidents, j'ai besoin d'un manuel sur la façon de gérer les jetons de session et les clés d'accès après un incident
-- En tant que répondeur d'incident, j'ai besoin d'une méthode pour analyser et supprimer des clés des référentiels de code public
-- En tant qu'intervenant en cas d'incident, j'ai besoin d'un décideur clair sur le moment de briser un environnement plutôt que de permettre une exposition continue.
-## Articles en arriéré actuel
+2. Sur la page Vérification supplémentaire requise, sélectionnez un MFA
+méthode pour vous authentifier et choisir Next.
+
+3. Selon le type de MFA que vous utilisez, vous devriez voir un
+page différente, mais l'option « *Résoudre les problèmes liés au MFA » * fonctionne
+pareil. Sur la page « *Vérification supplémentaire requise » *
+ou page « *Authentification multifactorielle » *, choisissez « *Résoudre les problèmes
+MFA » *.
+
+4. Si nécessaire, saisissez à nouveau votre mot de passe et choisissez *Se connecter*.
+
+5. Sur la page « *Résoudre les problèmes liés à votre dispositif d'authentification » *, dans
+le « *Connectez-vous en utilisant d'autres facteurs de
+section « Authentification » *, choisissez « *Connectez-vous en utilisant une alternative
+facteurs » *.
+
+6. Sur le bouton « *Connectez-vous en utilisant un autre facteur » de
+page d'authentification » *, authentifiez votre compte en vérifiant
+l'adresse e-mail, choisissez « *Envoyer un e-mail de vérification » *
+
+7. Vérifiez l'adresse e-mail associée à votre compte AWS pour trouver un
+message d'Amazon Web Services
+(recover-mfa-no-reply@verify.signin.aws). Suivez les indications
+dans l'e-mail.
+
+> Si vous ne voyez pas l'e-mail sur votre compte, consultez votre dossier de courriers indésirables, ou
+> retournez sur votre navigateur et choisissez « *Renvoyer l'e-mail* ».
+
+1. Après avoir vérifié votre adresse e-mail, vous pouvez continuer à vous authentifier
+votre compte. Pour vérifier votre numéro de téléphone principal,
+choisissez Call me now.
+
+2. Répondez à l'appel d'AWS et, lorsque vous y êtes invité, entrez les 6 chiffres
+numéro indiqué sur le site Web d'AWS sur le clavier de votre téléphone.
+
+> Si vous ne recevez aucun appel d'AWS, choisissez Se connecter pour vous connecter au
+> Encore une fois sur console et recommencez à zéro. Ou consultez [Multifactoriel perdu ou inutilisable]
+> Authentification (MFA)
+> appareil] (https://support.aws.amazon.com/#/contacts/aws-mfa-support) pour
+> contactez l'assistance pour obtenir de l'aide.
+
+1. Après avoir vérifié votre numéro de téléphone, vous pouvez vous connecter à votre compte
+> en choisissant Se connecter à la console.
+
+2. L'étape suivante varie en fonction du type de MFA que vous utilisez :
+
+1. Pour un appareil MFA virtuel, supprimez le compte de votre appareil.
+> Ensuite, rendez-vous sur [AWS Security]
+> Informations d'identification] (https://console.aws.amazon.com/iam/home ? (#security_credential) page
+> et supprimez l'ancienne entité d'appareil virtuel MFA avant de créer
+> un nouveau.
+
+2. Pour obtenir une clé de sécurité FIDO, rendez-vous sur le [AWS Security]
+> Informations d'identification] (https://console.aws.amazon.com/iam/home ? (#security_credential) page
+> et désactivez l'ancienne clé de sécurité FIDO avant d'en activer une nouvelle
+> un.
+
+3. Pour un jeton TOTP matériel, contactez le fournisseur tiers pour
+> aider à réparer ou à remplacer l'appareil. Vous pouvez continuer à signer
+> en utilisant d'autres facteurs d'authentification jusqu'à ce que vous
+> recevez votre nouvel appareil. Une fois que vous aurez le nouveau matériel MFA
+> appareil, accédez au [AWS Security
+> Informations d'identification] (https://console.aws.amazon.com/iam/home ? (#security_credential) page
+> et supprimez l'ancienne entité matérielle MFA avant vous
+> créez-en un nouveau.
+
+<!-- -->
+
+1. Vérifiez que les responsables de l'IAM disposent des droits d'accès et des autorisations appropriés
+à la suite de l'événement de sécurité.
+
+2. Corrigez les vulnérabilités et installez les correctifs nécessaires à l'aide de [AWS]
+Patch SSM
+manager] (https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager.html)
+ou tout autre outil <sup>tiers</sup> que vous utilisez.
+
+3. Remplacez tous les fichiers compromets/endommagés par des versions propres de
+sauvegarde.
+
+## Activité après un incident
+
+Une fois que vous vous êtes remise de l'incident de sécurité, vous
+devrait effectuer les exercices décrits dans [*Incident de sécurité AWS
+Guide de réponse, après l'incident
+activité*] (https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/establish-framework-for-learning.html).
+Cela vous aidera à documenter les leçons tirées de l'incident, à mesurer
+et améliorez l'efficacité de vos capacités de réponse aux incidents,
+et mettre en œuvre des contrôles supplémentaires pour empêcher qu'un incident similaire ne se produise
+récurrent.
+
+## Conclusion
+
+Dans ce playbook, nous avons décrit les premières étapes à suivre lorsqu'un
+un événement de sécurité des informations d'identification compromis se produit sur votre/vos compte (s) AWS.
+Cela inclut le fait de faire appel au support AWS, de détecter un compromis, d'analyser
+événements liés à votre ou vos comptes, contenant l'événement de sécurité,
+éradiquer la menace, récupérer votre/vos compte (s) pour un compte « dont le fonctionnement a été vérifié »
+état opérationnel et activités après l'incident, y compris les leçons
+appris. À l'étape suivante, veuillez consulter les ressources AWS suivantes, pour
+contribuer à améliorer vos capacités de réponse aux incidents :
+
+1. [Réponse aux incidents de sécurité d'AWS
+Guide] (https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/aws-security-incident-response-guide.html)
+
+2. [Framework AWS Customer Playbook pour les utilisateurs en cas de compromission de l'IAM
+Informations d'identification] (https://github.com/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md)
+
+3. [Bonnes pratiques de sécurité AWS en matière de
+IAM] (https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
+
+4. [Framework AWS Well Architected — Sécurité
+Pilier] (https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
+
+## Annexe A — Révision des journaux
+
+**Structure du journal CloudTrail**
+
+Lorsque vous effectuez des recherches dans les journaux de CloudTrail, il est important de comprendre
+les différents champs contenus dans un enregistrement d'événement CloudTrail. Pour un
+liste complète, veuillez consulter le [<u>officiel] Sentier dans le cloud
+</u>documentation] (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html).
+
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Heure de l'événement</td>
+<td>La date et l'heure auxquelles la demande a été traitée, en coordination
+heure universelle (UTC).</td>
+</tr>
+<tr class="even">
+<td>Nom de l'événement</td>
+<td>L'action demandée, qui est l'une des actions de l'API pour
+ce service</td>
+</tr>
+<tr class="odd">
+<td>Source de l'événement</td>
+<td>Le service auprès duquel la demande a été faite. Ce nom est généralement
+forme abrégée du nom du service sans espaces, plus .amazonaws.com.</td>
+</tr>
+<tr class="even">
+<td>Identité de l'utilisateur</td>
+<td>Informations sur l'identité IAM à l'origine de la demande. Pour en savoir plus
+informations, voir <a
+<u>href= » https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html « > Sentier dans le cloud
+Élément Identité de l'utilisateur.</u></a></td>
+</tr>
+<tr class="odd">
+<td>ressources</td>
+<td><p>Une liste des ressources consultées lors de l'événement. Le champ peut contenir
+les informations suivantes :</p>
+<ul>
+<li><p>ARN des ressources</p></li>
+<li><p>ID de compte du propriétaire de la ressource</p></li>
+<li><p>Identifiant du type de ressource au format :
+AWS : :aws-service-name : :data-type-name</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>Région AWS</td>
+<td>La région AWS à laquelle la demande a été envoyée, telle que us-east-2</td>
+</tr>
+<tr class="odd">
+<td>Adresse IP source</td>
+<td>L'adresse IP à partir de laquelle la demande a été faite. Pour les actions qui
+proviennent de la console de service, l'adresse indiquée est celle du
+la ressource client sous-jacente, et non le serveur Web de la console.</td>
+</tr>
+</tbody>
+</table>
+
+**Événements**
+
+Les acteurs de la menace effectueront un certain nombre d'actions par la suite
+compromettre les informations d'identification du compte. Bien qu'il ne soit pas pratique de répertorier tous
+action possible, voici quelques modèles à rechercher lors de votre
+enquête.
+
+**Remarque :** Les actions de l'API ci-dessous n'indiquent pas nécessairement une sécurité
+un incident s'est produit. Évaluez toutes les activités enregistrées dans le contexte
+de votre enquête.
+
+**Modifications apportées à la configuration du fournisseur d'identité SAML/OIDC**
+
+Les acteurs de la menace peuvent créer ou modifier le fournisseur d'identité SAML/OIDC
+configurations pour éviter d'être détectée et maintenir la persistance au sein de votre
+environnement cloud.
+
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Action relative à l'API</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IAM : Créer un fournisseur AML</td>
+<td>Crée une ressource IAM qui décrit un fournisseur d'identité (IdP)
+qui prend en charge le protocole SAML 2.0</td>
+</tr>
+<tr class="even">
+<td>IAM : Supprimer le fournisseur SAML</td>
+<td>Supprime une ressource de fournisseur SAML dans IAM.</td>
+</tr>
+<tr class="odd">
+<td>IAM : met à jour le fournisseur AML</td>
+<td>Met à jour le document de métadonnées d'un fournisseur SAML existant</td>
+</tr>
+<tr class="even">
+<td>IAM : Créer un fournisseur de connexion OpenID</td>
+<td>Crée une entité IAM pour décrire un fournisseur d'identité (IdP) qui
+supporte OpenID Connect (OIDC)</td>.
+</tr>
+<tr class="odd">
+<td>IAM : Ajouter l'identifiant du client au fournisseur OpenID Connect</td>
+<td>Ajoute un nouvel identifiant client (également appelé audience) à la liste des clients
+Identifiants déjà enregistrés pour l'IAM OpenID Connect (OIDC) spécifié
+ressource pour les fournisseurs</td>
+</tr>
+<tr class="even">
+<td>IAM : Supprimer le fournisseur de connexion OpenID</td>
+<td>Supprime un objet de ressource de fournisseur d'identité (IdP) OpenID Connect dans
+IAM</td>
+</tr>
+<tr class="odd">
+<td>IAM : Supprimer l'identifiant du client du fournisseur OpenIdConnect</td>
+<td>Supprime l'identifiant client spécifié (également appelé audience) du
+liste des identifiants clients enregistrés pour l'IAM OpenID Connect spécifié
+objet de ressource du fournisseur (OIDC)</td>
+</tr>
+<tr class="even">
+<td>IAM : Mettre à jour l'empreinte numérique du fournisseur OpenID Connect</td>
+<td>Remplace la liste existante des empreintes digitales des certificats de serveur
+associé à un objet de ressource du fournisseur OpenID Connect (OIDC) avec un
+nouvelle liste d'empreintes digitales</td>
+</tr>
+</tbody>
+</table>
+
+**Modifications apportées à la configuration IAM**
+
+Les acteurs de la menace peuvent créer ou modifier des principes IAM, des informations d'identification ou
+autorisations pour éviter d'être détectée ou pour maintenir la persistance dans votre cloud
+environnement.
+
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Action relative à l'API</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IAM : Changer le mot de passe</td>
+<td>Change le mot de passe de l'utilisateur IAM qui appelle
+</td>opération
+</tr>
+<tr class="even">
+<td>IAM : Créer un utilisateur</td>
+<td>Crée un nouvel utilisateur IAM pour votre compte AWS</td>
+</tr>
+<tr class="odd">
+<td>IAM : Créer un rôle</td>
+<td>Crée un nouveau rôle pour votre compte AWS</td>
+</tr>
+<tr class="even">
+<td>IAM : Créer un groupe</td>
+<td>Crée un nouveau groupe</td>
+</tr>
+<tr class="odd">
+<td>IAM : Politique relative aux pièces jointes</td>
+<td>Attache la politique gérée spécifiée à l'utilisateur spécifié</td>
+</tr>
+<tr class="even">
+<td>IAM : Politique relative aux rôles attachés</td>
+<td>Attache la politique gérée spécifiée au rôle IAM spécifié</td>
+</tr>
+<tr class="odd">
+<td>IAM : Politique du groupe Attacher</td>
+<td>Attache la politique gérée spécifiée à l'IAM spécifié
+</td>groupe
+</tr>
+<tr class="even">
+<td>IAM : Répertorier les clés d'accès</td>
+<td>Renvoie des informations sur les identifiants de clé d'accès associés au
+utilisateur IAM spécifié</td>
+</tr>
+<tr class="odd">
+<td>IAM : Créer une version de la politique</td>
+<td>Crée une nouvelle version de la politique gérée spécifiée</td>
+</tr>
+<tr class="even">
+<td>IAM : Mettre à jour le profil de connexion</td>
+<td>Change le mot de passe de l'utilisateur IAM indiqué</td>
+</tr>
+<tr class="odd">
+<td>IAM : Créer une clé d'accès</td>
+<td>Crée une nouvelle clé d'accès secrète AWS et la clé d'accès AWS correspondante
+ID de l'utilisateur indiqué</td>
+</tr>
+<tr class="even">
+<td>IAM : Mettre à jour la clé d'accès</td>
+<td>Fait passer le statut de la clé d'accès spécifiée d'Actif à
+Inactif, ou vice versa.</td>
+</tr>
+<tr class="odd">
+<td>IAM : Désactiver l'appareil MFA</td>
+<td>Désactive le dispositif MFA spécifié et le supprime de toute association
+avec le nom d'utilisateur pour lequel il a été initialement activé</td>
+</tr>
+</tbody>
+</table>
+
+**Modifications apportées aux configurations de journalisation et de surveillance**
+
+Les acteurs de la menace peuvent désactiver la surveillance des ressources ou supprimer des journaux pour éviter
+détecter ou dissuader les enquêtes sur les incidents.
+
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>CloudTrail : Supprimer le sentier</th>
+<th>Supprime un parcours, en désactivant la diffusion des événements CloudTrail à un
+bucket Amazon S3, CloudWatch Logs ou Amazon EventBridge</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CloudTrail : arrêtez de vous connecter</td>
+<td>Suspend l'enregistrement des appels d'API AWS et la livraison des fichiers journaux pour
+le sentier spécifié</td>
+</tr>
+<tr class="even">
+<td>Cloud Trail : Update Trail</td>
+<td>Met à jour les paramètres qui spécifient la livraison des fichiers journaux</td>
+</tr>
+<tr class="odd">
+<td>CloudTrail : Supprimer la banque de données d'événements</td>
+<td>Supprime un <a
+<u>href= » https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html « > Sentier dans le cloud
+Lake Event Date Store</u></a></td>
+</tr>
+<tr class="even">
+<td>Devoir de garde : supprimer le détecteur</td>
+<td>Supprime un détecteur Amazon GuardDuty et désactive GuardDuty dans un
+région en particulier</td>
+</tr>
+<tr class="odd">
+<td>Devoir de garde : supprimer la destination de publication</td>
+<td>Supprime la destination de publication, où les résultats sont exportés
+</td>à
+</tr>
+<tr class="even">
+<td>Analyseur d'accès : DeleteAnalyzer</td>
+<td>Supprime l'analyseur spécifié, désactivant l'analyseur d'accès IAM
+service pour cette région.</td>
+</tr>
+<tr class="odd">
+<td>Configuration : Supprimer la règle de configuration</td>
+<td>Supprime la règle de Configuration AWS spécifiée et toutes ses évaluations
+</td>résultats
+</tr>
+<tr class="even">
+<td>Configuration : Supprimer l'enregistreur de configuration</td>
+<td>Supprime l'enregistreur de configuration AWS Config</td>
+</tr>
+<tr class="odd">
+<td>Configuration : Supprimer le canal de livraison</td>
+<td>Supprime le canal de diffusion d'AWS Config</td>
+</tr>
+<tr class="even">
+<td>Configuration : Arrêter l'enregistreur de configuration</td>
+<td>Arrête d'enregistrer les configurations et les modifications de configuration pour
+groupe d'enregistrement spécifié</td>
+</tr>
+</tbody>
+</table>
+
+**Modifications apportées à la configuration du compartiment S3**
+
+Les acteurs menaçants peuvent modifier ou supprimer les configurations du compartiment S3 afin de
+exfiltrer des données.
+
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>S3 : List Buckets</th>
+<th>Renvoie la liste de tous les buckets appartenant à l'expéditeur authentifié de
+la demande</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>S3 : Create Bucket</td>
+<td>Crée un nouveau bucket</td>
+</tr>
+<tr class="even">
+<td>S3 : Supprimer le bloc d'accès public du compartiment</td>
+<td>Supprime la configuration PublicAccessBlock pour un Amazon S3
+</td>seau
+</tr>
+<tr class="odd">
+<td>S3 : Politique relative au puttbucket</td>
+<td>Ajoute ou met à jour une politique sur un bucket</td>
+</tr>
+<tr class="even">
+<td>S3 : Politique de suppression du compartiment</td>
+<td>Supprime la politique du bucket</td>
+</tr>
+<tr class="odd">
+<td>S3 : Mettre un objet ACL</td>
+<td>Définit les autorisations de la liste de contrôle d'accès (ACL) pour un objet dans un
+compartiment Amazon S3</td>
+</tr>
+<tr class="even">
+<td>S3 : Supprimer l'objet ACL</td>
+<td>Supprimer la liste de contrôle d'accès (ACL) d'un objet</td>
+</tr>
+<tr class="odd">
+<td>S3 : Putbucket Cors</td>
+<td>Définit la configuration CORS de votre bucket</td>
+</tr>
+<tr class="even">
+<td>S3 : Supprimer le Bucket Cors</td>
+<td>Supprime les informations de configuration CORS définies pour le bucket</td>
+</tr>
+<tr class="odd">
+<td>S3 : Chiffrement du bucket</td>
+<td>Configurer le chiffrement par défaut et les clés de compartiment Amazon S3 pour un
+seau existant</td>
+</tr>
+<tr class="even">
+<td>S3 : Supprimer le cryptage du bucket</td>
+<td>Réinitialise le cryptage par défaut du bucket côté serveur
+chiffrement avec des clés gérées par Amazon S3 (SSE-S3</td>)
+</tr>
+</tbody>
+</table>
+
+**Autres actions**
+
+Voici d'autres actions que vous devriez souligner lors de votre
+enquête
+
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>KMS : DisableKey</th>
+<th>Définit l'état d'une clé KMS sur Disabled. Ce changement est temporaire
+empêche l'utilisation de la clé KMS pour les opérations cryptographiques</th>.
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>KMS : Suppression de la clé de planification</td>
+<td>Planifie la suppression d'une clé KMS.</td>
+</tr>
+<tr class="even">
+<td>KMS : Politique de Putkey</td>
+<td>Attache une politique clé à la clé KMS spécifiée. Les principales politiques sont les
+principal moyen de contrôler l'accès aux clés KMS.</td>
+</tr>
+<tr class="odd">
+<td>KMS : CreateKey</td>
+<td>Crée une clé KMS unique gérée par le client sur votre compte AWS et
+Région.</td>
+</tr>
+<tr class="even">
+<td>EC2 : Décrivez les instances</td>
+<td>Décrit les instances EC2 de votre compte.</td>
+</tr>
+<tr class="odd">
+<td>EC2 : Exécuter des instances</td>
+<td>Lance des instances EC2 sur votre compte.</td>
+</tr>
+<tr class="even">
+<td>EC2 : Créer un VPC</td>
+<td>Crée un VPC sur votre compte.</td>
+</tr>
+<tr class="odd">
+<td>EC2 : Décrivez les VPC</td>
+<td>Décrit les VPC de votre compte.</td>
+</tr>
+<tr class="even">
+<td>EC2 : Créer un groupe de sécurité</td>
+<td>Crée un groupe de sécurité. Un groupe de sécurité agit comme un groupe virtuel
+pare-feu pour votre instance afin de contrôler le trafic entrant et sortant</td>.
+</tr>
+<tr class="odd">
+<td>EC2 : Supprimer le groupe de sécurité</td>
+<td>Supprime un groupe de sécurité.</td>
+</tr>
+<tr class="even">
+<td>RDS : instance de base de données créée</td>
+<td>Crée une instance de base de données RDS.</td>
+</tr>
+<tr class="odd">
+<td>RDS : instance B supprimée</td>
+<td>Supprime une instance de base de données RDS.</td>
+</tr>
+</tbody>
+</table>

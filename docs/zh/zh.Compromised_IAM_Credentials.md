@@ -1,329 +1,1129 @@
-# 事件响应行动手册：受损的 IAM 凭证
-本文档仅供参考。 它代表了截至本文档发布之日 Amazon Web Services (AWS) 提供的当前产品和实践，这些产品和做法如有更改，恕不另行通知。 客户有责任对本文档中的信息以及对 AWS 产品或服务的任何使用情况进行自己的独立评估，每种产品或服务都是 “按原样” 提供的，无论是明示还是暗示的担保。 本文档不创建 AWS、其附属公司、供应商或许可方的任何担保、陈述、合同承诺、条件或保证。 AWS 对客户的责任和责任受 AWS 协议的控制，本文档既不是 AWS 与其客户之间的任何协议的一部分，也不修改。
+# 针对被盗的 AWS 账户证书的安全手册
 
-© 2021 Amazon 网络服务公司或其附属公司。 保留所有权利。 本作品根据知识共享署名 4.0 国际许可协议进行许可。
+## 简介
 
-提供此 AWS 内容须遵守 http://aws.amazon.com/agreement 提供的 AWS 客户协议的条款或客户与 Amazon Web Services, Inc. 或 Amazon 网络服务 EMEA SARL 或两者之间的其他书面协议。
+作为我们对客户的持续承诺的一部分，AWS 正在提供这个
+安全事件响应手册，描述了执行以下操作所需的步骤
+检测并响应您的 AWS 内被泄露的证书
+账户。 本文档的目的是提供规范性
+有关在您怀疑发生安全事件后应采取的措施的指南
+发生了。
 
-## 联系点
+![Image](/images/nist_life_cycle.png)
 
-作者：`作者姓名`\
-批准者：`批准者姓名`\
-最后批准日期：
-
-## 执行摘要
-本行动手册概述了当您在 AWS 账户内观察到未经授权的活动或者您认为未经授权的方访问了您的账户时应做出响应的流程。
-
-## 潜在的妥协指标
--新的或无法识别的 IAM 用户
--无法识别或未经授权的资源（例如 EC2、Lambda）
--不寻常的账单增加
--来自安全研究员的通知
--通知我的 AWS 资源或账户可能会被盗用
-
-## 潜在的 AWS GuardDuty 调查结果
--CredentialAccess: IAMUser/AnomalousBehavior
--DefenseEvasion: IAMUser/AnomalousBehavior
--Discovery: IAMUser/AnomalousBehavior
--Exfiltration: IAMUser/AnomalousBehavior
--Impact: IAMUser/AnomalousBehavior
--InitialAccess: IAMUser/AnomalousBehavior
--PenTest: IAMUser/KaliLinux
--PenTest: IAMUser/ParrotLinux
--PenTest: IAMUser/PentooLinux
--Persistence: IAMUser/AnomalousBehavior
--Policy: IAMUser/RootCredentialUsage
--PrivilegeEscalation: IAMUser/AnomalousBehavior
--RERecon: IAMUser/MaliciousIPCaller
--RERecon: IAMUser/MaliciousIPCaller.Custom
--RECORecon: IAMUser/TorIPCaller
--Stealth: IAMUser/CloudTrailLoggingDisabled
--Stealth: IAMUser/PasswordPolicyChange
--UnauthorizedAccess: IAMUser/ConsoleLoginSuccess.B
--UnauthorizedAccess: IAMUser/InstanceCredentialExfiltration se
--UnauthorizedAccess: IAMUser/MaliciousIPCaller
--UnauthorizedAccess: IAMUser/MaliciousIPCaller.Custom
--UnauthorizedAccess: IAMUser/TorIPCaller
-
-### 目标
-在整个行动手册的执行过程中，重点关注 _*** 预期结果 ***_，记下增强事件响应能力的注意事件。
-
-#### 确定：
-* ** 漏洞被利用 **
-* ** 观察到的漏洞和工具 **
-* ** 演员的意图 **
-* ** 演员的归因 **
-* ** 对环境和业务造成的损害 **
-
-#### 恢复：
-
-* ** 返回原始和强化配置 **
-
-#### 增强 CAF 安全视角组件：
-[AWS Cloud Adoption Framework 安全角度] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
-* ** 指令 **
-* ** 侦探 **
-* ** 响应 **
-* ** 预防性 **
-
-! [图片] (/images/aws_caf.png)
-* * *
-
-### 响应步骤
-1. [** 准备 **] 执行资产库存
-2. [** 准备 **] 实施培训计划以识别和响应公开的 IAM 证书
-3. [** 准备 **] 实施事件响应的沟通策略
-4. [** 检测 **] 识别 Root 账户访问权限（已授权和未授权）
-5. [** 检测 **] 识别新的或无法识别的 IAM 用户
-6. [** 检测 **] 识别无法识别或未经授权的资源（例如 EC2、Lambda）
-7. [** 检测 **] 识别并查找暴露的秘密
-8. [** 检测 **] 识别不寻常的账单增加
-9. [** 检测 **] 回复来自 AWS 或第三方关于我的 AWS 资源或账户可能遭到入侵的通知
-10. [** 检测 **] 识别任何潜在未经授权的 IAM 用户凭证
-11. [** 准备 **] 确定上报程序
-12. [** 检测和分析 **] 查看 CloudTrail 日志
-13. [** 检测和分析 **] 查看 VPC Flow Logs
-14. [** 检测和分析 **] 查看端点/基于主机的日志
-15. [** 包含 **] 执行适当的遏制操作
-16. [**ERADICATION**] 查看来自被泄露的访问密钥查看 CloudTrail 事件历史记录中的调查结果以了解活动
-17. [** 根除 **] 查看避免意外费用
-18. [** 恢复 **] 执行适当的恢复操作
-19. [** 准备 **] 执行 Prowler IAM 扫描
-20. [** 准备 **] 启用 MFA
-21. [** 准备 **] 验证您的账户信息
-22. [** 准备 **] 使用 AWS Git 项目扫描未经授权使用的证据
-23. [** 准备 **] 避免使用 root 用户进行日常操作
-24. [** 准备 **] 评估你的整体安全状况
-
-*** 响应步骤遵循 [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide] 中的事件响应生命周期（https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf）
-
-! [图片] (/images/nist_life_cycle.png) ***
-
-### 事件分类和处理
-* ** 策略、技术和程序 **：证书曝光
-* ** 类别 **：IAM 凭证曝光
-* ** 资源 **：IAM
-* ** 指标 **：网络威胁情报，第三方通知
-* ** 日志源 **：AWS CloudTrail、AWS Config、VPC Flow Logs、Amazon GuardDuty
-* ** 团队 **：安全运营中心 (SOC)、法医调查员、云工程
-
-## 事件处理流程
-### 事件响应流程有以下几个阶段：
-* 准备
-* 检测和分析
-* 遏制和根除
-* 恢复
-* 事件后活动
+*AWS 事件响应的各个方面*
 
 ## 准备
-本行动手册在可能的情况下引用并集成了 [Prowler] (https://github.com/toniblyx/prowler)，这是一种命令行工具，可以帮助您进行 AWS 安全评估、审计、强化和事件响应。
 
-它遵循 CIS Amazon Web Services Foundations Benchmark 指南（49 个支票），并有 100 多项额外支票，包括与 GDPR、HIPAA、PCI-DSS、ISO-27001、FFIEC、SOC2 和其他相关的支票。
+为了快速有效地执行事件响应
+活动，至关重要的是要做好人员、流程和
+组织内部的技术。 查看 [*AWS 安全事件
+回应
+指南*] (https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/preparation.html)，
+并采取必要步骤，帮助确保所有人做好准备
+三个域名。
 
-此工具提供了客户环境中当前安全状态的快速快照。 作为替代方法，[AWS Security Hub] (https://aws.amazon.com/security-hub/?aws-security-hub-blogs.sort-by=item.additionalFields.createdDate&aws-security-hub-blogs.sort-order=desc) 提供了自动合规性扫描，并可以 [与 Prowler 集成] (https://github.com/toniblyx/prowler/blob/b0fd6ce60f815d99bb8461bb67c6d91b6607ae63/README.md#security-hub-integration)
+## 如何联系 AWS 支持部门寻求帮助
 
-### 资产库存
-识别所有现有用户并获得每个账户用途的最新列表
+一旦您怀疑存在泄露事件，就必须立即通知 AWS，这一点很重要
+您的 AWS 账户或组织中的证书。 这里有
+接触 AWS 支持的步骤：
 
-1. 导航到 [AWS 控制台]（https://console.aws.amazon.com/）
-1. 转到 “服务” 然后选择 `IAM`
-1. 在左侧菜单中，选择 “凭据报告”
-1. 选择 “下载报告”
-1. 特别注意创建帐户的时间、上次使用的密码和上次更改密码列。
-* ** 注意 ** 如果用户有多个访问密钥，请验证每个访问密钥的用途
+### 提交 AWS 支持案例
 
-### 训练
--“为了熟悉 AWS API（命令行环境）、S3、RDS 和其他 AWS 服务，公司内的分析师提供了哪些培训？ `
->>>
-威胁检测和事件响应的机会包括：\
-[AWS RE: INFORCE] (https://reinforce.awsevents.com/faq/)\
-[Self-Service Security Assessment] (https://aws.amazon.com/blogs/publicsector/assess-your-security-posture-identify-remediate-security-gaps-ransomware/)
->>>
+-登录您的 AWS 账户：
 
--“哪些角色能够更改账户中的服务？ `
--“哪些用户有这些角色分配给他们？ 遵守的权限最少吗？还是存在超级管理员用户？ `
--“是否针对您的环境进行了安全评估，您是否有已知的基准来检测 “新” 或 “可疑” 事物？ `
+-这是第一个受到安全影响的 AWS 账户
+事件，以验证 AWS 账户所有权。
 
-### 通信技术
--“团队/公司内部使用什么技术来沟通问题？ 有什么自动化的吗？ `
->>>
-电话\
-电子邮件\
-AWS SES\
-AWS SNS\
-Slack\
-Chime\
-其他？
->>>
+-注意：如果您无法访问账户，请使用 [this
+表格] (https://support.aws.amazon.com/#/contacts/aws-account-support/)
+提交支持请求。
+
+-选择 “*服务*”、“*支持中心*”、“*创建案例*”。
+
+-选择问题类型 “*账户和账单” *。
+
+-选择受影响的服务和类别：
+
+-示例：
+
+-服务：账户
+
+-类别：安全
+
+-选择严重性：
+
+-企业支持或入口客户：*关键业务风险
+问题*。
+
+-业务支持客户：*紧急业务风险问题*。
+
+-描述您的问题或问题：
+
+-详细描述您遇到的安全问题
+经历、受影响的资源和业务影响。
+
+-首次识别安全事件的时间。
+
+-迄今为止的事件时间表摘要。
+
+-您收集的工件（屏幕截图、日志文件）。
+
+-您怀疑遭到泄露的 IAM 用户或角色的 ARN。
+
+-受影响资源和业务影响的描述。
+
+-您组织中的参与程度（例如：“这种安全性
+该活动吸引了首席执行官和董事会的知名度
+导演”）。
+
+-可选：添加其他问题联系人。
+
+-选择 “*联系我们*”。
+
+-首选联系语言（可能视供应情况而定）
+
+-首选联系方式：网络、电话或聊天（推荐）
+
+-可选：其他案例联系人
+
+<!---->
+
+-*点击 “提交” *
+
+-**升级**：请尽快通知您的 AWS 账户团队
+可能，因此他们可以动用必要的资源并升级为
+需要。
+
+**注意：** 验证您的 “备用安全” 非常重要
+“联系人” 是为每个 AWS 账户定义的。 欲了解更多详情，请参阅
+到 [这个
+文章] (https://aws.amazon.com/blogs/security/update-the-alternate-security-contact-across-your-aws-accounts-for-timely-security-notifications/)。
 
 ## 检测
 
-### Root 账户访问
-建议删除与根账户关联的所有访问密钥：`。 /prowler-c check_112`
+有多种方法可以检测您内部的已泄露凭证
+AWS 环境。 列出了一些检测潜在指标的方法
+妥协（国际奥委会）。 有关国际奥委会的详细名单，请参阅 [附录
+A.] (#appendix-a-reviewing-logs) **注意**：记录每篇文章的详细信息
+怀疑国际奥委会需要进一步分析。
 
-### 新的或无法识别的 IAM 用户
-查看 [资产库存] 中的 IAM 凭证报告 (. /COMMED_iam_Credentials.md/ #asset-库存）
-检查 IAM 用户是否有两个活动访问密钥：`。 /prowler-c check_extra712`
-确保未创建允许完全\ "*: *\” 管理权限的 IAM 策略：`。 /prowler-c check_122`
-检查 IAM 访问分析器是否已启用及其发现：`。 /prowler-c check_extra769`
+1。 评论亚马逊 [GuardDuty
+调查结果] (https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings.html)。
+以下发现与可疑或异常活动有关
+由 IAM 实体提供。 查看 [调查结果
+详情] (https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-iam.html)，
+如果活动出乎意料，则可能表示受到了攻击
+凭证。
 
-### 无法识别或未经授权的资源（例如 EC2、Lambda）
-aws ec2 describe-instances
-aws lambda list-functions
+1。 CredentialAccess:IAMUser/AnomalousBehavior
 
-### 寻找秘密
-在 EC2 实例中找到潜在的秘密用户数据：`。 /prowler-c check_extra741`
-在 Lambda 函数变量中找到的潜在秘密：`。 /prowler-c check_extra759`
-ECS 任务定义变量中的潜在秘密：`。 /prowler-c check_extra768`
-在 AutoScaling 配置中找到潜在的秘密：`。 /prowler-c check_extra775`
+2。 DefenseEvasion:IAMUser/AnomalousBehavior
 
-### 不寻常的账单增加
-要查看 AWS 账单，请打开账单和成本管理控制台的 [账单] (https://console.aws.amazon.com/billing/home #) 窗格，然后从下拉菜单中选择要查看的月份。
+3。 Discovery:IAMUser/AnomalousBehavior
 
-您可以在账单和成本管理控制台的 [订单和发票] (https://console.aws.amazon.com/billing/home?/paymenthistory) 窗格中查看 AWS 付款历史记录。
+4。 Exfiltration:IAMUser/AnomalousBehavior
 
-您还可以使用 [AWS Cost Anomaly Detection] (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-ad.html) 进行动态监控和警报。
+5。 Impact:IAMUser/AnomalousBehavior
 
-检查账单以获取以下信息：
-* 您通常不使用的 AWS 服务
-* AWS 区域中通常不使用的资源
-* 账单的大小发生了重大变化
+6。 InitialAccess:IAMUser/AnomalousBehavior
 
-您可以使用此信息来帮助您删除或终止任何不想保留的资源。
+7。 PenTest:IAMUser/KaliLinux
 
-### 我的 AWS 资源或账户可能遭到泄露的通知
-如果您收到来自 AWS 的有关账户的通知，请登录 AWS 支持中心，然后回复通知。
+8。 PenTest:IAMUser/ParrotLinux
 
-如果您无法登录账户，请使用联系我们表单向 AWS Support 请求帮助。
+9。 PenTest:IAMUser/PentooLinux
 
-如果您有任何问题或疑虑，请在 AWS 支持中心创建一个新的 AWS Support 案例。
-* ** 注意 **：请勿在信件中包含敏感信息，例如 AWS 访问密钥、密码或信用卡信息。
-使用 AWS Git 项目扫描未经授权使用的证据
+10。 Persistence:IAMUser/AnomalousBehavior
 
-### 识别任何潜在未经授权的 IAM 用户凭证
-1. 打开 IAM 控制台。
-1. 在导航窗格中选择用户。
-1. 从列表中选择每个 IAM 用户，然后在权限策略下查看名为 AWSExposedCredentialPolicy_DO_NOT_REMOVE 的策略。1. 如果用户具有此附加策略，则必须轮换用户的访问密钥。
+11。 Policy:IAMUser/RootCredentialUsage
 
-## 上报程序
--“谁在监控日志/警报，接收日志/警报并对其采取行动？ `
--“发现警报后谁会收到通知？ `
--“什么时候公共关系和法律参与这一过程？ `
--“你什么时候联系 AWS Support 寻求帮助？ `
+12。 PrivilegeEscalation:IAMUser/AnomalousBehavior
+
+13。 Recon:IAMUser/MaliciousIPCaller
+
+14。 Recon:IAMUser/MaliciousIPCaller.Custom
+
+15。 Recon:IAMUser/TorIPCaller
+
+16。 Stealth:IAMUser/CloudTrailLoggingDisabled
+
+17。 Stealth:IAMUser/PasswordPolicyChange
+
+18。 UnauthorizedAccess:IAMUser/ConsoleLoginSuccess.B
+
+19。 UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration
+
+20。 UnauthorizedAccess:IAMUser/MaliciousIPCaller
+
+21。 UnauthorizedAccess:IAMUser/MaliciousIPCaller.Custom
+
+22。 UnauthorizedAccess:IAMUser/TorIPCaller
+
+2。 查看 AWS 账单，了解异常峰值，这可能是账户的迹象
+并按照以下步骤泄露凭证：
+
+1。 登录 AWS 管理控制台并打开 [账单]
+控制台] (https://console.aws.amazon.com/billing/)。
+
+2。 选择 “*账单” *以查看有关您当前费用的详细信息。
+
+3。 选择 “*付款” *以查看您的历史付款交易。
+
+4。 选择 “*AWS 成本和使用率报告” * 以查看中断的报告
+降低您的成本。
+
+3。 前往 IAM 控制台下载 IAM 证书报告，然后
+在 “*访问权限” 下选择左侧的 “*凭证报告” *
+报告” * 然后查看以下内容：
+
+1. 通过查看创建日期来识别异常的 IAM 用户创建情况
+以及 “上次使用/更改的密码” 列。
+
+2。 检查是否有任何 IAM 用户拥有两个或两个以上的访问密钥。
+
+3。 检查是否有 IAM 用户有
+*awsexposedCredentialPolicy\ _DO\ _NOT\ _REMOVE* 已附上。 如果是这样，
+轮换其访问密钥。
+
+4。 查看 AWS 账户中的 IAM 角色，找出任何不熟悉的角色
+已创建或访问的角色
+
+1。 在 AWS 控制台中，选择 “*Service*s”、“*IAM*” 和
+“*角色*”
+
+2。 查看所有不熟悉的 “*角色名称*”。
+
+3。 点击角色名称，然后查看列出的详细信息：
+
+1。 角色创建日期
+
+2。 ARN
+
+3。 上次活动
+
+4。 单击 “*权限*” 查看附加的 IAM 政策
+到这个角色。
+
+5。 单击 “*信任关系*” 查看可以假设的实体
+角色。
+
+6。 单击 “*Access Advisor*” 以显示已有哪些服务
+由角色访问，以及 “*上次访问日期*”。
+
+5。 检测您的 AWS 中任何无法识别或未经授权的资源
+账户，例如：
+
+1。 通过在 AWS CLI 中运行以下命令来实现 EC2 实例
+终端 “*aws ec2 描述实例*” 并验证
+结果。 使用查找每个实例的创建时间
+*--查询 '预留\ [\] .Instances\ [\]。 {ip：公共 IP 地址，
+tm: launchTime} '--filters 'name=tag: Name, Values=
+myInstanceName' | jq 'sort\ _by (.tm) | reverse |.\ [0\] '* 过滤器。
+
+2。 通过在 AWS CLI 中运行以下命令来实现 Lambda 的功能
+终端 “*aws lambda 列表函数*” 并验证最后一个
+使用 “| *grep “LastModified*” 过滤器修改时间。
+
+6。 通过以下方式查看 AWS 发出的有关您账户的所有安全通知
+登录 [AWS 支持]
+那么 Center] (https://support.console.aws.amazon.com/support/home#/)
+阅读并回复消息。
+
+7。 按照以下步骤查看调查结果：
+
+1。 打开 [IAM 控制台] (https://console.aws.amazon.com/iam/)。
+
+2。 从 Access 下的左栏中选择 “*访问分析器” *
+报告。
+
+3。 在 “*活跃发现” *下，查看调查结果以确定资源
+在您的组织中，例如 S3 存储桶、IAM 角色或 Lambda
+与外部实体共享的函数。
 
 ## 分析
-强烈建议将日志导出到安全事件事件管理 (SIEM) 解决方案（例如 Splunk、ELK stack 等），以帮助查看和分析各种日志，以进行更完整的攻击时间表分析。
 
-### CloudTrail
-寻找不寻常的登录活动
-1. 导航到 [CloudTrail 控制面板]（https://console.aws.amazon.com/cloudtrail）
-1. 在左边栏中选择 “事件历史记录”
-1. 在下拉菜单中，从 “只读” 更改为 “事件名称”
-1. 在搜索字段中输入 “ConsoleLOGINE” 或 “GetFenedationToken” 或 “获取凭据报告” 或 “生成证书报告”，然后查看可用事件是否有任何可疑活动
-* ** 注意 ** userIdentity 将显示为 “类型”：“root” `表示 Root 目录或 “” 类型”：“iAMUser"` 对于用户
+一旦您发现了任何可疑的资源或活动，这些资源或活动可能会发生
+指出漏洞，在您的 SIEM 中进行进一步分析，或记录日志
+分析工具。 AWS 有各种安全服务工具可以提供帮助
+分析安全事件。 其中一些工具包括：
 
-找到用于启动可疑 EC2 实例的 IAM 访问密钥 ID 和用户名
-1. 打开 CloudTrail 控制台，然后选择事件历史记录。
-1. 选择筛选器下拉菜单，然后选择资源名称。
-1. 在输入资源名称字段中，粘贴 EC2 实例 ID，然后在设备上选择 Enter。
-1. 展开 RunInstances 的事件名称。
-1. 复制 AWS 访问密钥，然后记下用户名。
+1。 **Amazon Guardduty**-亚马逊 GuardDuty 是一种威胁检测
+持续监控恶意活动的服务
+为保护您的 AWS 账户而采取的未经授权的行为，亚马逊 Elastic
+计算云 (EC2) 工作负载、容器应用程序、亚马逊 Aurora
+数据库以及存储在亚马逊简单存储服务 (S3) 中的数据。
 
-通过受损访问密钥查看 CloudTrail 事件历史记录中的活动
-1. 打开 CloudTrail 控制台，然后从导航窗格中选择事件历史记录。
-1. 选择 Filter 下拉菜单，然后选择 AWS 访问密钥过滤器。
-1. 在输入 AWS 访问密钥字段中，输入受损的 IAM 访问密钥 ID。
-1. 展开 API 调用 RunInstances 的事件名称。
-* ** 注意 **：除非您之前配置了保存到 S3 存储桶中的跟踪，否则您只能查看过去 90 天的事件历史记录
+2。 **AWS 安全中心**-AWS 安全中心是一种云安全态势
+自动化、连续执行的管理 (CSPM) 服务
+根据您的 AWS 资源进行安全最佳实践检查，以帮助您
+识别错误配置并汇总您的安全警报
+（即调查结果）采用标准化格式，这样您就可以更轻松地使用
+充实、调查和补救它们。
 
-### VPC Flow Logs
-VPC Flow Logs 是一项功能，使您能够捕获有关进出 VPC 中网络接口的 IP 流量的信息。 这对于在 CloudTrail 中发现的 IP 地址非常有用，可以确定与任何公共资源的外部连接类型。
+3。 **亚马逊侦探**-亚马逊侦探使其更易于分析，
+调查并快速找出潜在的根本原因
+安全问题或可疑活动。
 
-有关更多信息和步骤，包括使用 Athena 进行查询，请参阅 [适用于 VPC Flow Logs 的 AWS 文档] (https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-athena.html)。 建议将 Athena 分析包含在单独的手册中，并与其他相关内容链接。
+您还可以通过以下方式搜索您的 AWS CloudTrail 事件历史记录
+以下是分析和收集证据的步骤:
 
-### 端点/基于主机
-* ** 识别给定实例名称的上次创建时间 **：`aws ec2 描述实例 — 查询 '预留 []。实例 []。 {ip：PublicipAddress，tm：LaunchTime} '— 过滤器 “名称 = 标签名称，值 = 我的实例名称” | jq 'sort_by (.tm) | 反向 |. [0] '`
+1。 分析 AWS 云端追踪日志，了解以下内容：
 
-* ** 识别 lambda 函数的上次修改时间 **：`aws lambda 列表函数 | grep “最后修改” `
+1。 任何与登录相关的异常活动：
+
+1。 前往 [CloudTrail]
+仪表板] (https://console.aws.amazon.com/cloudtrail)。
+
+2。 在左侧，选择 “事件历史记录”。
+
+3。 在下拉菜单中，将 “只读” 更改为 “活动名称”。
+
+4。 通过以下方式查看可用事件中是否存在任何可疑活动
+通过搜索框搜索以下术语：
+“*consoleLogin*”、“*AssumeRole*”、“*getFederationToken*”、
+“*获取凭证报告*”，“*生成凭证报告*”。 还有
+请务必注意 “*用户身份*” 应该会出现
+作为 “*type*”：root 用户的 “*root*” 或 “*type*”：
+“*iamUser*” 表示账户中的任何本地 IAM 用户。
+
+<!---->
+
+1。 找到用于启动的任何 IAM 访问密钥 ID 和用户名
+可疑的亚马逊 EC2 实例：
+
+1。 打开 AWS CloudTrail 控制台并选择 “*事件”
+历史记录” * 来自导航窗格。
+
+2。 选择 “*查找属性” * 下拉菜单，然后
+选择 “*资源名称” *。
+
+3。 在输入资源名称字段中，粘贴 EC2 实例 ID，
+然后在你的设备上按回车键。
+
+4。 展开*RunInstances* 的事件名称。
+
+5。 复制 AWS 访问密钥，并记下用户名。
+
+2。 查看 AWS CloudTrail 事件历史记录，了解活动情况
+访问密钥泄露：
+
+1。 打开 CloudTrail 控制台并选择 “*事件”
+> 历史记录” * 来自导航窗格。
+
+2。 选择 “*查找属性” * 下拉菜单，然后
+> 选择 “*AWS 访问密钥” *。
+
+3。 在 “*输入 AWS 访问密钥字段” * 中，输入
+> 已泄露的 IAM 访问密钥 ID。
+
+4。 展开 API 调用 *runInstances* 的事件名称。
+
+3。 如果您通过第三方身份提供商访问 AWS，那么
+一定要审核访问日志并遵循供应商的指导方针
+关于响应事件并保护您的环境。
+
+<!---->
+
+1。 分析 IAM Access Advisor 泄露的凭证
+通过以下信息查看它上次访问的服务是什么
+这些步骤：
+
+1。 前往 [IAM 控制台] (https://console.aws.amazon.com/iam)。
+
+2。 前往用户或角色，点击受感染者的姓名
+校长，选择 “*访问顾问” * 选项卡并查看哪个
+上次访问的资源。
 
 ## 遏制
-1. 禁用 IAM 用户，创建备份 IAM 访问密钥，然后禁用受损的访问密钥
-1. 打开 [IAM 控制台]（https://console.aws.amazon.com/iam/），然后将 IAM 访问密钥 ID 粘贴到搜索 IAM 栏中。
-1. 选择用户名，然后选择 “安全凭据” 选项卡。
-1. 在控制台密码中，选择管理。
-* ** 注意 **：如果 AWS 管理控制台密码设置为禁用，则可以跳过此步骤。
-1. 在控制台访问权限中，选择禁用，然后选择应用。
-1. 重要提示：账户被禁用的用户无法访问 AWS 管理控制台。 但是，如果用户拥有活动访问密钥，他们仍然可以使用 API 调用访问 AWS 服务。
-1. 对于受损的 IAM 访问密钥，请选择设为非活动状态。
-1. 禁用应用程序 IAM 密钥，创建备份 IAM 访问密钥，然后禁用受损的访问密钥
-1. 首先，创建第二个密钥。 然后，修改应用程序以使用新密钥。
-1. 禁用（但不要删除）第一个密钥。
-1. 如果应用程序有任何问题，请暂时重新激活密钥。 当您的应用程序完全正常工作且第一个密钥处于禁用状态时，请删除第一个密钥。
-1. 旋转并删除所有不活动/受损的 AWS 访问密钥
-* **!! 确保记录所有已删除的访问密钥，以便您可以继续在 CloudTrail 中搜索它们！ **
+
+在分析并收集了有关受感染者的更多信息之后
+凭证和任何其他受影响的资源，是时候控制和
+抑制安全事件。
+
+1。 禁用 IAM 用户，创建备份 IAM 访问密钥，然后
+按照以下步骤禁用被泄露的访问密钥：
+
+1。 打开 [IAM 控制台] (https://console.aws.amazon.com/iam/) 然后
+将 IAM 访问密钥 ID 粘贴到搜索 IAM 栏中。
+
+2。 选择用户名，然后选择 “*安全
+凭证*” 选项卡。
+
+3。 在控制台密码字段中，选择 “*管理*”。
+
+4。 在 “控制台访问” 中，选择 “*禁用*”，然后选择 “应用”。
+
+5。 对于泄露的 IAM 访问密钥，请选择 “*设为非活动*”。
+
+2。 按照以下步骤轮换访问密钥：
+
+1。 首先，前往 [IAM] 创建第二个密钥
+控制台] (https://console.aws.amazon.com/iam/)。
+
+2。 在导航窗格中，选择 “*用户” *。
+
+3。 选择目标用户的姓名，然后选择
+“*安全证书” * 选项卡。
+
+4。 在 “*访问密钥” * 部分中，选择 “*创建访问密钥” *。 开启
+“*访问密钥最佳实践*和替代方案” *页面，
+选择 “*其他” *，然后选择 “*下一步” 。 *
+
+5。 然后，修改您的应用程序以使用新密钥。
+
+6。 禁用（但不要删除）第一个密钥。
+
+7。 如果您的应用程序有任何问题，请重新激活
+暂时密钥。 当您的应用程序功能齐全时，并且
+第一个密钥被禁用，只有这样才可以安全地删除
+第一把钥匙。 确保记录所有已删除的访问权限
+用于继续在 AWS CloudTrail 日志中搜索它们的密钥。
+
+3。 按照以下步骤撤消 IAM 角色的活动会话：
+
+1。 打开 [IAM 控制台] (https://console.aws.amazon.com/iam/) 然后
+转到角色并点击你要激活的 IAM 角色激活
+的会话。
+
+2。 单击 IAM 角色名称并转至 “*撤消会话” * 选项卡。
+
+3。 单击 “*撤消活动会话*” 按钮并确认该步骤。
+
+4。 按照以下步骤隔离受影响的资源：
+
+1。 对于亚马逊 EC2 实例，请前往 EC2 实例控制台，选中
+在要隔离的 EC2 实例旁边的方框中，单击
+*操作*，点击*安全*，然后点击*更改安全性
+团体*。 分离所有当前的安全组并附加
+阻止入站和出站的隔离安全组
+与 EC2 的通信。
+
+2。 对于亚马逊 S3 存储桶，请使用 [存储桶
+政策] (https://docs.aws.amazon.com/AmazonS3/latest/userguide/add-bucket-policy.html)
+阻止任何可疑 IP 地址访问 S3
+水桶。
+
+5。 撤消身份中心会话：
+
+在 Identity Center 中，有两个会议需要关注
+哪些是访问门户会话和角色/应用程序会话：
+
+1。 访问门户会话：
+
+1。 在 “身份中心” 中禁用用户：
+
+1。 导航到 Identity Center 控制台并选择 “用户”
+
+2。 选择被禁用的用户的用户名
+
+3。 在用户的 “常规信息” 框中，单击 “禁用”
+> 用户访问权限'
+
+2。 撤消所有活跃的会话：
+
+1。 在 Identity Center 的用户页面上，选择 “激活”
+> “会话” 选项卡
+
+2。 选择任何列出的会话，然后单击 “删除会话”
+
+2。 撤消角色会话：
+
+1。 确定用户正在使用的权限集。
+
+1。 在 Identity Center 控制台中，单击 “权限集”
+
+2。 选择权限集的名称。
+
+3。 向下滚动到 “内联策略”，然后单击 “编辑” 按钮
+
+4。 添加以下策略：
+
+{
+
+“版本”：“2012-10-17”，
+
+“声明”:\ [
+
+{
+
+“效果”：“拒绝”，
+
+“操作”：“\ *”，
+
+“资源”：“\ *”，
+
+“状况”：{
+
+“StringEquals”: {
+
+“IdentityStore: userID”: “示例”
+
+}，
+
+“DateLessThan”：{
+
+“aws: tokenissueTime”：“2023-09-26T 15:00:00.000 Z”
+
+}
+
+}
+
+}
+
+\]
+
+}
+
+对于此政策，将 “示例” 更新为用户的身份中心用户 ID。
+用户ID可以在用户的 “一般信息” 框中找到
+用户页面。 aws: tokenissueTime 的值应等于中的时间
+您应用本政策的内容。
+
+1。 应用程序会话
+
+应用程序会话是在用户访问第三方时创建的
+应用程序或 AWS 服务直接来自访问门户。
+
+要撤销申请会话，请查看其文档
+已访问的应用程序。
+
+1。 身份中心遭到入侵
+
+如果您的身份提供商遭到入侵，则应阻止访问
+来自被盗身份提供商（即外部）的身份中心
+基于 SAML 的身份提供者（或活动目录），方法是更改
+身份源到 “身份源目录”。
+
+要更改您的身份来源，请执行以下操作：
+
+6.1 导航到身份中心控制台
+
+6.2 选择 “设置”
+
+6.3 在 “设置” 页面上，单击 “身份来源” 选项卡
+
+6.4 点击 “操作” 按钮，然后选择 “更改身份”
+来源'
+
+6.5 在 “选择身份来源” 上选择 “身份中心目录”
+页
+
+6.6 点击 “下一步” 按钮
+
+6.7 阅读 “查看并确认” 框中包含的信息，
+
+6.8 在相应的字段中输入 “接受”，然后单击 “更改”
+“身份来源” 按钮
+
+请注意，如果您通过第三方身份提供商访问 AWS，
+请务必审核访问日志，并遵循供应商的指导方针
+响应事件并保护您的环境。
+
+另外，如果您要从 Active Directory 更改为身份中心
+目录，则所有用户和组都将被删除。 权限集将
+不会删除，但权限集分配将被删除。 如果你
+正在从基于 SAML 的外部身份提供者改变，所有用户
+群组将保留在 Identity Center 中
+权限集分配
 
 ## 根除
-### 查看来自 [查看 CloudTrail 事件历史记录以查看受损的访问密钥的活动] 的调查结果] (. /#cloudtrail)
-删除受损密钥创建的所有资源。 务必检查所有 AWS 区域，甚至是您从未启动 AWS 资源的区域。
-* ** 重要 **：如果您需要保留任何资源进行调查，请考虑备份它们。 例如，如果您有保留 EC2 实例的监管、合规性或法律需求，请在终止实例之前拍摄 EBS 快照。
 
-### 查看 [避免意外收费] (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/checklistforunwantedcharges.html)
-检查并删除账户中识别的任何服务。 特别注意以下资源：
-* EC2 实例和 AMI，包括处于停止状态的实例
-* EBS 卷和快照
-* AWS Lambda 函数和层
+控制完安全事件后，就该开始工作了
+关于移除和清理安全事件的原因。
 
-要删除 Lambda 函数和层，请执行以下操作：
-1. 打开 Lambda 控制台。
-1. 在导航窗格中，选择函数。
-1. 选择要删除的函数。
-1. 对于操作，请选择删除。
-1. 在导航窗格中，选择图层。
-1. 选择要删除的图层。
-1. 选择删除。
+1。 移除由泄露的密钥创建的所有资源
+在 “分析阶段步骤 1” 中检测到。 查看所有 AWS 区域，甚至
+您不在其中启动 AWS 资源的地区。 如果你需要
+保留调查资源，考虑对其进行备份。
 
-删除您没有创建的任何 IAM 用户
-1. 登录 AWS 管理控制台并打开 [IAM 控制台] (https://console.aws.amazon.com/iam/)
-1. 在导航窗格中，选择用户，然后选中要删除的用户名旁边的复选框，而不是名称或行本身。
-1. 在页面顶部，选择删除用户。
-1. 在确认对话框中，等待上次访问的信息加载，然后再查看数据。 该对话框显示每个选定用户上次访问 AWS 服务的时间。 如果您尝试删除过去 30 天内处于活动状态的用户，则必须选中其他复选框以确认要删除活动用户。 如果要继续，请选择是，删除。
+2。 检查和
+[删除] (https://repost.aws/knowledge-center/terminate-resources-account-closure)
+您的账户中正在运行的任何无法识别的服务。 支付
+特别注意以下资源:
 
-有关删除其他服务的文档可以在 [终止我的所有资源] (https://aws.amazon.com/premiumsupport/knowledge-center/terminate-resources-account-closure/) 页面上找到。
+1。 EC2 实例和 AMI，包括已停止的实例
+州。
+
+2。 EBS 卷和快照。
+
+3。 AWS Lambd 函数和层。
+
+3。 从记录 S3 存储桶或日志中移除不必要的权限
+在 “检测阶段步骤 6” 中确定的聚合资源
+可以用来避免被发现。 这可以让你识别出意外情况
+访问您的资源和数据。
+
+4。 移除操作不需要的所有暴露数据。
+
+5。 对面向公众进行安全漏洞扫描
+资源。 你可以使用 [亚马逊] 之类的工具
+督察] (https://docs.aws.amazon.com/inspector/latest/user/scanning-resources.html)
+扫描操作系统和<sup>第三方</sup>软件应用程序
+漏洞。
 
 ## 恢复
-AWS 发布了关于 [如果我注意到我的 AWS 账户中存在未经授权的活动该怎么办？] (https://aws.amazon.com/premiumsupport/knowledge-center/potential-account-compromise/)
 
-## 预防性行动
-### Prowler IAM 扫描
-`。 /prowler-g 检查 122、检查 111、检查 110、检查 19、检查 18、检查 17、检查 16、检查 15、检查 11、检查 116、检查 12、检查 114、检查 14、检查 13、检查 112、119、额外 71、额外 7100、额外 7123、额外 7125、额外 769、额外 769、额外 774`
+一旦你完成了消除安全事件原因的工作。 是时候了
+将受影响的资源恢复到众所周知的状态。
 
-### 启用 MFA
-为了提高安全性，最佳做法是配置 MFA 以帮助保护您的 AWS 资源。 您可以启用 [IAM 用户的 MFA] (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html) 或 [AWS 账户根用户] (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html)。 为根用户启用 MFA 仅影响根用户凭证。 账户中的 IAM 用户是具有自己凭证的独特身份，每个身份都有自己的 MFA 配置。
+1。 从早于已知的干净备份中恢复必要的数据
+事件:
 
-### 验证你的账户信息
-AWS 需要准确的账户信息才能与您联系并帮助解决任何账户问题。 检查您账户上的信息是否正确。
-* 帐户名称和电子邮件地址。
-* 你的联系信息，尤其是你的电话号码。
-* 账户的备用联系人。
+1。 [从亚马逊 EBS 快照或
+AMI] (https://docs.aws.amazon.com/prescriptive-guidance/latest/backup-recovery/restore.html)。
 
-### 使用 AWS Git 项目扫描未经授权使用的证据
-AWS 提供了可以安装的 Git 项目以帮助您保护账户：
-* [Git Secrets ret] (https://github.com/awslabs/git-secrets) 可以扫描合并、提交和提交消息以获取秘密信息（即访问密钥）。 如果 Git Secrets 检测到禁止的正则表达式，它可以拒绝将这些提交发布到公共仓库。
-* 使用 [AWS 步骤函数和 AWS Lambda 生成 Amazon CloudWatch 事件] (https://aws.amazon.com/step-functions) 来自 AWS Health 或 AWS 信任顾问。 如果有证据表明您的访问密钥已泄露，那么这些项目可以帮助您自动检测、记录和缓解事件。
+2。 [从数据库恢复
+快照] (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RestoreFromSnapshot.html) 亚马逊
+RDS。
 
-### 避免使用 root 用户进行日常操作
-AWS 账户根用户的访问密钥可以完全访问您的所有 AWS 资源，包括账单信息。 您无法减少与 AWS 账户根用户访问密钥关联的权限。 除非绝对必要，否则不要使用 root 用户访问权限是最佳做法。
+3。 [恢复之前的
+版本] (https://docs.aws.amazon.com/AmazonS3/latest/userguide/RestoringPreviousVersions.html) 亚马逊
+S3 对象版本。
 
-如果您还没有 AWS 账户根用户的访问密钥，除非绝对必要，否则不要创建访问密钥。 相反，应为自己创建具有管理权限的 IAM 用户。 您可以使用 AWS 账户电子邮件地址和密码登录 AWS 管理控制台以创建 IAM 用户。
+2。 如有必要，从头开始重建系统，包括重新部署
+使用自动化功能从可信来源获取，有时会存入新的 AWS 账户。
 
-### 整体安全态势
-针对环境执行 [Self-Service Security Assessment]（https://aws.amazon.com/blogs/publicsector/assess-your-security-posture-identify-remediate-security-gaps-ransomware/），以进一步识别本手册中未发现的其他风险和其他潜在的公众风险。
+3。 如果丢失了对多因素身份验证 “MFA” 的访问权限，而您却没有
+请为你的根账户注册另一台 MFA 设备，
+请按照以下步骤操作：
 
-## 吸取的教训
-“这里可以添加特定于贵公司的物品，这些物品不一定需要 “修复”，但在与运营和业务要求同时执行本行动手册时也很重要。 `
+1。 登录 [AWS 管理]
+主机] (https://console.aws.amazon.com/) 作为账户所有者
+选择 Root 用户并输入您的 AWS 账户邮箱
+地址。 在下一页上，输入您的密码。
 
-## 已解决积压项目
--作为事件响应者，我需要一本关于如何在事件发生后处理会话令牌和访问密钥的行动手册
--作为事件响应者，我需要一种方法来扫描和从公共代码存储库中删除密钥
--作为事件响应者，我需要一个明确的决策者，了解何时破坏环境与允许持续曝光
-## 当前积压项目
+2。 在 “需要额外验证” 页面上，选择 MFA
+进行身份验证的方法，然后选择 “下一步”。
+
+3。 根据您使用的 MFA 类型，您应该会看到
+页面不同，但是 “*MFA 疑难解答” * 选项起作用
+同样的。 在 “*需要额外验证” *页面上
+或 “*多因素身份验证” * 页面，选择 “*疑难解答
+MFA” *。
+
+4。 如果需要，请再次键入密码并选择*登录*。
+
+5。 在 “*对身份验证设备进行故障排除” *页面上，在
+“*使用替代因素登录
+身份验证” * 部分，选择 “*使用其他方式登录
+因素” *。
+
+6。 在 “*使用替代因子登录” 上
+身份验证” * 页面，通过验证来验证您的账户
+电子邮件地址，选择 “*发送验证电子邮件” *
+
+7。 请查看与您的 AWS 账户关联的电子邮件以获取
+来自亚马逊云科技的消息
+(recover-mfa-no-reply@verify.signin.aws)。 按照指示行事
+在电子邮件中。
+
+> 如果您的账户中没有看到该电子邮件，请查看您的垃圾邮件文件夹，或者
+> 返回浏览器并选择 “*重新发送电子邮件*”。
+
+1。 验证电子邮件地址后，您可以继续进行身份验证
+你的账户。 要验证您的主要联系人电话号码，
+选择 “立即给我打电话”。
+
+2。 接听 AWS 的来电，出现提示时，输入 6 位数字
+手机键盘上的 AWS 网站上的号码。
+
+> 如果您没有接到 AWS 的来电，请选择 “登录” 登录
+> 再次控制台然后重新开始。 或者参见 [多因子丢失或无法使用]
+> 身份验证 (MFA)
+> 设备] (https://support.aws.amazon.com/#/contacts/aws-mfa-support) 到
+> 联系支持人员寻求帮助。
+
+1。 验证电话号码后，您可以登录您的帐户
+> 选择 “登录控制台”。
+
+2。 根据您使用的 MFA 类型，下一步会有所不同：
+
+1。 对于虚拟 MFA 设备，请将该账户从您的设备中移除。
+> 然后前往 [AWS 安全]
+> 凭证] (https://console.aws.amazon.com/iam/home？ #security_credential) 页面
+> 并在创建之前删除旧的 MFA 虚拟设备实体
+> 一个新的。
+
+2。 要获取 FIDO 安全密钥，请前往 [AWS 安全
+> 凭证] (https://console.aws.amazon.com/iam/home？ #security_credential) 页面
+> 并在启用新的 FIDO 安全密钥之前停用旧的 FIDO 安全密钥
+> 一个。
+
+3。 如需硬件 TOTP 令牌，请联系第三方提供商获取
+> 帮助修复或更换设备。 你可以继续签名
+> 在你之前使用其他身份验证因素
+> 接收您的新设备。 有了新硬件 MFA 之后
+> 设备，前往 [AWS 安全]
+> 凭证] (https://console.aws.amazon.com/iam/home？ #security_credential) 页面
+> 然后在你之前删除旧的 MFA 硬件设备实体
+> 创建一个新的。
+
+<!---->
+
+1。 确认 IAM 委托人拥有适当的访问权限和权限
+在安全事件发生之后。
+
+2。 使用 [AWS] 解决漏洞并安装必要的补丁
+SSM 补丁
+经理] (https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager.html)
+或您使用的任何其他<sup>第三方</sup>工具。
+
+3。 将所有受损/损坏的文件替换为来自的干净版本
+备份。
+
+## 事后活动
+
+成功从安全事件中恢复过来后，您
+应进行 [*AWS 安全事件] 中概述的练习
+事后响应指南
+activity*] (https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/establish-framework-for-learning.html)。
+这将帮助您记录从事件中吸取的教训，衡量
+并提高您的事件响应能力的有效性，
+并实施额外的控制措施以防止类似的事件发生
+反复出现。
+
+## 结论
+
+在本剧本中，我们描述了在以下情况下应采取的初始步骤
+您的 AWS 账户内发生凭证安全泄露事件。
+这包括接触 AWS 支持、检测漏洞、分析
+您账户中的事件，包含安全事件，
+消除威胁，将您的账户恢复到 “已知良好”
+运营状态和事后活动，包括教训
+学会了。 下一步，请查看以下 AWS 资源
+帮助提高您的事件响应能力：
+
+1。 [AWS 安全事件响应
+指南] (https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/aws-security-incident-response-guide.html)
+
+2。 [AWS 客户手册框架：针对受损的 IAM
+凭证] (https://github.com/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md)
+
+3。 [中的 AWS 安全最佳实践
+IAM] (https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
+
+4。 [AWS 架构完善的框架 — 安全
+Pillar] (https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
+
+## 附录 A — 查看日志
+
+**CloudTrail 日志结构**
+
+在搜索 CloudTrail 日志时，了解这一点很重要
+CloudTrail 事件记录中包含的各个字段。 对于
+完整列表，请参阅 [<u>官方 CloudTrail]
+</u>文档] (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html)。
+
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>EventTime</td>
+<td>协调完成请求的日期和时间
+世界时间 (UTC)</td>。
+</tr>
+<tr class="even">
+<td>事件名称</td>
+<td>请求的操作，这是 API 中的操作之一
+那项服务</td>
+</tr>
+<tr class="odd">
+<td>EventSource</td>
+<td>向其发出请求的服务。 这个名字通常是
+服务名称的缩写形式，不带空格加上.amazonaws.com。</td>
+</tr>
+<tr class="even">
+<td>用户身份</td>
+<td>有关发出请求的 IAM 身份的信息。 欲了解更多
+信息，请参阅 <a
+<u>href=” https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html “> CloudTrail
+用户身份元素</u></a></td>。
+</tr>
+<tr class="odd">
+<td>资源</td>
+<td><p>活动中访问的资源列表。 该字段可以包含
+以下信息：</p>
+<ul>
+<li><p>资源 ARN</p></li>
+<li><p>资源所有者的账户 ID</p></li>
+<li><p>资源类型标识符的格式为：
+AWS:: aws-service-name::</p></li> 数据类型名称
+</ul></td>
+</tr>
+<tr class="even">
+<td>AWS 区域</td>
+<td>向其发出请求的 AWS 区域，例如 us-east-2</td>
+</tr>
+<tr class="odd">
+<td>源 IP 地址</td>
+<td>发出请求的 IP 地址。 对于那样的动作
+源自服务控制台，报告的地址用于
+底层客户资源，而不是控制台 Web 服务器。</td>
+</tr>
+</tbody>
+</table>
+
+**活动**
+
+威胁行为者在之后会采取许多行动
+泄露账户凭证。 虽然列出所有内容是不切实际的
+可能的操作，以下是一些模式可供您搜索
+调查。
+
+**注意：** 以下 API 操作不一定表示安全
+事件已经发生。 评估上下文中所有记录的活动
+你的调查。
+
+**对 SAML/OIDC 身份提供商配置的更改**
+
+威胁行为者可以创建或修改 SAML/OIDC 身份提供商
+配置以避免被检测并在您的内部保持持久性
+云环境。
+
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>API 操作</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>我是：创建 SAMLProvider</td>
+<td>创建描述身份提供商 (IdP) 的 IAM 资源
+支持 SAML 2.0</td>
+</tr>
+<tr class="even">
+<td>我是：删除 SAML 提供者</td>
+<td>删除 IAM 中的 SAML 提供商资源。</td>
+</tr>
+<tr class="odd">
+<td>我是：更新 samlProvider</td>
+<td>更新现有 SAML 提供商的元数据文档</td>
+</tr>
+<tr class="even">
+<td>我是：创建 OpenIDConnect Provider</td>
+<td>创建一个 IAM 实体来描述身份提供商 (IdP)
+支持 OpenID Connect (OIDC)</td>。
+</tr>
+<tr class="odd">
+<td>我是：将 ClientID 添加到 OpenidConnect 提供商</td>
+<td>向客户列表中添加新的客户端 ID（也称为受众）
+已经为指定的 IAM OpenID Connect (OIDC) 注册了身份证
+提供者资源</td>
+</tr>
+<tr class="even">
+<td>我是：删除 OpenidConnectProvider</td>
+<td>删除中的 OpenID Connect 身份提供商 (IdP) 资源对象
+IAM</td>
+</tr>
+<tr class="odd">
+<td>我是：从 OpenidConnect Provider 中移除客户端 ID</td>
+<td>从中移除指定的客户端 ID（也称为受众）
+为指定 IAM OpenID Connect 注册的客户端 ID 列表
+(OIDC) 提供者资源对象</td>
+</tr>
+<tr class="even">
+<td>我是：更新 OpenidConnect ProviderThumbprint</td>
+<td>替换现有的服务器证书指纹列表
+与 OpenID Connect (OIDC) 提供者资源对象相关联
+新的指纹清单</td>
+</tr>
+</tbody>
+</table>
+
+**对 IAM 配置的更改**
+
+威胁行为者可以创建或修改 IAM 委托人、证书或
+避免被发现或在云中保持持久性的权限
+环境。
+
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>API 操作</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>我是：更改密码</td>
+<td>更改调用此命令的 IAM 用户的密码
+</td>操作
+</tr>
+<tr class="even">
+<td>我是:创建用户</td>
+<td>为您的 AWS 账户创建一个新的 IAM 用户</td>
+</tr>
+<tr class="odd">
+<td>我是:createRole</td>
+<td>为您的 AWS 账户创建一个新角色</td>
+</tr>
+<tr class="even">
+<td>我是：创建群组</td>
+<td>创建新群组</td>
+</tr>
+<tr class="odd">
+<td>我是：附上用户政策</td>
+<td>将指定的托管策略附加到指定用户</td>
+</tr>
+<tr class="even">
+<td>我是：附加角色政策</td>
+<td>将指定的托管策略附加到指定的 IAM 角色</td>
+</tr>
+<tr class="odd">
+<td>我是：附加群组策略</td>
+<td>将指定的托管策略附加到指定的 IAM
+</td>组
+</tr>
+<tr class="even">
+<td>我是:列出访问密钥</td>
+<td>返回与关联的访问密钥 ID 的相关信息
+指定的 IAM 用户</td>
+</tr>
+<tr class="odd">
+<td>我是：创建策略版本</td>
+<td>创建指定托管策略的新版本</td>
+</tr>
+<tr class="even">
+<td>我是：更新登录资料</td>
+<td>更改指定 IAM 用户的密码</td>
+</tr>
+<tr class="odd">
+<td>我是：创建访问密钥</td>
+<td>创建新的 AWS 私有访问密钥和相应的 AWS 访问密钥
+指定用户的 ID</td>
+</tr>
+<tr class="even">
+<td>我是：更新访问密钥</td>
+<td>将指定访问密钥的状态从 “活动” 更改为
+处于非活动状态，反之亦然。</td>
+</tr>
+<tr class="odd">
+<td>我是：停用 emfa 设备</td>
+<td>停用指定的 MFA 设备并将其从关联中移除
+使用最初启用它的用户名</td>
+</tr>
+</tbody>
+</table>
+
+**对日志和监控配置的更改**
+
+威胁行为者可能会禁用资源监控或删除日志以避免
+侦测或阻止事件调查。
+
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>CloudTrail：删除跟踪</th>
+<th>删除跟踪 — 禁用向某人传送 CloudTrail 事件
+亚马逊 S3 存储桶、CloudWatch Logs 或亚马逊 EventBridge</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CloudTrail: 停止记录</td>
+<td>暂停记录 AWS API 调用和日志文件传输
+指定的轨迹</td>
+</tr>
+<tr class="even">
+<td>CloudTrail：更新轨迹</td>
+<td>更新指定日志文件传送的设置</td>
+</tr>
+<tr class="odd">
+<td>CloudTrail：删除事件数据存储</td>
+<td>删除 <a
+<u>href=” https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html “> CloudTrail
+湖畔活动日期存储</u></a></td>
+</tr>
+<tr class="even">
+<td>GuardDuty：删除探测器</td>
+<td>删除亚马逊 GuardDuty 探测器并在其中禁用 GuardDuty
+特定区域</td>
+</tr>
+<tr class="odd">
+<td>GuardDuty：删除发布目的地</td>
+<td>删除将结果导出到的发布目标
+</td>到
+</tr>
+<tr class="even">
+<td>Access Analyzer：删除分析器</td>
+<td>删除指定的分析器，禁用 IAM 访问分析器
+为该地区提供服务。</td>
+</tr>
+<tr class="odd">
+<td>配置：删除配置规则</td>
+<td>删除指定的 AWS 配置规则及其所有评估
+</td>结果
+</tr>
+<tr class="even">
+<td>配置：删除配置记录器</td>
+<td>删除 AWS 配置配置记录器</td>
+</tr>
+<tr class="odd">
+<td>配置：删除配送频道</td>
+<td>删除 AWS 配置的交付渠道</td>
+</tr>
+<tr class="even">
+<td>配置：停止配置记录器</td>
+<td>停止记录的配置和配置更改
+指定的录制组</td>
+</tr>
+</tbody>
+</table>
+
+**S3 存储桶配置更改**
+
+威胁行为者可以修改或删除 S3 存储桶配置，以便
+泄露数据。
+
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>s3: listBuckets</th>
+<th>返回经过身份验证的发送者拥有的所有存储桶的列表
+该请求</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>s3: 创建存储桶</td>
+<td>创建新的存储桶</td>
+</tr>
+<tr class="even">
+<td>s3: 删除存储桶公共访问块</td>
+<td>移除亚马逊 S3 的 PublicAccessBlock 配置
+</td>桶
+</tr>
+<tr class="odd">
+<td>s3: putbucketPolic</td>
+<td>在存储桶上添加或更新策略</td>
+</tr>
+<tr class="even">
+<td>s3: 删除存储桶策略</td>
+<td>从存储桶中删除策略</td>
+</tr>
+<tr class="odd">
+<td>s3: putObjectaCL</td>
+<td>设置中对象的访问控制列表 (ACL) 权限
+亚马逊 S3 存储桶</td>
+</tr>
+<tr class="even">
+<td>s3: deleteObjectacl</td>
+<td>删除对象的访问控制列表 (ACL)</td>
+</tr>
+<tr class="odd">
+<td>s3: putBucketCors</td>
+<td>为您的存储桶设置 CORS 配置</td>
+</tr>
+<tr class="even">
+<td>s3: 删除 BucketCors</td>
+<td>删除为存储桶设置的 CORS 配置信息</td>
+</tr>
+<tr class="odd">
+<td>s3: putBucketenCrypti</td>
+<td>为配置默认加密和亚马逊 S3 存储桶密钥
+现有存储桶</td>
+</tr>
+<tr class="even">
+<td>s3: 删除存储桶加密</td>
+将@@ <td>存储桶的默认加密重置为服务器端
+使用亚马逊 S3 托管密钥进行加密 (SSE-S3)</td>
+</tr>
+</tbody>
+</table>
+
+**其他操作**
+
+以下是其他一些您应该在操作期间重点介绍的操作
+调查
+
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>kms: disableKey</th>
+<th>将 KMS 密钥的状态设置为已禁用。 此更改是暂时性的
+防止使用 KMS 密钥进行加密操作</th>。
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>kms: 计划密钥删除</td>
+<td>计划删除 KMS 密钥。</td>
+</tr>
+<tr class="even">
+<td>kms: putKeypolicy</td>
+<td>将密钥策略附加到指定的 KMS 密钥。 关键政策是
+控制 KMS 密钥访问权限的主要方法。</td>
+</tr>
+<tr class="odd">
+<td>kms: createKey</td>
+在您的 <td>AWS 账户中创建唯一的客户托管 KMS 密钥，然后
+区域。</td>
+</tr>
+<tr class="even">
+<td>ec2: 描述实例</td>
+<td>描述您的账户中的 EC2 实例。</td>
+</tr>
+<tr class="odd">
+<td>ec2: 运行实例</td>
+<td>在您的账户中启动 EC2 实例。</td>
+</tr>
+<tr class="even">
+<td>ec2: 创建 VPC</td>
+<td>在您的账户中创建 VPC。</td>
+</tr>
+<tr class="odd">
+<td>ec2: describeVPC</td>
+<td>描述您账户中的 VPC。</td>
+</tr>
+<tr class="even">
+<td>ec2: 创建安全组</td>
+<td>创建安全组。 安全组充当虚拟组
+您的实例的防火墙用于控制入站和出站流量。</td>
+</tr>
+<tr class="odd">
+<td>ec2: 删除安全组</td>
+<td>删除安全组。</td>
+</tr>
+<tr class="even">
+<td>RDS: createdBinstance</td>
+<td>创建 RDS 数据库实例。</td>
+</tr>
+<tr class="odd">
+<td>RDS: deletedBinstance</td>
+<td>删除 RDS 数据库实例。</td>
+</tr>
+</tbody>
+</table>

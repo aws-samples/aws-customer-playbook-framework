@@ -1,6 +1,6 @@
 This document is provided for informational purposes only. It represents the current product offerings and practices from Amazon Web Services (AWS) as of the date of issue of this document, which are subject to change without notice. Customers are responsible for making their own independent assessment of the information in this document and any use of AWS products or services, each of which is provided “as is” without warranty of any kind, whether express or implied. This document does not create any warranties, representations, contractual commitments, conditions, or assurances from AWS, its affiliates, suppliers, or licensors. The responsibilities and liabilities of AWS to its customers are controlled by AWS agreements, and this document is not part of, nor does it modify, any agreement between AWS and its customers.
 
-© 2021 Amazon Web Services, Inc. or its affiliates. All Rights Reserved. This work is licensed under a Creative Commons Attribution 4.0 International License.
+© 2024 Amazon Web Services, Inc. or its affiliates. All Rights Reserved. This work is licensed under a Creative Commons Attribution 4.0 International License.
 
 This AWS Content is provided subject to the terms of the AWS Customer Agreement available at http://aws.amazon.com/agreement or other written agreement between the Customer and either Amazon Web Services, Inc. or Amazon Web Services EMEA SARL or both.
 
@@ -16,3 +16,5 @@ Customers should also use a [private GitHub repository](https://docs.github.com/
 - [Scan for Sensitive Information Using Git-Secrets](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/scan-git-repositories-for-sensitive-information-and-security-issues-by-using-git-secrets.html)
 - [Fighting Sensitive Data Exposure with Automation](https://medium.com/@gtsai70/fighting-sensitive-data-exposure-with-automation-44c8e7ba0c87)
 - [Github Credentials Scanner](https://geekflare.com/github-credentials-scanner/)
+
+These playbooks contains translations performed using machine translation with [AWS Translate](https://aws.amazon.com/translate/). These playbooks have not been reviewed by a human translator and may contain errors. Please ensure you review the documents before using to ensure correct context and language for your individual use case. If you would like to contribute to correcting errors and reviewing the errors, we welcome that assistance. 
