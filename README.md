@@ -15,7 +15,7 @@ Diese Dateisammlung wird als Beispiel für Kunden bereitgestellt, um Sicherheits
 
 Diese Playbooks enthalten Übersetzungen, die mithilfe maschineller Übersetzung mit [AWS Translate] (https://aws.amazon.com/translate/) durchgeführt wurden. Diese Playbooks wurden nicht von einem menschlichen Übersetzer überprüft und können Fehler enthalten. Bitte überprüfen Sie die Dokumente vor der Verwendung, um sicherzustellen, dass der Kontext und die Sprache für Ihren individuellen Anwendungsfall korrekt sind. Wenn Sie zur Korrektur von Fehlern und zur Überprüfung der Fehler beitragen möchten, freuen wir uns über diese Unterstützung. 
 
-## Qué es este repositorio
+## Que es este repositorio
 Esta colección de archivos se proporciona como un marco de ejemplo para que los clientes creen, desarrollen e integren guías de seguridad a fin de prepararse para posibles situaciones de ataque al utilizar los servicios de AWS. [El plan de respuesta en español se encuentran aquí](./docs/es)
 
 Estos manuales contienen traducciones realizadas mediante traducción automática con [AWS Translate] (https://aws.amazon.com/translate/). Estos manuales de estrategias no han sido revisados por un traductor humano y pueden contener errores. Asegúrese de revisar los documentos antes de usarlos para asegurarse de que el contexto y el idioma son correctos para su caso de uso individual. Si desea contribuir a corregir y revisar los errores, agradecemos su ayuda. 
