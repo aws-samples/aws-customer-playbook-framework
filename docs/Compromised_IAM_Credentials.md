@@ -178,7 +178,7 @@ After analyzing and gathering more information about the compromised credential(
     7.  If there are any problems with your application, reactivate the key temporarily. When your application is fully functional, and the first key is disabled, only then is it safe to delete the first key. Make sure you keep a record of all deleted access keys to continue searching for them in AWS CloudTrail logs.
 
 3.  Revoke the IAM role(s) active sessions by following these steps:
-    1.  Open the [IAM console](https://console.aws.amazon.com/iam/) and go to role and click on the IAM role you want to provoke active sessions for.
+    1.  Open the [IAM console](https://console.aws.amazon.com/iam/) and go to role and click on the IAM role you want to revoke active sessions for.
     2.  Click on the IAM role name and go to “*revoke sessions”* tab.
     3.  Click on “*revoke active sessions*” button and confirm the step.
 
@@ -209,11 +209,11 @@ With Identity Center, there are two sessions that to be concerned about which ar
 ```
 {
 "Version": "2012-10-17",
-"Statement": \[
+"Statement": [
     {
     "Effect": "Deny",
-    "Action": "\*",
-    "Resource": "\*",
+    "Action": "*",
+    "Resource": "*",
     "Condition": {
         "StringEquals": {
         "identitystore:userId": "example"
@@ -223,7 +223,7 @@ With Identity Center, there are two sessions that to be concerned about which ar
             }
         }
     }
-\]
+]
 }
 ```
 
