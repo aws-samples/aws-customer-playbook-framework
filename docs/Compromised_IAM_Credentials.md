@@ -95,7 +95,7 @@ There are multiple ways to detect compromised credentials within your AWS enviro
 
     1.  identify unusual IAM user creation by looking at creation date and the password last used/changed columns.
     2.  Check if any IAM users have two or more access keys.
-    3.  Check if any IAM users have *AWSExposedCredentialPolicy\_DO\_NOT\_REMOVE* attached. If so, rotate its access keys.
+    3.  Check if any IAM users have *AWSCompromisedKeyQuarantineV2* attached. If so, rotate its access keys.
 
 4.  Review IAM Roles within the AWS account, to identify any unfamiliar roles that have been created or accessed
 
