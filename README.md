@@ -94,15 +94,13 @@ And you don't just have to write code. You can help out by writing documentation
 * [AWS Security Incident Response Guide Downloadable](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/aws-security-incident-response-guide.pdf)
 * [AWS Security Reference Architecture (AWS SRA)](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/welcome.html)
 * [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/)
+* [AWS Threat Detection & Response Workshop](https://catalog.workshops.aws/threat-detection-and-response)
 * [AWS Well Architected Resources](https://aws.amazon.com/architecture/well-architected/)
 
-
 ## Security
-
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
 ## License Summary
-
 The documentation is made available under the Creative Commons Attribution-ShareAlike 4.0 International License. See the [LICENSE](/LICENSE) file.
 
 The sample code within this documentation is made available under the MIT-0 license. See the [LICENSE-SAMPLECODE](/LICENSE-SAMPLECODE) file.
