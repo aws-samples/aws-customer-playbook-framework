@@ -15,7 +15,7 @@ AWS、その関連会社、サプライヤー、または AWS からの条件、
 AWS 契約によって管理されており、このドキュメントはの一部でもなく、
 AWS とその顧客との間の契約は変更されますか。 \
 \
-© 2021、Amazon ウェブサービス株式会社またはその関連会社。 すべての権利
+© 2024、Amazon ウェブサービス株式会社またはその関連会社。 すべての権利
 予約済み。
 
 ## ランサムウェア
@@ -161,9 +161,9 @@ AWS のベストプラクティスを使用します。
 ACSC は、[ランサムウェア] への応答を含むいくつかのガイドを提供しています。
 オーストラリア] (https://www.cyber.gov.au/sites/default/files/2020-10/Ransomware%20in%20Australia%20%28October%202020%29.pdf), [ランサムウェア
 攻撃緊急対応
-ガイド] (https://www.cyber.gov.au/sites/default/files/2021-07/11515_ACSC_Emergency-Response-Guide_Accessible_08.12.20.pdf)、
+ガイド] (https://www.cyber.gov.au/sites/default/files/2024-07/11515_ACSC_Emergency-Response-Guide_Accessible_08.12.20.pdf)、
 [ランサムウェア攻撃の防止と保護]
-ガイド] (https://www.cyber.gov.au/sites/default/files/2021-07/11515_ACSC_Prevention-And-Protection-Guide_Accessible_08.12.20.pdf)。
+ガイド] (https://www.cyber.gov.au/sites/default/files/2024-07/11515_ACSC_Prevention-And-Protection-Guide_Accessible_08.12.20.pdf)。
 
 ## NISTサイバーセキュリティフレームワーク
 

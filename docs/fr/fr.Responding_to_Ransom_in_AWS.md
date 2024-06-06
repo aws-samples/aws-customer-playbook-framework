@@ -15,7 +15,7 @@ concédants de licence. Les responsabilités et responsabilités d'AWS envers se
 sont contrôlés par des accords AWS, et ce document ne fait pas partie, ni
 modifie-t-il tout accord entre AWS et ses clients. \
 \
-© 2021, Amazon Web Services, Inc. ou ses sociétés affiliées. Tous droits
+© 2024, Amazon Web Services, Inc. ou ses sociétés affiliées. Tous droits
 réservé.
 
 ## Ransomware
@@ -161,9 +161,9 @@ des mesures d'atténuation sont fournies.
 L'ACSC fournit plusieurs guides, y compris la réponse à [Ransomware dans
 Australie] (https://www.cyber.gov.au/sites/default/files/2020-10/Ransomware%20in%20Australia%20%28October%202020%29.pdf), [RANSOMWARE
 RÉPONSE D'URGENCE AUX ATTAQUES
-GUIDE] (https://www.cyber.gov.au/sites/default/files/2021-07/11515_ACSC_Emergency-Response-Guide_Accessible_08.12.20.pdf),
+GUIDE] (https://www.cyber.gov.au/sites/default/files/2024-07/11515_ACSC_Emergency-Response-Guide_Accessible_08.12.20.pdf),
 et [PRÉVENTION ET PROTECTION DES ATTAQUES DE RANSOMWARE]
-GUIDE] (https://www.cyber.gov.au/sites/default/files/2021-07/11515_ACSC_Prevention-And-Protection-Guide_Accessible_08.12.20.pdf).
+GUIDE] (https://www.cyber.gov.au/sites/default/files/2024-07/11515_ACSC_Prevention-And-Protection-Guide_Accessible_08.12.20.pdf).
 
 ## Cadre de cybersécurité NIST
 

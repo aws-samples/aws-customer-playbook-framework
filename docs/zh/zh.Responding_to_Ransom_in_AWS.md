@@ -15,7 +15,7 @@
 受 AWS 协议控制，且本文档不是其中的一部分，也不是
 它是否修改了 AWS 与其客户之间的任何协议。 \
 \
-© 2021，Amazon 网络服务公司或其附属公司。 所有权利
+© 2024，Amazon 网络服务公司或其附属公司。 所有权利
 保留。
 
 ## 勒索软件
@@ -161,9 +161,9 @@ SRA)] (https://docs.aws.amazon.com/prescriptive-guidance/latest/security-referen
 ACSC 提供了几个指南，包括对 [勒索软件的回应
 澳大利亚] (https://www.cyber.gov.au/sites/default/files/2020-10/Ransomware%20in%20Australia%20%28October%202020%29.pdf), [勒索软件
 攻击紧急响应
-指南] (https://www.cyber.gov.au/sites/default/files/2021-07/11515_ACSC_Emergency-Response-Guide_Accessible_08.12.20.pdf)，
+指南] (https://www.cyber.gov.au/sites/default/files/2024-07/11515_ACSC_Emergency-Response-Guide_Accessible_08.12.20.pdf)，
 和 [勒索软件攻击的预防和保护
-指南] (https://www.cyber.gov.au/sites/default/files/2021-07/11515_ACSC_Prevention-And-Protection-Guide_Accessible_08.12.20.pdf)。
+指南] (https://www.cyber.gov.au/sites/default/files/2024-07/11515_ACSC_Prevention-And-Protection-Guide_Accessible_08.12.20.pdf)。
 
 ## NIST 网络安全框架
 

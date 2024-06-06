@@ -2,7 +2,7 @@
 
 Este documento se proporciona únicamente con fines informativos. Representa las ofertas y prácticas actuales de productos de Amazon Web Services (AWS) a la fecha de publicación de este documento, que están sujetas a cambios sin previo aviso. Los clientes son responsables de realizar su propia evaluación de forma independiente sobre la información presentada en este documento y de cualquier uso de los productos o servicios de AWS, cada uno de los cuales se proporciona «as is» sin garantía de ningún tipo, ya sea expresa o implícita. Este documento no crea ninguna garantía, representación, compromiso contractual, condición o garantía de parte de AWS, sus filiales, proveedores o licenciantes. Las responsabilidades y las obligaciones de AWS con sus clientes están controladas por los acuerdos de AWS, y este documento no forma parte ni modifica ningún acuerdo entre AWS y sus clientes.
 
-© 2021 Amazon Web Services, Inc. o sus filiales. Todos los derechos
+© 2024 Amazon Web Services, Inc. o sus filiales. Todos los derechos
 reservados. Este trabajo está licenciado bajo una licencia internacional
 Creative Commons Attribution 4.0.
 

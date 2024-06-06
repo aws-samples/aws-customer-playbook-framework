@@ -15,7 +15,7 @@ Lizenzgeber. Die Verantwortlichkeiten und Verbindlichkeiten von AWS gegenüber s
 werden von AWS-Vereinbarungen kontrolliert, und dieses Dokument ist weder Bestandteil noch
 ändert es, jede Vereinbarung zwischen AWS und seinen Kunden. \
 \
-© 2021, Amazon Web Services, Inc. oder seine verbundenen Unternehmen. Alle Rechte
+© 2024, Amazon Web Services, Inc. oder seine verbundenen Unternehmen. Alle Rechte
 reserviert.
 
 ## Ransomware
@@ -161,9 +161,9 @@ Maßnahmen zur Abschwächung werden bereitgestellt.
 Der ACSC bietet mehrere Leitfäden einschließlich Reaktion auf [Ransomware in
 Australien] (https://www.cyber.gov.au/sites/default/files/2020-10/Ransomware%20in%20Australia%20%28October%202020%29.pdf), [RANSOMWARE
 GREIFT NOTFALLMASSNAHMEN AN
-LEITFADEN] (https://www.cyber.gov.au/sites/default/files/2021-07/11515_ACSC_Emergency-Response-Guide_Accessible_08.12.20.pdf),
+LEITFADEN] (https://www.cyber.gov.au/sites/default/files/2024-07/11515_ACSC_Emergency-Response-Guide_Accessible_08.12.20.pdf),
 und [SCHUTZ UND SCHUTZ VON RANSOMWARE-ANGRIFFEN
-LEITFADEN] (https://www.cyber.gov.au/sites/default/files/2021-07/11515_ACSC_Prevention-And-Protection-Guide_Accessible_08.12.20.pdf).
+LEITFADEN] (https://www.cyber.gov.au/sites/default/files/2024-07/11515_ACSC_Prevention-And-Protection-Guide_Accessible_08.12.20.pdf).
 
 ## NIST-Cybersicherheits-Framework
 
