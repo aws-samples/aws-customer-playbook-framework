@@ -58,16 +58,19 @@ And you don't just have to write code. You can help out by writing documentation
 * [Resource Glossary](./docs/Resource_Glossary.md)
 
 #### Communications 
+* [Getting help from AWS](./docs/AWS_Help.md)
 
 ### Response Scenarios
 #### 100-200 Level Scenarios
 * [Compromised IAM Credential(s)](./docs/Compromised_IAM_Credentials.md)
 * [Denial of Service / Distributed Denial of Service](./docs/Denial_of_Service.md)
-* [Inappropriate Public Resources: S3)](./docs/S3_Public_Access.md)
-* [Inappropriate Public Resources: RDS)](./docs/RDS_Public_Access.md)
-* [Unauthorized Network Changes](./docs/Unauthorized_Network_Changes.md)
-* [Simple Email Service Compromise](./docs/Responding_to_SES_Events.md)
 * [Identifying Exposure of CodeCommit](./docs/Code_Exposure.md)
+* [Inappropriate Public Resources: S3](./docs/S3_Public_Access.md)
+* [Inappropriate Public Resources: RDS](./docs/RDS_Public_Access.md)
+* [Responding to Amazon Bedrock Security Events](./docs/Bedrock_Response.md)
+* [Responding to Amazon Q Security Events](./docs/Amazon_Q.md)
+* [Simple Email Service Compromise](./docs/Responding_to_SES_Events.md)
+* [Unauthorized Network Changes](./docs/Unauthorized_Network_Changes.md)
 
 #### 300-400 Level Scenarios
 * [Bitcoin and Cryptojacking](./docs/Cryptojacking.md)
@@ -85,6 +88,7 @@ And you don't just have to write code. You can help out by writing documentation
 
 ## References
 * [AWS Cloud Adoption Framework](https://aws.amazon.com/professional-services/CAF/)
+* [AWS CIRT Incident Response Workshops](https://aws.amazon.com/blogs/security/aws-cirt-announces-the-release-of-five-publicly-available-workshops/)
 * [AWS Incident Response Blogs](https://aws.amazon.com/blogs/security/tag/incident-response/)
 * [AWS Security Incident Response Guide Wiki](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/welcome.html)
 * [AWS Security Incident Response Guide Downloadable](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/aws-security-incident-response-guide.pdf)
@@ -99,6 +103,6 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 ## License Summary
 
-The documentation is made available under the Creative Commons Attribution-ShareAlike 4.0 International License. See the LICENSE file.
+The documentation is made available under the Creative Commons Attribution-ShareAlike 4.0 International License. See the [LICENSE](/LICENSE) file.
 
-The sample code within this documentation is made available under the MIT-0 license. See the LICENSE-SAMPLECODE file.
+The sample code within this documentation is made available under the MIT-0 license. See the [LICENSE-SAMPLECODE](/LICENSE-SAMPLECODE) file.
