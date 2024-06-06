@@ -96,6 +96,7 @@ And you don't just have to write code. You can help out by writing documentation
 * [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/)
 * [AWS Threat Detection & Response Workshop](https://catalog.workshops.aws/threat-detection-and-response)
 * [AWS Well Architected Resources](https://aws.amazon.com/architecture/well-architected/)
+* [re:Inforce: AWS' cloud security learning event](https://reinforce.awsevents.com/)
 
 ## Security
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
