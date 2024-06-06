@@ -77,7 +77,7 @@ When a user in an AWS account (either authorized or unauthorized), accesses Bedr
 
 The image below portrays the relationship between Prompts, [Agents](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html), and Knowledge Bases and can be a good way to visualize the data flow (taken from the [User Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html))
 
-![Agent Construction During Build-Time API Operations](images/bedrock-01.png)
+![Agent Construction During Build-Time API Operations](/images/bedrock-01.png)
 
 
 ## Detection
@@ -159,7 +159,7 @@ The screenshots below can provide a visual aid for an Incident Responder to assi
 -
 This event is first logged when browsing to the main Amazon Bedrock page
 
-![GetFoundationModelAvailability](images/bedrock-02.png)
+![GetFoundationModelAvailability](/images/bedrock-02.png)
 
 </details>
 
@@ -171,7 +171,7 @@ This event is first logged when browsing to the main Amazon Bedrock page
 -
 These events are logged when browsing to the 'Base models' and 'Custom models' pages
 
-![ListFoundationModels and ListCustomModels](images/bedrock-03.png)
+![ListFoundationModels and ListCustomModels](/images/bedrock-03.png)
 
 </details>
 
@@ -183,11 +183,11 @@ These events are logged when browsing to the 'Base models' and 'Custom models' p
 -
 This event is logged upon model invocation.
 
-![Model invocation example](images/bedrock-04.png)
+![Model invocation example](/images/bedrock-04.png)
 
 Sample CloudTrail event record for model invocation:
 
-![CloudTrail for InvokeModel](images/bedrock-05.png)
+![CloudTrail for InvokeModel](/images/bedrock-05.png)
 
 </details>
 
@@ -205,13 +205,13 @@ The first image shows the differences between various methods of model invocatio
 
 Note that the *User name* displayed is different depending on how the model is invoked
 
-![Agent and Knowledge Base model invocation](images/bedrock-06.png)
+![Agent and Knowledge Base model invocation](/images/bedrock-06.png)
 
 This difference is highlighted using two side-by-side screenshots of the `InvokeModel` event record in CloudTrail
 The left image =  Direct model invocation 
 The right image = Model invocation using a Knowledge Base
 
-![CloudTrail for InvokeModel](images/bedrock-07.png)
+![CloudTrail for InvokeModel](/images/bedrock-07.png)
 
 
 </details>
@@ -224,7 +224,7 @@ The right image = Model invocation using a Knowledge Base
 -
 While the `InvokeModel` and `InvokeModelWithResponseStream` events show up in CloudTrail, model invocation logs (when configured) also display the prompt and response that corresponds to each `InvokeModel` event.  The image below is taken from model invocation logs that have been sent to S3 - these contain the prompt used as well as the output or the response from the model (an Athena DDL is available below):
 
-![S3 Model invocation example](images/bedrock-09.png)
+![S3 Model invocation example](/images/bedrock-09.png)
 
 </details>
 
@@ -236,7 +236,7 @@ While the `InvokeModel` and `InvokeModelWithResponseStream` events show up in Cl
 -
 This event is logged when model invocation logging is configured in an AWS account
 
-![Configuring Model Invocation Logging](images/bedrock-10.png)
+![Configuring Model Invocation Logging](/images/bedrock-10.png)
 
 </details>
 
@@ -248,7 +248,7 @@ This event is logged when model invocation logging is configured in an AWS accou
 -
 The following CloudTrail event record is logged when a knowledge base is created.  The event record includes the identity that issued the request and the name of the Knowledge Base.  The name of the knowledge base can be referenced in subsequent logs that capture model invocations using `InvokeModel`
 
-![Knowledge Base Creation](images/bedrock-11.png)
+![Knowledge Base Creation](/images/bedrock-11.png)
 
 </details>
 
@@ -260,7 +260,7 @@ The following CloudTrail event record is logged when a knowledge base is created
 -
 The image below portrays the creation of an agent using the console.  The resulting event name that is logged is `CreateAgent`
 
-![Agent Creation](images/bedrock-12.png)
+![Agent Creation](/images/bedrock-12.png)
 
 </details>
 
@@ -272,7 +272,7 @@ The image below portrays the creation of an agent using the console.  The result
 -
 An example of how the `Retrieve` and `RetrieveAndGenerate` event names are shown in the image below when testing a knowledge base.  Note that `Retrieve` only tests the retrieval of data from the knowledge base, and `RetrieveAndGenerate` tests the retrieval of data from the knowledge base and generation of a response:
 
-![Retrieve and RetrieveAndGenerate](images/bedrock-13.png)
+![Retrieve and RetrieveAndGenerate](/images/bedrock-13.png)
 
 </details>
 
