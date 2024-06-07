@@ -15,7 +15,7 @@ Last Date Approved:
 ## Executive Summary
 As part of our ongoing commitment to customers, AWS is providing this security incident response playbook that describes the steps needed to investigate security events where Amazon SageMaker is either the source or a target of unauthorized use within your AWS account(s). The purpose of this document is to provide prescriptive guidance on the actions to take once you suspect a security event has taken place.
 
-![Image](../images/nist_life_cycle.png)
+![Image](/images/nist_life_cycle.png)
 
 *Aspects of AWS incident response*
 
@@ -378,7 +378,7 @@ The screenshots below provide a visual aid for an Incident Responder to assist i
 -
 Creates a Domain. A domain consists of an associated Amazon Elastic File System volume, a list of authorized users, and a variety of security, application, policy, and Amazon Virtual Private Cloud (VPC) configurations. Users within a domain can share notebook files and other artifacts with each other.
 
-![CreateDomain](../images/sagemaker-01.png)
+![CreateDomain](/images/sagemaker-01.png)
 </details>
 
 ---
@@ -390,8 +390,8 @@ Creates a Domain. A domain consists of an associated Amazon Elastic File System 
 Amazon SageMaker domain supports SageMaker machine learning (ML) environments. A SageMaker domain is composed of the following entities: Domain, User Profile, Shared Space, App
 
 
-![DomainDetails](../images/sagemaker-02.png)
-![DomainDetails2](../images/sagemaker-03.png)
+![DomainDetails](/images/sagemaker-02.png)
+![DomainDetails2](/images/sagemaker-03.png)
 
 </details>
 
@@ -405,7 +405,7 @@ Amazon SageMaker domain supports SageMaker machine learning (ML) environments. A
 
 Note that the `CreateDomain` event in Cloudtrail has all of the following information: VPC, subnets, execution role, apps, etc.
 
-![SageMaker Domain with associated VPC, execution role, apps, etc](./images/sagemaker-04.png)
+![SageMaker Domain with associated VPC, execution role, apps, etc](/images/sagemaker-04.png)
 
 
 </details>
@@ -419,7 +419,7 @@ Note that the `CreateDomain` event in Cloudtrail has all of the following inform
 
 Note that the  `CreateEndpoint` event for SageMaker in CloudTrail is called by `SageMaker-ExecutionRole` service role
 
-![Create endpoint example](../images/sagemaker-05.png)
+![Create endpoint example](/images/sagemaker-05.png)
 
 </details>
 
