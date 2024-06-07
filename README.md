@@ -79,6 +79,7 @@ And you don't just have to write code. You can help out by writing documentation
     * [Amazon Elastic Computing (EC2) Microsoft Windows](./docs/Ransom_Response_EC2_Windows.md)
     * [Amazon Relational Database Service (RDS)](./docs/Ransom_Response_RDS.md)
     * [Amazon Simple Storage Service (S3)](./docs/Ransom_Response_S3.md)
+* [Responding to SageMaker Security Events](./docs/Responding%20to%20SageMaker.md)
 
 ### AWS Analysis Tools
 * [Analyzing VPC Flow Logs with AWS Athena](./docs/Analyzing_VPC_Flow_Logs.md)
