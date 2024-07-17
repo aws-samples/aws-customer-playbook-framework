@@ -17,7 +17,7 @@ This AWS Content is provided subject to the terms of the AWS Customer Agreement 
 ## Playbook structure:
 
 1. **Threat**: Describes the threat that is been addressed by the playbook
-2. **Endgame**: Describes the desired outcomes for the playbook based on the security perspective of the _[*AWS Cloud Adoption Framework (CAF)*](https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)_ and industry accepted security patterns, such as, vulnerability assessment and impact analysis.
+2. **Endgame**: Describes the desired outcomes for the playbook based on the security perspective of the _[*AWS Cloud Adoption Framework (CAF)*](https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)_ and industry accepted security patterns, such as, vulnerability assessment and impact analysis.
 3. **Response steps**: Provides step-by-step procedure in chronological order to respond to the event based on *[_NIST 800-61r2 - Computer Security Incident Response Guide_](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)*. Refer to figure A.
 4. **Simulation** [**CODE**]: Provides step-by-step procedure to generate the indicators required to trigger the alert initiating the response.
 5. **Incident classification, handling, and detection**: Categorizes the playbook per [*_MITRE ATT&CK_* enterprise tactics](https://attack.mitre.org/tactics/enterprise/), enumerates the tools required for running the playbook, enumerates the indicators (a.k.a. findings) used for detection generating the alert, log sources required to generate indicators and facilitate analysis, and the teams involved.
