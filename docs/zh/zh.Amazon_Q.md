@@ -32,7 +32,7 @@
 ***恢复原始和强化配置**
 
 #### 增强 CAF 安全透视组件：
-[AWS 云采用框架 AWS Framework 安全视角] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[AWS 云采用框架 AWS Framework 安全视角] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **指令**
 * **侦探**
 * **响应式**

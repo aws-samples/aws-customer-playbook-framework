@@ -32,7 +32,7 @@ Tout au long de l'exécution du playbook, concentrez-vous sur les _***résultats
 * **Revenir à la configuration d'origine et durcie**
 
 #### Améliorez les composants de CAF Security Perspective :
-[Perspective de sécurité de l'AWS Cloud Adoption Framework] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[Perspective de sécurité de l'AWS Cloud Adoption Framework] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **Directive**
 * **Détective**
 * **Réactif**

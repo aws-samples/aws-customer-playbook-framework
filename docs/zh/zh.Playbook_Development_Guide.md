@@ -17,7 +17,7 @@
 ## PlayBook 结构：
 
 1. ** 威胁 **：描述行动手册已解决的威胁
-2. **Endgam**：根据 _ [* AWS 云采用框架 (CAF) *] 的安全视角描述行动手册的预期结果（https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)_）和业界接受的安全模式，例如漏洞评估和影响分析。
+2. **Endgam**：根据 _ [* AWS 云采用框架 (CAF) *] 的安全视角描述行动手册的预期结果（https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)_）和业界接受的安全模式，例如漏洞评估和影响分析。
 3. ** 响应步骤 **：根据 * [_NIST 800-61r2-计算机安全事件响应指南 _] (https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf) * 提供按时间顺序对事件作出响应的逐步程序。 请参阅图 A。
 4. ** 模拟 ** [**CODE **]：提供分步过程来生成触发启动响应的警报所需的指标。
 5. ** 事件分类、处理和检测 **：按 [*_MITRE ATT&CK_* 企业策略] (https://attack.mitre.org/tactics/enterprise/) 对行动手册进行分类，列举运行行动手册所需的工具，列举用于检测生成警报的指标（又名调查结果），日志生成指标和促进分析所需的来源以及所涉团队.
@@ -42,7 +42,7 @@
 ## 开发过程：
 
 1. 选择游戏手册将要解决的威胁，然后在 ``1 中描述它。 威胁部分 ```。 根据需要提供尽可能多的参考资料，以帮助剧本读者理解它。
-2. 查看行动手册模板部分 ``2。 终局部分 ```并进行更改或保持原样。 它们基于 AWS 安全和行业模式，例如 [CAF 的安全视角] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)、[AWS 架构完善框架的安全支柱] (https://d1.awsstatic.com/whitepapers/architecture/AWS-Security-Pillar.pdf)、[AmazonWeb 服务：安全流程概述] (https://d0.awsstatic.com/whitepapers/aws-security-whitepaper.pdf)、[AWS 安全事件响应指南] (https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf) 和 [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide] (https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)。
+2. 查看行动手册模板部分 ``2。 终局部分 ```并进行更改或保持原样。 它们基于 AWS 安全和行业模式，例如 [CAF 的安全视角] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)、[AWS 架构完善框架的安全支柱] (https://d1.awsstatic.com/whitepapers/architecture/AWS-Security-Pillar.pdf)、[AmazonWeb 服务：安全流程概述] (https://d0.awsstatic.com/whitepapers/aws-security-whitepaper.pdf)、[AWS 安全事件响应指南] (https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf) 和 [NIST Special Publication 800-61r2 Computer Security Incident Handling Guide] (https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)。
 3. 填写 ``5 部分。 事件分类、处理和检测 ```，并提供适当的信息。 如果在构建剧本的其他部分的过程中，你最终发现了新的指标、你可能想要使用的其他工具等，你可以稍后回到本部分。
 4. 定义触发威胁指标的步骤。 记录流程、AWS 资源、IAM 委托人、所需的策略和代码，例如 AWS CLI 命令、基于 AWS 开发工具包的代码，最好包装在 shell 脚本或支持的语言代码程序中。 添加屏幕截图，说明使用 CloudWatch Insights 或 Athena 等分析工具生成的模拟活动生成的各种日志。
 5. 在 ``3 节下制定应对步骤。 响应步骤 ``部分突出显示每个步骤所属的 NIST IR 生命周期阶段。 应按照与受影响工作负载的威胁模型相一致的时间顺序列举这些步骤。 在剧本中明确指出，按时间顺序排列的顺序不是不可变的，可以根据事件的上下文进行更改。 建议任何偏离既定执行命令的行为都必须经过先前批准的审查程序，以尽量减少可能进一步损害受影响工作量的行动的风险。

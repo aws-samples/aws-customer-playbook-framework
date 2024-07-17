@@ -55,7 +55,7 @@ Playbook の実行全体を通して、インシデント対応機能の強化�
 * **エクスポーズされたコードのリスクを最小化または排除**
 
 #### CAF セキュリティパースペクティブの強化コンポーネント:
-[AWS Cloud Adoption Framework セキュリティの視点] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[AWS Cloud Adoption Framework セキュリティの視点] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **指令**
 * **探偵**
 * **レスポンシブ**

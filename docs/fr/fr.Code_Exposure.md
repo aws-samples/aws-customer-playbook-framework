@@ -55,7 +55,7 @@ Tout au long de l'exécution du playbook, concentrez-vous sur les résultats rec
 * **Minimiser ou éliminer les risques liés au code exposé**
 
 #### Améliorer les composants Perspectives de sécurité des FAC :
-[Perspective de sécurité AWS Cloud Adoption Framework] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[Perspective de sécurité AWS Cloud Adoption Framework] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **Directive**
 * **Détective**
 * **Responsible**

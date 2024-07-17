@@ -32,7 +32,7 @@ A lo largo de la ejecución del manual, concéntrese en los _***resultados desea
 * **Volver a la configuración original y reforzada**
 
 #### Componentes de mejora de la perspectiva de seguridad de CAF:
-[Perspectiva de seguridad del AWS Cloud Adoption Framework] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[Perspectiva de seguridad del AWS Cloud Adoption Framework] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **Directiva**
 * **Detective**
 * **Responsivo**

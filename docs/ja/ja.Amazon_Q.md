@@ -32,7 +32,7 @@
 * **元の強化された構成に戻す**
 
 #### CAF セキュリティパースペクティブコンポーネントの強化:
-[AWS Cloud Adoption Framework のセキュリティパースペクティブ] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[AWS Cloud Adoption Framework のセキュリティパースペクティブ] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **指令**
 * **探偵**
 * **レスポンシブ**

@@ -17,7 +17,7 @@
 ## プレイブックの構造:
 
 1. **Threat**: プレイブックによって対処された脅威を記述します
-2. **Endgame**: _ [*AWS クラウド導入フレームワーク (CAF) *] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)_ および業界で受け入れられているセキュリティパターン (脆弱性評価や影響分析など) のセキュリティの観点に基づいて、プレイブックの望ましい結果について説明します。
+2. **Endgame**: _ [*AWS クラウド導入フレームワーク (CAF) *] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)_ および業界で受け入れられているセキュリティパターン (脆弱性評価や影響分析など) のセキュリティの観点に基づいて、プレイブックの望ましい結果について説明します。
 3. **応答手順**: * [_NIST 800-61r2-コンピュータセキュリティインシデント対応ガイド_] (https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf) * に基づいて、イベントに応答するための手順を時系列順に説明します。 図 A を参照してください。
 4. **シミュレーション** [**コード**]: レスポンスを開始するアラートをトリガーするのに必要なインジケーターを生成するステップバイステップの手順を提供します。
 5. **インシデントの分類、処理、および検出**: [*_MITRE ATT&CK_* エンタープライズタクティクス] (https://attack.mitre.org/tactics/enterprise/) ごとにプレイブックを分類し、プレイブックの実行に必要なツールを列挙し、アラートを生成する検出に使用されるインジケータ（別名：所見）を列挙し、ログを生成します。指標を生成し、分析を容易にするために必要な情報源、および関係するチーム。
@@ -42,7 +42,7 @@
 ## 開発プロセス:
 
 1. プレイブックが対処する脅威を選択し、```1 で説明してください。 脅威セクション```。 Playbook 読者がそれを理解するのに役立つ参考文献を必要なだけ多く提供してください。
-2. Playbook テンプレートのセクション ```2 を確認します。 エンドゲームのセクション``` と変更を加えるか、そのまま維持する。 これらは、[CAF のセキュリティ観点] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)、[AWS Well-Architected Framework のセキュリティ柱] (https://d1.awsstatic.com/whitepapers/architecture/AWS-Security-Pillar.pdf)、[Amazon] など、AWS のセキュリティと業界パターンに基づいています。ウェブサービス:セキュリティプロセスの概要] (https://d0.awsstatic.com/whitepapers/aws-security-whitepaper.pdf)、[AWS セキュリティインシデント対応ガイド] (https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf)、[NIST Special Publication 800-61r2 Computer Security Incident Handling Guide] (https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)。
+2. Playbook テンプレートのセクション ```2 を確認します。 エンドゲームのセクション``` と変更を加えるか、そのまま維持する。 これらは、[CAF のセキュリティ観点] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)、[AWS Well-Architected Framework のセキュリティ柱] (https://d1.awsstatic.com/whitepapers/architecture/AWS-Security-Pillar.pdf)、[Amazon] など、AWS のセキュリティと業界パターンに基づいています。ウェブサービス:セキュリティプロセスの概要] (https://d0.awsstatic.com/whitepapers/aws-security-whitepaper.pdf)、[AWS セキュリティインシデント対応ガイド] (https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf)、[NIST Special Publication 800-61r2 Computer Security Incident Handling Guide] (https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)。
 3. セクション ```5 に記入してください。 インシデントの分類、処理、および検出を適切な情報で指定します。 後でこのセクションに戻ることができます。プレイブックの他のセクションを作成する過程で、新しいインジケータ、使用したいかもしれない他のツールなどを発見してしまった場合。
 4. 脅威の指標をトリガーする手順を定義します。 プロセス、AWS リソース、IAM プリンシパル、必要なポリシー、AWS CLI コマンド、AWS SDK ベースのコードなど、必要なコードを文書化します。できれば、シェルスクリプトまたはサポートされている言語コードプログラムにラップしてください。 CloudWatch Insights や Athena などの分析ツールを使用して、シミュレーションアクティビティによって生成されるさまざまなログを示すスクリーンショットを追加します。
 5. セクション ```3 の下で応答ステップを開発する。 応答ステップ ```セクションでは、各ステップが属する NIST IR ライフサイクルフェーズを強調しています。 ステップは、影響を受けるワークロードの脅威モデルに合わせて時系列順に列挙する必要があります。 プレイブックの中で、時系列順は不変ではなく、イベントのコンテキストに応じて変更できることを明確にしてください。 影響を受けるワークロードをさらに損傷する可能性のあるアクションのリスクを最小限に抑えるために、確立された実行順序からの逸脱は、以前に承認された審査プロセスを経る必要があります。

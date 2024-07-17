@@ -59,7 +59,7 @@ A lo largo de la ejecución del manual, concéntrese en los _***resultados desea
 * **Volver a la configuración original reforzada
 
 #### Mejore la perspectiva de los componentes de seguridad de CAF:
-[Perspectiva de seguridad del marco de adopción de la nube de AWS] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[Perspectiva de seguridad del marco de adopción de la nube de AWS] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **Directive**
 * **Detective**
 * **Responsive**

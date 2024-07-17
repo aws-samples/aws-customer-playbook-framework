@@ -61,7 +61,7 @@ Throughout the execution of the playbook, focus on the desired outcomes, taking 
 * **Return to original and hardened configuration**
 
 #### Enhance CAF Security Perspective components:
-[AWS Cloud Adoption Framework Security Perspective](https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[AWS Cloud Adoption Framework Security Perspective](https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **Directive**
 * **Detective**
 * **Responsive**

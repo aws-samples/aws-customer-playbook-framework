@@ -34,7 +34,7 @@ Durante la ejecución del libro de jugadas, concéntrate en los resultados _***d
 * **Volver a la configuración original y endurecida**
 
 #### Mejorar los componentes de la perspectiva de seguridad de CAF:
-[Perspectiva de seguridad de AWS Cloud Adoption Framework] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[Perspectiva de seguridad de AWS Cloud Adoption Framework] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **Directiva**
 * **Detectivo**
 * **Responsivo**

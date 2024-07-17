@@ -55,7 +55,7 @@ Konzentrieren Sie sich während der Ausführung des Playbooks auf die gewünscht
 * **Risiken des exponierten Codes minimieren oder eliminieren**
 
 #### Komponenten der CAF-Sicherheitsperspektive verbessern:
-[Sicherheitsperspektive des AWS Cloud Adoption Framework] (https://d0.awsstatic.com/whitepapers/AWS_CAF_Security_Perspective.pdf)
+[Sicherheitsperspektive des AWS Cloud Adoption Framework] (https://docs.aws.amazon.com/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.html)
 * **Richtlinie**
 * **Detektiv**
 * **Verantwortlich**
