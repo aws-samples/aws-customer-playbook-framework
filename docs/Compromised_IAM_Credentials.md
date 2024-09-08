@@ -187,48 +187,79 @@ After analyzing and gathering more information about the compromised credential(
     2.  For Amazon S3 buckets, use [bucket policies](https://docs.aws.amazon.com/AmazonS3/latest/userguide/add-bucket-policy.html) to block any suspicious IP addresses from accessing the S3 buckets.
 
 5.  Revoke Identity Center sessions:
+    - With Identity Center, there are two sessions that to be concerned about which are the access portal session, and role/application sessions:
+    1.  Access portal session:
+        1.  Disable the user in Identity Center:
+            1.  Navigate to the Identity Center console and select ‘Users’
+            2.  Choose the username of the user being disabled
+            3.  In the General information box for the user, click ‘Disable > user access’
+        2.  Revoke any active sessions:
+            1.  On the user’s page in Identity Center, select ‘Active > sessions’ tab
+            2.  Select any listed sessions and then click ‘Delete session’
 
-With Identity Center, there are two sessions that to be concerned about which are the access portal session, and role/application sessions:
+    2.  Revoke role sessions:
+        - Use one of the two options proposed:
+        1.  Identify the permission set(s) being used by the user.
+            1.  From the Identity Center console, click on Permission Sets
+            2.  Select the name of the permission set.
+            3.  Scroll down to ‘Inline Policy’ and click on the Edit button
+            4.  Add the following policy:
 
-1.  Access portal session:
-    1.  Disable the user in Identity Center:
-        1.  Navigate to the Identity Center console and select ‘Users’
-        2.  Choose the username of the user being disabled
-        3.  In the General information box for the user, click ‘Disable > user access’
-    2.  Revoke any active sessions:
-        1.  On the user’s page in Identity Center, select ‘Active > sessions’ tab
-        2.  Select any listed sessions and then click ‘Delete session’
+                ```json
+                {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                    "Effect": "Deny",
+                    "Action": "*",
+                    "Resource": "*",
+                    "Condition": {
+                        "StringEquals": {
+                        "identitystore:userId": "example"
+                        },
+                        "DateLessThan": {
+                            "aws:TokenIssueTime": "2023-09-26T15:00:00.000Z"
+                            }
+                        }
+                    }
+                ]
+                }
+                ```
 
-2.  Revoke role sessions:
-    1.  Identify the permission set(s) being used by the user.
-        1.  From the Identity Center console, click on Permission Sets
-        2.  Select the name of the permission set.
-        3.  Scroll down to ‘Inline Policy’ and click on the Edit button
-        4.  Add the following policy:
+            5. For this policy, update ‘example’ to the user’s Identity Center User ID. The User ID can be found in the ‘General information’ box of the user’s
+    User page. The value for aws:TokenIssueTime should equal the time in which you apply this policy.
 
-```
-{
-"Version": "2012-10-17",
-"Statement": [
-    {
-    "Effect": "Deny",
-    "Action": "*",
-    "Resource": "*",
-    "Condition": {
-        "StringEquals": {
-        "identitystore:userId": "example"
-        },
-        "DateLessThan": {
-            "aws:TokenIssueTime": "2023-09-26T15:00:00.000Z"
-            }
-        }
-    }
-]
-}
-```
+        1. Alternatively, use a Service Control Policy to deny all actions for a specific user.
+            1.  From the AWS management console, navigate to AWS Organizations.
+            2.  Click on ‘Policies’ then select ‘Service Control Policies’.
+            3.  Click ‘Create policy’ and add the following policy:
 
-For this policy, update ‘example’ to the user’s Identity Center User ID. The User ID can be found in the ‘General information’ box of the user’s
-User page. The value for aws:TokenIssueTime should equal the time in which you apply this policy.
+                ```json
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Deny",
+                            "Action": [
+                                "*"
+                            ],
+                            "Resource": "*",
+                            "Condition": {
+                                "StringEquals": {
+                                    "identitystore:userId": "Add user ID here"
+                                }
+                            }
+                        }
+                    ]
+                }
+                ```
+
+            4.  Replace ‘Add user ID here’ with the user’s Identity Center User ID found in the ‘General information’ box of the user’s User page.
+            5.  Attach this policy to the Root or a specific Organizational Unit where the user resides:
+                1.  Go back to the ‘Service Control Policies’ page.
+                2.  Select the newly created policy.
+                3.  Click on ‘Attach’.
+                4.  Choose the target Root or Organizational Unit to apply this policy.
 
 6.  Application sessions
 
