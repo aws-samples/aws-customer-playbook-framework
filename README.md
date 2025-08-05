@@ -6,34 +6,34 @@ The contents of this library are provided for informational purposes only. It re
 This AWS Content is provided subject to the terms of the AWS Customer Agreement available at http://aws.amazon.com/agreement or other written agreement between the Customer and either Amazon Web Services, Inc. or Amazon Web Services EMEA SARL or both.
 
 ## What this Repository Is
-This collections of files is provided as an example framework for customers to create, develop, and integrate security playbooks in preparation for potential attack scenarios when using AWS services. 
+This collections of files is provided as an example framework for customers to create, develop, and integrate security playbooks in preparation for potential attack scenarios when using AWS services.
 
-These playbooks contains translations performed using machine translation with [AWS Translate](https://aws.amazon.com/translate/). These playbooks have not been reviewed by a human translator and may contain contextual or grammatical errors. Please ensure you review the documents before using to ensure correct context and language for your individual use case. If you would like to contribute to correcting errors and reviewing the errors, we welcome that assistance. 
+These playbooks contains translations performed using machine translation with [AWS Translate](https://aws.amazon.com/translate/). These playbooks have not been reviewed by a human translator and may contain contextual or grammatical errors. Please ensure you review the documents before using to ensure correct context and language for your individual use case. If you would like to contribute to correcting errors and reviewing the errors, we welcome that assistance.
 
 ## Was ist dieses Repository
 Diese Dateisammlung wird als Beispiel für Kunden bereitgestellt, um Sicherheits-Playbooks zu erstellen, zu entwickeln und zu integrieren, um sich auf mögliche Angriffsszenarien bei der Nutzung von AWS-Services vorzubereiten. [Spielbücher auf Deutsch befinden Sie hier](./docs/de)
 
-Diese Playbooks enthalten Übersetzungen, die mithilfe maschineller Übersetzung mit [AWS Translate] (https://aws.amazon.com/translate/) durchgeführt wurden. Diese Playbooks wurden nicht von einem menschlichen Übersetzer überprüft und können Fehler enthalten. Bitte überprüfen Sie die Dokumente vor der Verwendung, um sicherzustellen, dass der Kontext und die Sprache für Ihren individuellen Anwendungsfall korrekt sind. Wenn Sie zur Korrektur von Fehlern und zur Überprüfung der Fehler beitragen möchten, freuen wir uns über diese Unterstützung. 
+Diese Playbooks enthalten Übersetzungen, die mithilfe maschineller Übersetzung mit [AWS Translate] (https://aws.amazon.com/translate/) durchgeführt wurden. Diese Playbooks wurden nicht von einem menschlichen Übersetzer überprüft und können Fehler enthalten. Bitte überprüfen Sie die Dokumente vor der Verwendung, um sicherzustellen, dass der Kontext und die Sprache für Ihren individuellen Anwendungsfall korrekt sind. Wenn Sie zur Korrektur von Fehlern und zur Überprüfung der Fehler beitragen möchten, freuen wir uns über diese Unterstützung.
 
 ## Que es este repositorio
 Esta colección de archivos se proporciona como un marco de ejemplo para que los clientes creen, desarrollen e integren guías de seguridad a fin de prepararse para posibles situaciones de ataque al utilizar los servicios de AWS. [El plan de respuesta en español se encuentran aquí](./docs/es)
 
-Estos manuales contienen traducciones realizadas mediante traducción automática con [AWS Translate] (https://aws.amazon.com/translate/). Estos manuales de estrategias no han sido revisados por un traductor humano y pueden contener errores. Asegúrese de revisar los documentos antes de usarlos para asegurarse de que el contexto y el idioma son correctos para su caso de uso individual. Si desea contribuir a corregir y revisar los errores, agradecemos su ayuda. 
+Estos manuales contienen traducciones realizadas mediante traducción automática con [AWS Translate] (https://aws.amazon.com/translate/). Estos manuales de estrategias no han sido revisados por un traductor humano y pueden contener errores. Asegúrese de revisar los documentos antes de usarlos para asegurarse de que el contexto y el idioma son correctos para su caso de uso individual. Si desea contribuir a corregir y revisar los errores, agradecemos su ayuda.
 
 ## Qu'est-ce que ce dépôt
 Ces collections de fichiers sont fournies à titre d'exemple de cadre permettant aux clients de créer, de développer et d'intégrer des playbooks de sécurité en vue de scénarios d'attaque potentiels lors de l'utilisation des services AWS. [Les playbooks en français se trouvent ici](./docs/fr)
 
-Ces playbooks contiennent des traductions effectuées à l'aide de la traduction automatique avec [AWS Translate] (https://aws.amazon.com/translate/). Ces manuels n'ont pas été révisés par un traducteur humain et peuvent contenir des erreurs. Assurez-vous de lire les documents avant de les utiliser afin de vous assurer que le contexte et la langue sont corrects pour votre cas d'utilisation individuel. Si vous souhaitez contribuer à la correction des erreurs et à la révision des erreurs, cette assistance est la bienvenue. 
+Ces playbooks contiennent des traductions effectuées à l'aide de la traduction automatique avec [AWS Translate] (https://aws.amazon.com/translate/). Ces manuels n'ont pas été révisés par un traducteur humain et peuvent contenir des erreurs. Assurez-vous de lire les documents avant de les utiliser afin de vous assurer que le contexte et la langue sont corrects pour votre cas d'utilisation individuel. Si vous souhaitez contribuer à la correction des erreurs et à la révision des erreurs, cette assistance est la bienvenue.
 
 ## このリポジトリとは何か
 このファイルのコレクションは、AWS のサービスを使用する際の潜在的な攻撃シナリオに備えて、セキュリティプレイブックを作成、開発、統合するためのフレームワークの例として提供されています。[日本のプレイブックはこちら](./docs/ja)
 
-これらのプレイブックには、[AWS Translate] (https://aws.amazon.com/translate/) による機械翻訳を使用して行われた翻訳が含まれています。これらのプレイブックは人間の翻訳者によるレビューを受けていないため、誤りがある可能性があります。使用する前に必ずドキュメントを確認して、個々のユースケースに適したコンテキストと言語を確認してください。エラーの修正やエラーの確認にご協力いただける場合は、その支援を歓迎します。 
+これらのプレイブックには、[AWS Translate] (https://aws.amazon.com/translate/) による機械翻訳を使用して行われた翻訳が含まれています。これらのプレイブックは人間の翻訳者によるレビューを受けていないため、誤りがある可能性があります。使用する前に必ずドキュメントを確認して、個々のユースケースに適したコンテキストと言語を確認してください。エラーの修正やエラーの確認にご協力いただける場合は、その支援を歓迎します。
 
 ## 这个仓库是什么
 这些文件集是作为示例框架提供的，供客户创建、开发和集成安全行动手册，为使用 AWS 服务时的潜在攻击场景做好准备。[中文剧本位于此处](./docs/zh)
 
-这些手册包含使用 [AWS 翻译] (https://aws.amazon.com/translate/) 进行机器翻译的翻译。这些剧本未经人工翻译人员审查，可能包含错误。在使用之前，请务必仔细阅读文档，以确保您的个人用例的上下文和语言正确。如果您想为更正错误和审查错误做出贡献，我们欢迎您的帮助。 
+这些手册包含使用 [AWS 翻译] (https://aws.amazon.com/translate/) 进行机器翻译的翻译。这些剧本未经人工翻译人员审查，可能包含错误。在使用之前，请务必仔细阅读文档，以确保您的个人用例的上下文和语言正确。如果您想为更正错误和审查错误做出贡献，我们欢迎您的帮助。
 
 ## Contributing to the Incident Response Playbooks
 
@@ -53,11 +53,15 @@ And you don't just have to write code. You can help out by writing documentation
 * [Rationalization of Security Incident Handling](./docs/rationalization_of_security_incident_handling.md)
 * [Playbook Development Guide](./docs/Playbook_Development_Guide.md)
 
+### Detections
+* [Bedrock API Key Security Monitoring](./detections/Bedrock_Api_Key_Eventbridge_Detection.md)
+    * [Cloudformation template for Bedrock API Key monitoring](./detections/cfn/bedrock-eventbridge-monitoring.yaml)
+
 #### Administrative
 * [Playbook Creation Process](./docs/Playbook_Creation_Process.md)
 * [Resource Glossary](./docs/Resource_Glossary.md)
 
-#### Communications 
+#### Communications
 * [Getting help from AWS](./docs/AWS_Help.md)
 
 ### Response Scenarios
