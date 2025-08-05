@@ -1,5 +1,5 @@
 
-# Bedrock API Security Monitoring
+# Bedrock API Key Security Monitoring
 
 A CloudFormation solution that monitors Amazon Bedrock API activity for security events, specifically tracking service-specific credential creation and bearer token usage through CloudTrail logs.
 
@@ -38,4 +38,7 @@ aws cloudformation create-stack \
 
 Or deploy via AWS Console by uploading the template file.
 
+## Playbook
+
+For a comprehensive security playbook, reference our Bedrock playbook: [Responding to Amazon Security Events](../docs/Bedrock_Response.md)
 

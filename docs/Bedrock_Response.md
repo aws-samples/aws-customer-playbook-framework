@@ -313,7 +313,7 @@ ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 ---
 
 ### Bedrock API Keys
-To detect the creation or usage of [Bedrock API Keys](https://aws.amazon.com/blogs/machine-learning/accelerate-ai-development-with-amazon-bedrock-api-keys/), leverage [Bedrock API Key detection using Eventbridge and SNS](/detections/Bedrock_API_Key_Eventbridge_Detection.md).
+To detect the creation or usage of [Bedrock API Keys](https://aws.amazon.com/blogs/machine-learning/accelerate-ai-development-with-amazon-bedrock-api-keys/), leverage [Bedrock API Key detection using Eventbridge and SNS](../detections/Bedrock_Api_Key_Eventbridge_Detection.md).
 
 ## Addressed Backlog Items
 - As an Incident Responder I need to be able to monitor all critical Bedrock events
