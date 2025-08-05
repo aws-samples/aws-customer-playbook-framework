@@ -1,0 +1,292 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template to monitor CloudTrail events using EventBridge rules for CreateServiceSpecificCredential and Bearer Token usage'
+
+Parameters:
+  NotificationEmail:
+    Type: String
+    AllowedPattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    ConstraintDescription: Must be a valid email address
+  EventBusName:
+    Type: String
+    Description: Name of the EventBridge Event Bus (use 'default' for default bus)
+    Default: default
+
+Resources:
+  # KMS Key for SNS Topic encryption
+  SNSEncryptionKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: KMS key for encrypting Bedrock security alerts SNS topic
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action: "kms:*"
+            Resource: "*"
+          # Allow EventBridge to use the key for SNS publishing
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action:
+              - kms:Encrypt
+              - kms:Decrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+              - kms:DescribeKey
+            Resource: "*"
+            Condition:
+              StringEquals:
+                'kms:ViaService': !Sub "sns.${AWS::Region}.amazonaws.com"
+          # Allow SNS service to use the key
+          - Effect: Allow
+            Principal:
+              Service: sns.amazonaws.com
+            Action:
+              - kms:Encrypt
+              - kms:Decrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+              - kms:DescribeKey
+            Resource: "*"
+
+  # KMS Key Alias for easier reference
+  SNSEncryptionKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-sns-encryption-key"
+      TargetKeyId: !Ref SNSEncryptionKey
+
+  # IAM Role for EventBridge to publish to SNS
+  EventBridgeServiceRole:
+    Type: AWS::IAM::Role
+    Metadata:
+      guard:
+        SuppressedRules:
+          - rule: cfn_no_explicit_resource_names
+            reason: "This bucket has a name inherited by the stack name"
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-EventBridge-ServiceRole"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
+
+  # IAM Policy for EventBridge SNS operations
+  EventBridgeSNSPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub "${AWS::StackName}-EventBridge-SNS-Policy"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          # Allow publishing to the specific SNS topic only
+          - Effect: Allow
+            Action:
+              - sns:Publish
+            Resource: !Ref BedrockAlertsTopic
+          # Allow reading SNS topic attributes for the specific topic
+          - Effect: Allow
+            Action:
+              - sns:GetTopicAttributes
+            Resource: !Ref BedrockAlertsTopic
+          # Allow KMS operations for the specific key
+          - Effect: Allow
+            Action:
+              - kms:Encrypt
+              - kms:Decrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+              - kms:DescribeKey
+            Resource: !GetAtt SNSEncryptionKey.Arn
+            Condition:
+              StringEquals:
+                'kms:ViaService': !Sub "sns.${AWS::Region}.amazonaws.com"
+      Roles:
+        - !Ref EventBridgeServiceRole
+
+  # SNS Topic for notifications
+  BedrockAlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub "${AWS::StackName}-BedrockAlertsNotifications"
+      DisplayName: Security Events Monitoring via EventBridge
+      KmsMasterKeyId: !Ref SNSEncryptionKey
+
+  # SNS Topic Policy to allow EventBridge to publish
+  BedrockAlertsTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref BedrockAlertsTopic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action:
+              - sns:Publish
+            Resource: !Ref BedrockAlertsTopic
+            Condition:
+              StringEquals:
+                'aws:SourceAccount': !Ref 'AWS::AccountId'
+
+  # SNS Subscription for email notifications
+  EmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: email
+      TopicArn: !Ref BedrockAlertsTopic
+      Endpoint: !Ref NotificationEmail
+
+  # EventBridge Rule for CreateServiceSpecificCredential events
+  CreateServiceSpecificCredentialRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${AWS::StackName}-CreateServiceSpecificCredential-Rule"
+      Description: "EventBridge rule to detect CreateServiceSpecificCredential API calls"
+      EventBusName: !Ref EventBusName
+      EventPattern:
+        source:
+          - "aws.iam"
+        detail-type:
+          - "AWS API Call via CloudTrail"
+        detail:
+          eventSource:
+            - "iam.amazonaws.com"
+          eventName:
+            - "CreateServiceSpecificCredential"
+      State: ENABLED
+      Targets:
+        - Arn: !Ref BedrockAlertsTopic
+          Id: "CreateServiceSpecificCredentialSNSTarget"
+          RoleArn: !GetAtt EventBridgeServiceRole.Arn
+          InputTransformer:
+            InputPathsMap:
+              account: "$.account"
+              region: "$.region"
+              time: "$.time"
+              user: "$.detail.userIdentity.userName"
+              sourceIP: "$.detail.sourceIPAddress"
+              userAgent: "$.detail.userAgent"
+              eventName: "$.detail.eventName"
+              awsRegion: "$.detail.awsRegion"
+            InputTemplate: |
+              {
+                "alertType": "SECURITY_ALERT",
+                "severity": "HIGH",
+                "eventName": "<eventName>",
+                "description": "CreateServiceSpecificCredential API call detected",
+                "details": {
+                  "account": "<account>",
+                  "region": "<region>",
+                  "time": "<time>",
+                  "user": "<user>",
+                  "sourceIP": "<sourceIP>",
+                  "userAgent": "<userAgent>",
+                  "awsRegion": "<awsRegion>"
+                },
+                "recommendations": [
+                  "Review the legitimacy of this service-specific credential creation",
+                  "Verify the user identity and source IP address",
+                  "Check if this action aligns with your security policies"
+                ]
+              }
+
+  # EventBridge Rule for Bearer Token usage events
+  BearerTokenUsageRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${AWS::StackName}-BearerTokenUsage-Rule"
+      Description: "EventBridge rule to detect Bedrock API calls with bearer tokens"
+      EventPattern:
+        detail-type:
+          - "AWS API Call via CloudTrail"
+        detail:
+          additionalEventData:
+            callWithBearerToken:
+              - true
+      State: ENABLED
+      Targets:
+        - Arn: !Ref BedrockAlertsTopic
+          Id: "BearerTokenUsageSNSTarget"
+          RoleArn: !GetAtt EventBridgeServiceRole.Arn
+          InputTransformer:
+            InputPathsMap:
+              account: "$.account"
+              region: "$.region"
+              time: "$.time"
+              user: "$.detail.userIdentity.userName"
+              sourceIP: "$.detail.sourceIPAddress"
+              userAgent: "$.detail.userAgent"
+              eventName: "$.detail.eventName"
+              awsRegion: "$.detail.awsRegion"
+              requestID: "$.detail.requestID"
+            InputTemplate: |
+              {
+                "alertType": "SECURITY_ALERT",
+                "severity": "CRITICAL",
+                "eventName": "<eventName>",
+                "description": "Bedrock API call with bearer token detected",
+                "details": {
+                  "account": "<account>",
+                  "region": "<region>",
+                  "time": "<time>",
+                  "user": "<user>",
+                  "sourceIP": "<sourceIP>",
+                  "userAgent": "<userAgent>",
+                  "awsRegion": "<awsRegion>",
+                  "requestID": "<requestID>",
+                  "bearerTokenUsed": true
+                },
+                "recommendations": [
+                  "IMMEDIATE ACTION REQUIRED: Bearer token usage detected",
+                  "Review and validate the source of this API call",
+                  "Check if bearer token usage is authorized in your environment",
+                  "Consider implementing SCPs to prevent bearer token usage",
+                  "Audit all recent Bedrock API activities from this user/source"
+                ]
+              }
+Outputs:
+  SNSTopicArn:
+    Description: ARN of the SNS Topic for security alerts
+    Value: !Ref BedrockAlertsTopic
+    Export:
+      Name: !Sub "${AWS::StackName}-SNSTopicArn"
+
+  SNSEncryptionKeyArn:
+    Description: ARN of the KMS key used for SNS topic encryption
+    Value: !GetAtt SNSEncryptionKey.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-SNSEncryptionKeyArn"
+
+  SNSEncryptionKeyAlias:
+    Description: Alias of the KMS key used for SNS topic encryption
+    Value: !Ref SNSEncryptionKeyAlias
+    Export:
+      Name: !Sub "${AWS::StackName}-SNSEncryptionKeyAlias"
+
+  EventBridgeServiceRoleArn:
+    Description: ARN of the IAM Service Role for EventBridge operations
+    Value: !GetAtt EventBridgeServiceRole.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-EventBridgeServiceRoleArn"
+
+  CreateServiceSpecificCredentialRuleArn:
+    Description: ARN of the CreateServiceSpecificCredential EventBridge rule
+    Value: !GetAtt CreateServiceSpecificCredentialRule.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-CreateServiceSpecificCredentialRule"
+
+  BearerTokenUsageRuleArn:
+    Description: ARN of the Bearer Token usage EventBridge rule
+    Value: !GetAtt BearerTokenUsageRule.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-BearerTokenUsageRule"

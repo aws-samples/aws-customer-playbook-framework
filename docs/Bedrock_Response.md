@@ -9,7 +9,7 @@ This AWS Content is provided subject to the terms of the AWS Customer Agreement 
 
 Author: `Author Name` \
 Approver: `Approver Name` \
-Last Date Approved:  
+Last Date Approved:
 
 ## Executive Summary
 
@@ -84,7 +84,7 @@ The image below portrays the relationship between Prompts, [Agents](https://docs
 
 ### Notes and Considerations
 
-* Bedrock is not available in all regions (2024-06-04).  See [link](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-regions.html) for current region availability 
+* Bedrock is not available in all regions (2024-06-04).  See [link](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-regions.html) for current region availability
 * Model Invocation Logging is required to view prompts and responses sent to models.  This is a region level setting and is not default
 * For CloudTrail, the eventSource = bedrock.amazonaws.com
 * The ***InvokeModel*** API is a **read-only** event
@@ -97,55 +97,55 @@ The event names listed in the table below are a quick reference for types of eve
 * `InvokeModel`
 * `InvokeModelWithResponseStream`
 
-| **Event Names** | **readOnly** | **Description** | 
+| **Event Names** | **readOnly** | **Description** |
 | :-----------------| :-----------------| :-------------------------------- |
 | ***Events related to Models*** | --- | --- |
-| `GetFoundationModelAvailability` | TRUE | Retrieves the availability of a foundation model | 
-| `GetUseCaseForModelAccess` | TRUE | Retrieves a use case for a specified model | 
-| `InvokeModel` | TRUE | Invokes the specified Bedrock model to run inference using the input provided in the request body | 
-| `InvokeModelWithResponseStream` | TRUE | Invokes the specified Bedrock model to run inference using the input provided in the request body using chunking | 
-| `ListCustomModels` | TRUE | Lists Bedrock custom models that have been created | 
-| `ListFoundationModels` | TRUE | Lists the foundation models that can be used | 
-| `ListProvisionedModelThroughputs` | TRUE | Lists the provisioned capacities for models | 
+| `GetFoundationModelAvailability` | TRUE | Retrieves the availability of a foundation model |
+| `GetUseCaseForModelAccess` | TRUE | Retrieves a use case for a specified model |
+| `InvokeModel` | TRUE | Invokes the specified Bedrock model to run inference using the input provided in the request body |
+| `InvokeModelWithResponseStream` | TRUE | Invokes the specified Bedrock model to run inference using the input provided in the request body using chunking |
+| `ListCustomModels` | TRUE | Lists Bedrock custom models that have been created |
+| `ListFoundationModels` | TRUE | Lists the foundation models that can be used |
+| `ListProvisionedModelThroughputs` | TRUE | Lists the provisioned capacities for models |
 | --- | --- | --- |
 | ***Events related to Model Invocation Logging*** | --- | --- |
-| `DeleteModelInvocationLoggingConfiguration` | FALSE | Deletes an existing invocation logging configuration | 
-| `GetModelInvocationLoggingConfiguration` | TRUE | Retrieves the existing invocation logging configuration | 
-| `PutModelInvocationLoggingConfiguration` | FALSE | Creates an existing invocation logging configuration | 
+| `DeleteModelInvocationLoggingConfiguration` | FALSE | Deletes an existing invocation logging configuration |
+| `GetModelInvocationLoggingConfiguration` | TRUE | Retrieves the existing invocation logging configuration |
+| `PutModelInvocationLoggingConfiguration` | FALSE | Creates an existing invocation logging configuration |
 | --- | --- | --- |
 | ***Events related to Knowledge Bases*** | --- | --- |
-| `AssociateAgentKnowledgeBase` | FALSE | This action logs the association of a knowledge base during agent creation or after an agent has been created | 
-| `CreateDataSource` | FALSE | Creates a data source | 
-| `CreateKnowledgeBase` | FALSE | Creates a knowledge base | 
-| `DeleteKnowledgeBase` | FALSE | Deletes a knowledge base | 
-| `GetDataSource` | TRUE | Gets information about a data source | 
-| `GetKnowledgeBase` | TRUE | Retrieves an existing knowledge base | 
-| `ListDataSources` | TRUE | Lists available data sources | 
-| `ListKnowledgeBases` | TRUE | Lists existing knowledge bases | 
+| `AssociateAgentKnowledgeBase` | FALSE | This action logs the association of a knowledge base during agent creation or after an agent has been created |
+| `CreateDataSource` | FALSE | Creates a data source |
+| `CreateKnowledgeBase` | FALSE | Creates a knowledge base |
+| `DeleteKnowledgeBase` | FALSE | Deletes a knowledge base |
+| `GetDataSource` | TRUE | Gets information about a data source |
+| `GetKnowledgeBase` | TRUE | Retrieves an existing knowledge base |
+| `ListDataSources` | TRUE | Lists available data sources |
+| `ListKnowledgeBases` | TRUE | Lists existing knowledge bases |
 | --- | --- | --- |
 | ***Events related to Agents*** | --- | --- |
-| `CreateAgent` | FALSE | Creates a new agent and a test agent alias pointing to the DRAFT agent version | 
-| `CreateAgentActionGroup` | FALSE | Creates an action group for an agent. An action group represents the actions that an agent can carry out for the customer by defining the APIs that an agent can call and the logic for calling them | 
-| `CreateAgentAlias` | FALSE | Creates a new alias for an agent | 
-| `DeleteAgent` | FALSE | Deletes an earlier created agent | 
-| `GetAgent` | TRUE | Retrieves an existing agent | 
-| `GetAgentAlias` | TRUE | Retrieves an existing alias | 
-| `InvokeAgent` | FALSE | Sends a prompt for the agent to process and respond to | 
-| `ListAgentActionGroups` | TRUE | Lists the action groups for an agent and information about each one | 
-| `ListAgentAliases` | TRUE | Lists the aliases of an agent and information about each one | 
-| `ListAgentKnowledgeBases` | TRUE | Lists knowledge bases associated with an agent and information about each one | 
-| `ListAgents` | TRUE | Lists existing agents | 
-| `ListAgentVersions` | TRUE | Lists the versions of an agent and information about each version | 
-| `PrepareAgent` | FALSE | Prepares an existing Amazon Bedrock Agent to receive runtime requests | 
+| `CreateAgent` | FALSE | Creates a new agent and a test agent alias pointing to the DRAFT agent version |
+| `CreateAgentActionGroup` | FALSE | Creates an action group for an agent. An action group represents the actions that an agent can carry out for the customer by defining the APIs that an agent can call and the logic for calling them |
+| `CreateAgentAlias` | FALSE | Creates a new alias for an agent |
+| `DeleteAgent` | FALSE | Deletes an earlier created agent |
+| `GetAgent` | TRUE | Retrieves an existing agent |
+| `GetAgentAlias` | TRUE | Retrieves an existing alias |
+| `InvokeAgent` | FALSE | Sends a prompt for the agent to process and respond to |
+| `ListAgentActionGroups` | TRUE | Lists the action groups for an agent and information about each one |
+| `ListAgentAliases` | TRUE | Lists the aliases of an agent and information about each one |
+| `ListAgentKnowledgeBases` | TRUE | Lists knowledge bases associated with an agent and information about each one |
+| `ListAgents` | TRUE | Lists existing agents |
+| `ListAgentVersions` | TRUE | Lists the versions of an agent and information about each version |
+| `PrepareAgent` | FALSE | Prepares an existing Amazon Bedrock Agent to receive runtime requests |
 | --- | --- | --- |
 | ***Events related to Job Ingestion*** | --- | --- |
-| `GetIngestionJob` | TRUE | Gets information about a ingestion job, in which a data source is added to a knowledge base | 
-| `ListIngestionJobs` | TRUE | Lists the ingestion jobs for a data source and information about each of them | 
-| `StartIngestionJob` | FALSE | Begins an ingestion job, in which a data source is added to a knowledge base | 
+| `GetIngestionJob` | TRUE | Gets information about a ingestion job, in which a data source is added to a knowledge base |
+| `ListIngestionJobs` | TRUE | Lists the ingestion jobs for a data source and information about each of them |
+| `StartIngestionJob` | FALSE | Begins an ingestion job, in which a data source is added to a knowledge base |
 | --- | --- | --- |
 | ***Events related to RAG*** | --- | --- |
-| `Retrieve` | TRUE | Retrieves ingested data from a knowledge base (considered data events and will not show up in CloudTrail) | 
-| `RetrieveAndGenerate` | FALSE | Sends user input to perform retrieval and generation (considered data events and will not show up in CloudTrail) | 
+| `Retrieve` | TRUE | Retrieves ingested data from a knowledge base (considered data events and will not show up in CloudTrail) |
+| `RetrieveAndGenerate` | FALSE | Sends user input to perform retrieval and generation (considered data events and will not show up in CloudTrail) |
 
 ### Bedrock Usage Screenshots
 
@@ -200,7 +200,7 @@ Sample CloudTrail event record for model invocation:
 The images below provide additional examples of how the `InvokeModel` event name is logged.
 The first image shows the differences between various methods of model invocation:
 (a) Model invocation using a Knowledge Base
-(b) Direct model invocation 
+(b) Direct model invocation
 (c) Model invocation using an Agent
 
 Note that the *User name* displayed is different depending on how the model is invoked
@@ -208,7 +208,7 @@ Note that the *User name* displayed is different depending on how the model is i
 ![Agent and Knowledge Base model invocation](/images/bedrock-06.png)
 
 This difference is highlighted using two side-by-side screenshots of the `InvokeModel` event record in CloudTrail
-The left image =  Direct model invocation 
+The left image =  Direct model invocation
 The right image = Model invocation using a Knowledge Base
 
 ![CloudTrail for InvokeModel](/images/bedrock-07.png)
@@ -310,6 +310,10 @@ CREATE EXTERNAL TABLE bedrock_model_invocation_metadata_unfiltered (
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
  LOCATION 's3://<insert_S3_bucket>/<insert_prefix>/'
 ```
+---
+
+### Bedrock API Keys
+To detect the creation or usage of [Bedrock API Keys](https://aws.amazon.com/blogs/machine-learning/accelerate-ai-development-with-amazon-bedrock-api-keys/), leverage [Bedrock API Key detection using Eventbridge and SNS](/detections/Bedrock_API_Key_Eventbridge_Detection.md).
 
 ## Addressed Backlog Items
 - As an Incident Responder I need to be able to monitor all critical Bedrock events
