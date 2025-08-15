@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/aws-samples/aws-customer-playbook-framework,534,255
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md,356,154
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Responding_to_Ransom_in_AWS.md,206,59
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Ransom_Response_EC2_Linux.md,201,52
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Analyzing_VPC_Flow_Logs.md,190,51
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Bedrock_Response.md,190,48
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Ransom_Response_S3.md,187,49
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/EC2_Forensics.md,179,36
+/aws-samples/aws-customer-playbook-framework/pulls,173,12
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Responding%20to%20SageMaker.md,171,30

@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/aws-samples/aws-customer-playbook-framework,267,182
+/aws-samples/aws-customer-playbook-framework/tree/main/docs,130,78
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md,123,93
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Analyzing_VPC_Flow_Logs.md,28,22
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Denial_of_Service.md,28,22
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/EC2_Forensics.md,24,23
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Playbook_Creation_Process.md,21,15
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Code_Exposure.md,20,12
+/aws-samples/aws-customer-playbook-framework/tree/main/docs/es,19,10
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Responding_to_SES_Events.md,18,13
