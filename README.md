@@ -52,6 +52,7 @@ And you don't just have to write code. You can help out by writing documentation
 ### Preparation
 * [Rationalization of Security Incident Handling](./docs/rationalization_of_security_incident_handling.md)
 * [Playbook Development Guide](./docs/Playbook_Development_Guide.md)
+* [Build an intelligent security playbook assistant with Amazon Q](./docs/amazonq.md)
 
 ### Detections
 * [Bedrock API Key Security Monitoring](./detections/Bedrock_Api_Key_Eventbridge_Detection.md)
