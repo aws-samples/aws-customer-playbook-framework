@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/aws-samples/aws-customer-playbook-framework,322,213
+/aws-samples/aws-customer-playbook-framework/tree/main/docs,113,72
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md,109,84
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/EC2_Forensics.md,66,45
+/aws-samples/aws-customer-playbook-framework/pulls,66,18
+/aws-samples/aws-customer-playbook-framework/issues,50,16
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Ransom_Response_EC2_Linux.md,36,25
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Responding_to_SES_Events.md,34,27
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Responding_to_Ransom_in_AWS.md,34,25
+/aws-samples/aws-customer-playbook-framework/tree/main,33,24
