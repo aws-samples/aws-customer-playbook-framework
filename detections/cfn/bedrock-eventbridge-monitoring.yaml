@@ -205,14 +205,20 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Name: !Sub "${AWS::StackName}-BearerTokenUsage-Rule"
-      Description: "EventBridge rule to detect Bedrock API calls with bearer tokens"
+      Description: "EventBridge rule to detect Bedrock and Bedrock Mantle API calls with bearer tokens"
       EventPattern:
         detail-type:
           - "AWS API Call via CloudTrail"
         detail:
-          additionalEventData:
-            callWithBearerToken:
-              - true
+          # Standard Bedrock (bedrock.amazonaws.com) reports bearer-token use in additionalEventData.
+          # Bedrock Mantle (bedrock-mantle.amazonaws.com) reports it in requestParameters.
+          $or:
+            - additionalEventData:
+                callWithBearerToken:
+                  - true
+            - requestParameters:
+                callWithBearerToken:
+                  - true
       State: ENABLED
       Targets:
         - Arn: !Ref BedrockAlertsTopic
