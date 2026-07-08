@@ -86,7 +86,7 @@ The image below portrays the relationship between Prompts, [Agents](https://docs
 
 * Bedrock is not available in all regions (2024-06-04).  See [link](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-regions.html) for current region availability
 * Model Invocation Logging is required to view prompts and responses sent to models.  This is a region level setting and is not default
-* For CloudTrail, the eventSource = bedrock.amazonaws.com
+* For CloudTrail, the eventSource = bedrock.amazonaws.com, or bedrock-mantle.amazonaws.com for Bedrock Mantle
 * The ***InvokeModel*** API is a **read-only** event
 
 ### Event Names

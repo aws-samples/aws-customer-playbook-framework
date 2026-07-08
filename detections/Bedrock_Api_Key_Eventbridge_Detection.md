@@ -10,7 +10,7 @@ This solution creates two EventBridge rules to monitor CloudTrail logs for speci
 ## Features
 
 - **CreateServiceSpecificCredential Monitoring**: Detects IAM API calls for credential creation
-- **Bearer Token Usage Detection**: Monitors API calls using bearer tokens
+- **Bearer Token Usage Detection**: Monitors API calls using bearer tokens, across both standard Bedrock (`bedrock.amazonaws.com`) and Bedrock Mantle (`bedrock-mantle.amazonaws.com`)
 
 
 ## Architecture
