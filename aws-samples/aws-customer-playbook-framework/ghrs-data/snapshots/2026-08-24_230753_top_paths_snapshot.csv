@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/aws-samples/aws-customer-playbook-framework,320,139
+/aws-samples/aws-customer-playbook-framework/pulls,104,15
+/aws-samples/aws-customer-playbook-framework/issues,89,11
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md,79,54
+/aws-samples/aws-customer-playbook-framework/actions,65,4
+/aws-samples/aws-customer-playbook-framework/tree/main/docs,56,46
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/EC2_Forensics.md,36,29
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Responding_to_SES_Events.md,36,26
+/aws-samples/aws-customer-playbook-framework/activity,31,4
+/aws-samples/aws-customer-playbook-framework/blob/main/docs/Bedrock_Response.md,28,21
