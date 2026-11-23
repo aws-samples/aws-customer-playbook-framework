@@ -1,5 +1,5 @@
 % Statistics for aws-samples/aws-customer-playbook-framework
-% Generated for [aws-samples/aws-customer-playbook-framework](https://github.com/aws-samples/aws-customer-playbook-framework) with [jgehrcke/github-repo-stats](https://github.com/jgehrcke/github-repo-stats) at 2026-11-23 16:08 UTC.
+% Generated for [aws-samples/aws-customer-playbook-framework](https://github.com/aws-samples/aws-customer-playbook-framework) with [jgehrcke/github-repo-stats](https://github.com/jgehrcke/github-repo-stats) at 2026-11-23 23:09 UTC.
 
 
 ## Views
@@ -79,7 +79,7 @@ respond slowly to change (narrow peaks are smoothed out).
 
 <div id="chart_referrers_top_n_alltime" class="full-width-chart"></div>
 
-Top 15 referrers: 01: `linkedin.com`, 02: `Google`, 03: `t.co`, 04: `aws.amazon.com`, 05: `com.linkedin.android`, 06: `thehackernews.com`, 07: `reddit.com`, 08: `out.reddit.com`, 09: `app.gotowebinar.com`, 10: `securitylabs.datadoghq.com`, 11: `github.com`, 12: `amazon.webex.com`, 13: `statics.teams.cdn.office.net`, 14: `maturitymodel.security.aws.dev`, 15: `com.google.android.gm`
+Top 15 referrers: 01: `linkedin.com`, 02: `Google`, 03: `t.co`, 04: `aws.amazon.com`, 05: `com.linkedin.android`, 06: `thehackernews.com`, 07: `reddit.com`, 08: `out.reddit.com`, 09: `app.gotowebinar.com`, 10: `github.com`, 11: `securitylabs.datadoghq.com`, 12: `amazon.webex.com`, 13: `statics.teams.cdn.office.net`, 14: `maturitymodel.security.aws.dev`, 15: `com.google.android.gm`
 
 
 
